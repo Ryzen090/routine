@@ -1,0 +1,57 @@
+{
+  "name": "Discipline - Daily Schedule & Routine Tracker",
+  "short_name": "Discipline",
+  "description": "A beautiful daily task scheduler to organize your routine, track payments, and stay motivated",
+  "start_url": "/?source=pwa",
+  "display": "standalone",
+  "display_override": ["window-control-overlay", "standalone"],
+  "background_color": "#ffffff",
+  "theme_color": "#4f46e5",
+  "orientation": "portrait",
+  "scope": "/",
+  "lang": "en",
+  "categories": ["productivity", "lifestyle", "utilities"],
+  "icons": [
+    {
+      "src": "/icons/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Today's Routine",
+      "short_name": "Routine",
+      "description": "View today's schedule and tasks",
+      "url": "/?view=dashboard",
+      "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Track Payments",
+      "short_name": "Payments",
+      "description": "Add and track daily expenses",
+      "url": "/?view=payments",
+      "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Motivation",
+      "short_name": "Motivation",
+      "description": "Daily motivation and goals",
+      "url": "/?view=notes",
+      "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192", "type": "image/png" }]
+    }
+  ]
+}
