@@ -1,26 +1,17 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { useApp } from '@/contexts/AppContext';
-import { Button } from '@/components/ui/button';
-import { ThemeToggle } from './ThemeToggle';
-import { 
-  BadgeCheck, 
-  CheckSquare, 
-  BarChart3,
-  CreditCard,
-  Menu,
-  X,
-  User,
-  Heart
-} from 'lucide-react';
-import { useState } from 'react';
+import React from "react";
+import { useState } from "react";
+import { useApp } from "@/contexts/AppContext";
+import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "./ThemeToggle";
+import { BadgeCheck, BarChart3, CreditCard, DumbbellIcon } from "lucide-react";
 
 const navigationItems = [
-  { id: 'dashboard', label: 'Routine', icon: BadgeCheck },
-  { id: 'payments', label: 'Payments', icon: CreditCard },
-  { id: 'notes', label: 'Motivation', icon: Heart },
-  { id: 'stats', label: 'Statistics', icon: BarChart3 },
+  { id: "dashboard", label: "Routine", icon: BadgeCheck },
+  { id: "notes", label: "Discipline", icon: DumbbellIcon },
+  { id: "payments", label: "Payments", icon: CreditCard },
+  { id: "stats", label: "Statistics", icon: BarChart3 },
 ];
 
 export function Navigation() {
@@ -28,7 +19,7 @@ export function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleViewChange = (view: typeof state.currentView) => {
-    dispatch({ type: 'SET_CURRENT_VIEW', payload: view });
+    dispatch({ type: "SET_CURRENT_VIEW", payload: view });
     setIsMobileMenuOpen(false);
   };
 
@@ -49,15 +40,15 @@ export function Navigation() {
             {navigationItems.map((item) => {
               const IconComponent = item.icon;
               const isActive = state.currentView === item.id;
-              
+
               return (
                 <Button
                   key={item.id}
-                  variant={isActive ? 'default' : 'ghost'}
+                  variant={isActive ? "default" : "ghost"}
                   className={`w-full justify-start ${
-                    isActive 
-                      ? 'bg-indigo-600 hover:bg-indigo-700 text-white' 
-                      : 'hover:bg-gray-100 text-gray-700'
+                    isActive
+                      ? "bg-indigo-600 hover:bg-indigo-700 text-white"
+                      : "hover:bg-gray-100 text-gray-700"
                   }`}
                   onClick={() => handleViewChange(item.id as any)}
                 >
@@ -76,13 +67,13 @@ export function Navigation() {
           {navigationItems.map((item) => {
             const IconComponent = item.icon;
             const isActive = state.currentView === item.id;
-            
+
             return (
               <button
                 key={item.id}
                 onClick={() => handleViewChange(item.id as any)}
                 className={`flex flex-col items-center justify-center space-y-1 relative ${
-                  isActive ? 'text-black' : 'text-gray-400'
+                  isActive ? "text-black" : "text-gray-400"
                 }`}
               >
                 <IconComponent className="h-5 w-5" />

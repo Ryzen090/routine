@@ -145,7 +145,7 @@ const defaultTasks: Task[] = [
   },
   {
     id: "7",
-    title: "Nourishing Lunch",
+    title: "Lunch",
     icon: "🍱",
     startTime: "12:00",
     endTime: "12:50",
@@ -156,7 +156,7 @@ const defaultTasks: Task[] = [
   },
   {
     id: "9",
-    title: "Evening Relaxation & Pen Spinning",
+    title: "Evening Relaxation",
     icon: "🎮",
     startTime: "17:00",
     endTime: "18:00",
@@ -167,7 +167,7 @@ const defaultTasks: Task[] = [
   },
   {
     id: "10",
-    title: "Prepare Dinner",
+    title: "Dinner",
     icon: "🍳",
     startTime: "18:00",
     endTime: "19:15",
@@ -199,21 +199,21 @@ const defaultTasks: Task[] = [
     priority: "medium",
   },
   {
-    id: "14",
-    title: "Learning",
-    icon: "📚",
+    id: "13",
+    title: "Trading Learning",
+    icon: "📈",
     startTime: "19:00",
-    endTime: "21:00",
+    endTime: "19:45",
     category: "learning",
     completed: false,
     recurring: true,
     priority: "medium",
   },
   {
-    id: "15",
+    id: "14",
     title: "Healthy Dinner",
     icon: "🍽️",
-    startTime: "20:00",
+    startTime: "19:45",
     endTime: "20:00",
     category: "routine",
     completed: false,
@@ -221,7 +221,19 @@ const defaultTasks: Task[] = [
     priority: "high",
   },
   {
-    id: "17",
+    id: "15",
+    title: "Learning",
+    icon: "📚",
+    startTime: "20:00",
+    endTime: "21:00",
+    category: "learning",
+    completed: false,
+    recurring: true,
+    priority: "medium",
+  },
+
+  {
+    id: "16",
     title: "Relaxation",
     icon: "🎲",
     startTime: "21:15",
@@ -232,8 +244,8 @@ const defaultTasks: Task[] = [
     priority: "high",
   },
   {
-    id: "16",
-    title: "Healthy night Sleep & Recharge",
+    id: "17",
+    title: "Healthy night Sleep",
     icon: "🌙",
     startTime: "23:30",
     endTime: "23:30",
@@ -252,71 +264,17 @@ const defaultNotes: Note[] = [
     subNotes: [
       {
         id: "1-1",
-        content: "Reading",
+        content: "Trade",
         completed: false,
       },
       {
         id: "1-2",
-        content: "Writing",
+        content: "Upwork",
         completed: false,
       },
       {
         id: "1-3",
-        content: "Listening",
-        completed: false,
-      },
-      {
-        id: "1-4",
-        content: "Speading",
-        completed: false,
-      },
-    ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "8",
-    title: "Daily Learning",
-    content: "Continuous learning and skill development",
-    subNotes: [
-      {
-        id: "8-1",
-        content: "អានសៀវភៅ ៣ អត្ថបទ ក្នុងមួយថ្ងៃ",
-        completed: false,
-      },
-      {
-        id: "8-2",
-        content: "ជ្រើសយកប្រធានបទដែលអ្នកចាប់អារម្មណ៍ ឬជួយអភិវឌ្ឍអាជីព",
-        completed: false,
-      },
-      {
-        id: "8-3",
-        content: "រៀនភាសាថ្មី ឬជំនាញថ្មីៗ ( English & Guitar & Pen Spinning )",
-        completed: false,
-      },
-    ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "2",
-    title: "Consistent Sleep",
-    content: "Quality sleep for better health",
-    subNotes: [
-      {
-        id: "2-1",
-        content:
-          "បង្កើត ពិធីមុនគេង (bedtime ritual) ដូចជា ស្តាប់ចម្រៀងស្ងប់ស្ងាត់ ឬអានសៀវភៅ",
-        completed: false,
-      },
-      {
-        id: "2-2",
-        content: "ជៀសវាងប្រើទូរស័ព្ទ ឬកុំព្យូទ័រក្នុងរយៈពេល ១ ម៉ោងមុនគេង",
-        completed: false,
-      },
-      {
-        id: "2-3",
-        content: "គេងតាមម៉ោងដដែលរៀងរាល់ថ្ងៃ (ម៉ោង ១១)",
+        content: "Improve English",
         completed: false,
       },
     ],
@@ -330,12 +288,7 @@ const defaultNotes: Note[] = [
     subNotes: [
       {
         id: "3-1",
-        content: "ហាត់ប្រាណ ៤–៥ ដងក្នុងមួយសប្តាហ៍",
-        completed: false,
-      },
-      {
-        id: "3-2",
-        content: "ចាប់ផ្ដើមតែ ១៥–៣០ នាទីក្នុងមួយថ្ងៃ",
+        content: "ហាត់ប្រាណ ១៥–៣០ នាទីក្នុងមួយថ្ងៃ",
         completed: false,
       },
     ],
@@ -361,24 +314,10 @@ const defaultNotes: Note[] = [
     title: "Eat Nutritious Food",
     content: "Healthy eating habits",
     subNotes: [
-      { id: "5-1", content: "ផឹកទឹក ៤-៦ កែវក្នុងមួយថ្ងៃ", completed: false },
+      { id: "5-1", content: "ផឹកទឹក ២-៣ លីតក្នុងមួយថ្ងៃ", completed: false },
       {
         id: "5-2",
-        content: "កាត់បន្ថយអាហារផ្អែម និងអាហារដែលមិនមានប្រយោជន៍",
-        completed: false,
-      },
-    ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "6",
-    title: "Limit Social Media",
-    content: "Control digital consumption",
-    subNotes: [
-      {
-        id: "6-1",
-        content: "កំណត់ពេលសម្រាប់ APP ដូចជា Facebook, TikTok",
+        content: "កាត់បន្ថយសារជាតិផ្អែម",
         completed: false,
       },
     ],
@@ -389,14 +328,7 @@ const defaultNotes: Note[] = [
     id: "7",
     title: "Save & Invest Early",
     content: "Financial planning",
-    subNotes: [
-      { id: "7-1", content: "រៀបចំថវិការៀងរាល់ខែ", completed: false },
-      {
-        id: "7-2",
-        content: "សន្សំប្រាក់ ១០–២០% នៃចំណូលប្រចាំខែ",
-        completed: false,
-      },
-    ],
+    subNotes: [{ id: "7-1", content: "រៀបចំថវិការៀងរាល់ខែ", completed: false }],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
@@ -414,7 +346,7 @@ const defaultMyTools: MyTool[] = [
       { id: "1-1", amount: "1 Bottle", unit: "bottle", completed: false },
       { id: "1-2", amount: "1 Bottle", unit: "bottle", completed: false },
     ],
-  }
+  },
 ];
 
 const defaultPayments: Payment[] = [
@@ -430,7 +362,7 @@ const defaultPayments: Payment[] = [
   {
     id: "2",
     title: "Food",
-    amount: 60.0,
+    amount: 75.0,
     category: "food",
     date: new Date().toISOString().split("T")[0],
     type: "expense",
