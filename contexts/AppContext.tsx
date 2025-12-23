@@ -59,7 +59,7 @@ interface AppState {
   achievements: Achievement[];
   userStats: UserStats;
   selectedDate: string;
-  currentView: "dashboard" | "tasks" | "stats" | "payments" | "notes";
+  currentView: "dashboard" | "tasks" | "stats" | "payments" | "discipline";
   notes: Note[];
   myTools: MyTool[];
   payments: Payment[];

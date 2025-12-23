@@ -1,12 +1,10 @@
-"use client";
-
 import React from "react";
+import { CheckSquare } from "lucide-react";
 import { useApp } from "@/contexts/AppContext";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Heart, CheckSquare } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-export function Notes() {
+export function Discipline() {
   const { state, dispatch } = useApp();
 
   const toggleSubNote = (noteId: string, subNoteId: string) => {

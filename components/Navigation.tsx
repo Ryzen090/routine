@@ -9,7 +9,7 @@ import { BadgeCheck, BarChart3, CreditCard, DumbbellIcon } from "lucide-react";
 
 const navigationItems = [
   { id: "dashboard", label: "Routine", icon: BadgeCheck },
-  { id: "notes", label: "Discipline", icon: DumbbellIcon },
+  { id: "discipline", label: "Discipline", icon: DumbbellIcon },
   { id: "payments", label: "Payments", icon: CreditCard },
   { id: "stats", label: "Statistics", icon: BarChart3 },
 ];

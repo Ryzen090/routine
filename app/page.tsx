@@ -6,7 +6,7 @@ import { Navigation } from '@/components/Navigation';
 import { Dashboard } from '@/components/Dashboard';
 import { Statistics } from '@/components/Statistics';
 import { Payments } from '@/components/Payments';
-import { Notes } from '@/components/Notes';
+import { Discipline } from '@/components/Discipline';
 
 function AppContent() {
   const { state, dispatch } = useApp();
@@ -27,8 +27,8 @@ function AppContent() {
         return <Statistics />;
       case 'payments':
         return <Payments />;
-      case 'notes':
-        return <Notes />;
+      case 'discipline':
+        return <Discipline />;
       default:
         return <Dashboard />;
     }
