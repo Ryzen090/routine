@@ -26,11 +26,6 @@ export function Dashboard() {
 
   return (
     <div className="space-y-6 bg-gray-50 min-h-screen pt-6 pb-20 px-4 lg:px-0">
-      {/* Page Title */}
-      <h1 className="text-center text-2xl lg:text-3xl font-bold text-gray-900">
-        Today
-      </h1>
-
       {/* Hero Header */}
       <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 p-6 text-white shadow-lg">
         <div className="flex items-center justify-between">
