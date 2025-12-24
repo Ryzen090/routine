@@ -42,6 +42,12 @@ interface Payment {
   icon: string;
 }
 
+interface MonthlyGoal {
+  id: string;
+  title: string;
+  icon: string;
+}
+
 interface AppState {
   tasks: Task[];
   achievements: Achievement[];
@@ -51,6 +57,7 @@ interface AppState {
   notes: Note[];
   myTools: MyTool[];
   payments: Payment[];
+  monthlyGoals: MonthlyGoal[];
 }
 
 type AppAction =
@@ -367,6 +374,14 @@ const defaultPayments: Payment[] = [
   },
 ];
 
+const monthlyGoals: MonthlyGoal[] = [
+  {
+    id: "1",
+    title: "Save Money",
+    icon: "💲",
+  },
+];
+
 const initialState: AppState = {
   tasks: defaultTasks,
   achievements: [
@@ -409,6 +424,7 @@ const initialState: AppState = {
   notes: defaultNotes,
   myTools: defaultMyTools,
   payments: defaultPayments,
+  monthlyGoals: monthlyGoals,
 };
 
 function appReducer(state: AppState, action: AppAction): AppState {

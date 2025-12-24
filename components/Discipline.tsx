@@ -1,18 +1,17 @@
 import React, { useState } from "react";
-import { CheckSquare } from "lucide-react";
+import { CheckSquare, Goal } from "lucide-react";
 import { useApp } from "@/contexts/AppContext";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-/* ---------------- TYPES ---------------- */
 type Tab = "daily" | "weekly" | "monthly";
 
-/* ---------------- COMPONENT ---------------- */
 export function Discipline() {
   const { state, dispatch } = useApp();
   const [activeTab, setActiveTab] = useState<Tab>("daily");
 
-  /* ---------------- DAILY ---------------- */
+  const monthlyGoals = state.monthlyGoals;
+
   const toggleSubNote = (noteId: string, subNoteId: string) => {
     dispatch({
       type: "UPDATE_NOTE_SUBNOTE",
@@ -20,11 +19,9 @@ export function Discipline() {
     });
   };
 
-  /* ---------------- WEEKLY ---------------- */
   const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
-  const periods = ["Morning", "Afternoon", "Evening"];
+  const periods = ["Trade"];
 
-  const [weeklyFocus, setWeeklyFocus] = useState("");
   const [weeklyPlan, setWeeklyPlan] = useState<
     Record<string, Record<string, string>>
   >(
@@ -34,24 +31,8 @@ export function Discipline() {
     }, {} as Record<string, Record<string, string>>)
   );
 
-  /* ---------------- MONTHLY ---------------- */
-  const [monthlyGoals, setMonthlyGoals] = useState<string[]>([
-    "Exercise 20 days",
-    "Code consistently",
-    "Read 2 books",
-  ]);
-  const [newGoal, setNewGoal] = useState("");
-
-  /* ---------------- STATS ---------------- */
-  const habits = [
-    { name: "Exercise", done: 12, target: 20 },
-    { name: "Coding", done: 18, target: 25 },
-    { name: "Reading", done: 9, target: 15 },
-  ];
-
   return (
     <div className="space-y-6 bg-white min-h-screen pt-5 pb-20 px-4">
-      {/* ---------- HEADER ---------- */}
       <div className="text-center">
         <h2 className="text-xl lg:text-2xl font-bold text-black">Discipline</h2>
         <p className="text-sm text-gray-600">
@@ -59,7 +40,6 @@ export function Discipline() {
         </p>
       </div>
 
-      {/* ---------- TABS ---------- */}
       <div className="flex justify-center gap-2">
         {(["daily", "weekly", "monthly"] as Tab[]).map((tab) => (
           <button
@@ -77,7 +57,6 @@ export function Discipline() {
         ))}
       </div>
 
-      {/* ================= DAILY ================= */}
       {activeTab === "daily" && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {state.notes.map((note) => (
@@ -120,7 +99,6 @@ export function Discipline() {
         </div>
       )}
 
-      {/* ================= WEEKLY ================= */}
       {activeTab === "weekly" && (
         <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -144,7 +122,7 @@ export function Discipline() {
                         }))
                       }
                       placeholder={p}
-                      className="w-full rounded-md border px-3 py-1 text-xs"
+                      className=" w-full rounded-md border px-3 py-1 text-xs focus:outline-none focus:border"
                     />
                   ))}
                 </CardContent>
@@ -154,21 +132,25 @@ export function Discipline() {
         </div>
       )}
 
-      {/* ================= MONTHLY ================= */}
       {activeTab === "monthly" && (
         <div className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle className="text-sm">📅 Monthly Goals</CardTitle>
+              <CardTitle className="text-sm">
+                <div className="flex items-center gap-2">
+                  <Goal className="h-6 w-6" />
+                  <p>Monthly Goals</p>
+                </div>
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              {monthlyGoals.map((goal, i) => (
+              {monthlyGoals.map((item, i) => (
                 <div
                   key={i}
                   className="flex items-center gap-2 bg-gray-50 p-2 rounded"
                 >
-                  <span>🎯</span>
-                  <span className="text-sm">{goal}</span>
+                  <span>{item.icon}</span>
+                  <span className="text-sm">{item.title}</span>
                 </div>
               ))}
             </CardContent>
