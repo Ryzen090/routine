@@ -1,8 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-"use client";
-
-import React, { createContext, useContext, useReducer, useEffect } from "react";
 import { Task, Achievement, UserStats } from "@/types";
+import React, { createContext, useContext, useReducer, useEffect } from "react";
 
 interface Note {
   id: string;
@@ -40,16 +38,6 @@ interface Payment {
   id: string;
   title: string;
   amount: number;
-  category:
-    | "food"
-    | "gas"
-    | "family"
-    | "utilities"
-    | "entertainment"
-    | "rent"
-    | "salary"
-    | "other";
-  date: string;
   type: "expense" | "income";
   icon: string;
 }
@@ -59,7 +47,7 @@ interface AppState {
   achievements: Achievement[];
   userStats: UserStats;
   selectedDate: string;
-  currentView: "dashboard" | "tasks" | "stats" | "payments" | "discipline";
+  currentView: "dashboard" | "tasks" | "setting" | "payments" | "discipline";
   notes: Note[];
   myTools: MyTool[];
   payments: Payment[];
@@ -324,14 +312,6 @@ const defaultNotes: Note[] = [
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
-  {
-    id: "7",
-    title: "Save & Invest Early",
-    content: "Financial planning",
-    subNotes: [{ id: "7-1", content: "រៀបចំថវិការៀងរាល់ខែ", completed: false }],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
 ];
 
 const defaultMyTools: MyTool[] = [
@@ -352,48 +332,38 @@ const defaultMyTools: MyTool[] = [
 const defaultPayments: Payment[] = [
   {
     id: "1",
-    title: "Payroll",
-    amount: 350.0,
-    category: "salary",
-    date: new Date().toISOString().split("T")[0],
+    title: "Salary",
+    amount: 350,
     type: "income",
-    icon: "💰",
-  },
-  {
-    id: "2",
-    title: "Food",
-    amount: 75.0,
-    category: "food",
-    date: new Date().toISOString().split("T")[0],
-    type: "expense",
-    icon: "🍱",
-  },
-  {
-    id: "3",
-    title: "Gas & Card",
-    amount: 15.0,
-    category: "gas",
-    date: new Date().toISOString().split("T")[0],
-    type: "expense",
-    icon: "⛽",
-  },
-  {
-    id: "4",
-    title: "Rent",
-    amount: 70.0,
-    category: "rent",
-    date: new Date().toISOString().split("T")[0],
-    type: "expense",
-    icon: "🏠",
+    icon: "💲",
   },
   {
     id: "5",
     title: "Family",
-    amount: 100.0,
-    category: "family",
-    date: new Date().toISOString().split("T")[0],
+    amount: 100,
     type: "expense",
-    icon: "👨‍👩‍👧‍👦",
+    icon: "👪",
+  },
+  {
+    id: "2",
+    title: "Rent",
+    amount: 75,
+    type: "expense",
+    icon: "🏠",
+  },
+  {
+    id: "4",
+    title: "Food",
+    amount: 75,
+    type: "expense",
+    icon: "🍛",
+  },
+  {
+    id: "3",
+    title: "Motorbike",
+    amount: 20,
+    type: "expense",
+    icon: "⛽",
   },
 ];
 
@@ -536,25 +506,6 @@ function appReducer(state: AppState, action: AppAction): AppState {
             : tool
         ),
       };
-    case "ADD_PAYMENT":
-      return {
-        ...state,
-        payments: [...state.payments, action.payload],
-      };
-    case "UPDATE_PAYMENT":
-      return {
-        ...state,
-        payments: state.payments.map((payment) =>
-          payment.id === action.payload.id ? action.payload : payment
-        ),
-      };
-    case "DELETE_PAYMENT":
-      return {
-        ...state,
-        payments: state.payments.filter(
-          (payment) => payment.id !== action.payload
-        ),
-      };
     default:
       return state;
   }
@@ -569,12 +520,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(appReducer, initialState);
   const [isLoaded, setIsLoaded] = React.useState(false);
 
-  // Save current state to localStorage
   const saveToLocalStorage = () => {
     try {
       const today = new Date().toISOString().split("T")[0];
 
-      // Save current day's data
       const currentDayData = {
         date: today,
         tasks: state.tasks.reduce((acc, task) => {
@@ -597,33 +546,19 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         }, {} as Record<string, Record<string, boolean>>),
       };
 
-      // Save today's data
       localStorage.setItem(
         `dailyData_${today}`,
         JSON.stringify(currentDayData)
       );
 
-      // Save payments (1 month)
-      const now = new Date();
-      const oneMonthAgo = new Date(
-        now.getFullYear(),
-        now.getMonth() - 1,
-        now.getDate()
-      );
-      const recentPayments = state.payments.filter((payment) => {
-        const paymentDate = new Date(payment.date);
-        return paymentDate >= oneMonthAgo;
-      });
-      localStorage.setItem("paymentsData", JSON.stringify(recentPayments));
-
-      // Save app state
       const appStateToSave = {
         tasks: state.tasks,
         achievements: state.achievements,
         userStats: state.userStats,
         notes: state.notes,
         myTools: state.myTools,
-        payments: recentPayments,
+        // Note: intentionally NOT saving `payments` so the app always
+        // uses `defaultPayments` and payments cannot be modified/persisted.
       };
       localStorage.setItem("appState", JSON.stringify(appStateToSave));
     } catch (error) {
@@ -631,30 +566,27 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  // Load data from localStorage
   const loadFromLocalStorage = () => {
     try {
       const today = new Date().toISOString().split("T")[0];
 
-      // Load app state
       const savedAppState = localStorage.getItem("appState");
       if (savedAppState) {
         const parsedAppState = JSON.parse(savedAppState);
-        dispatch({ type: "LOAD_DATA", payload: parsedAppState });
+        // Ensure we do NOT load persisted `payments` (keep defaultPayments)
+        const { payments, ...rest } = parsedAppState as Partial<AppState>;
+        dispatch({ type: "LOAD_DATA", payload: rest });
       }
 
-      // Load today's data if it exists
       const todayData = localStorage.getItem(`dailyData_${today}`);
       if (todayData) {
         const parsedTodayData = JSON.parse(todayData);
 
-        // Restore task completion states
         const updatedTasks = state.tasks.map((task) => ({
           ...task,
           completed: parsedTodayData.tasks[task.id] || false,
         }));
 
-        // Restore notes completion states
         const updatedNotes = state.notes.map((note) => ({
           ...note,
           subNotes: note.subNotes.map((subNote) => ({
@@ -663,7 +595,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           })),
         }));
 
-        // Restore tools completion states
         const updatedTools = state.myTools.map((tool) => {
           const updatedSubItems = tool.subItems.map((item) => ({
             ...item,
@@ -686,14 +617,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         });
       }
 
-      // Check if it's a new day
       const lastActiveDate = localStorage.getItem("lastActiveDate");
       if (lastActiveDate && lastActiveDate !== today) {
-        // It's a new day, reset daily items but keep the data saved
         localStorage.setItem("lastActiveDate", today);
         dispatch({ type: "RESET_DAILY_TASKS", payload: undefined });
       } else if (!lastActiveDate) {
-        // First time user
         localStorage.setItem("lastActiveDate", today);
       }
     } catch (error) {
@@ -701,7 +629,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  // Load data on mount
   useEffect(() => {
     if (!isLoaded) {
       loadFromLocalStorage();
@@ -709,7 +636,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   }, [isLoaded]);
 
-  // Save data whenever state changes
   useEffect(() => {
     if (isLoaded) {
       saveToLocalStorage();

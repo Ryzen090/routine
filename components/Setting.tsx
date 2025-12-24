@@ -39,7 +39,7 @@ const getStartOfWeek = () => {
 const isToday = (date: string) =>
   new Date(date).toDateString() === new Date().toDateString();
 
-export function Statistics() {
+export function Setting() {
   const { state } = useApp();
 
   /* =======================

@@ -5,13 +5,18 @@ import { useState } from "react";
 import { useApp } from "@/contexts/AppContext";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./ThemeToggle";
-import { BadgeCheck, BarChart3, CreditCard, DumbbellIcon } from "lucide-react";
+import {
+  BadgeCheck,
+  Settings,
+  DumbbellIcon,
+  BadgeDollarSign,
+} from "lucide-react";
 
 const navigationItems = [
   { id: "dashboard", label: "Routine", icon: BadgeCheck },
   { id: "discipline", label: "Discipline", icon: DumbbellIcon },
-  { id: "payments", label: "Payments", icon: CreditCard },
-  { id: "stats", label: "Statistics", icon: BarChart3 },
+  { id: "payments", label: "Payments", icon: BadgeDollarSign },
+  { id: "setting", label: "Setting", icon: Settings },
 ];
 
 export function Navigation() {

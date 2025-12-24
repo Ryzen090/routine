@@ -4,9 +4,9 @@ import React, { useEffect } from 'react';
 import { AppProvider, useApp } from '@/contexts/AppContext';
 import { Navigation } from '@/components/Navigation';
 import { Dashboard } from '@/components/Dashboard';
-import { Statistics } from '@/components/Statistics';
 import { Payments } from '@/components/Payments';
 import { Discipline } from '@/components/Discipline';
+import { Setting } from '@/components/Setting';
 
 function AppContent() {
   const { state, dispatch } = useApp();
@@ -23,8 +23,8 @@ function AppContent() {
     switch (state.currentView) {
       case 'dashboard':
         return <Dashboard />;
-      case 'stats':
-        return <Statistics />;
+      case 'setting':
+        return <Setting />;
       case 'payments':
         return <Payments />;
       case 'discipline':

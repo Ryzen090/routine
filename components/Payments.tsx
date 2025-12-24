@@ -1,47 +1,11 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CreditCard, Calendar, DollarSign, TrendingUp } from "lucide-react";
-
-const value = [
-  {
-    id: "1",
-    title: "Salary",
-    amount: 350,
-    type: "income",
-    icon: "💲",
-  },
-  {
-    id: "5",
-    title: "Family",
-    amount: 100,
-    type: "expense",
-    icon: "👪",
-  },
-  {
-    id: "2",
-    title: "Rent",
-    amount: 75,
-    type: "expense",
-    icon: "🏠",
-  },
-  {
-    id: "4",
-    title: "Food",
-    amount: 75,
-    type: "expense",
-    icon: "🍛",
-  },
-  {
-    id: "3",
-    title: "Motorbike",
-    amount: 20,
-    type: "expense",
-    icon: "⛽",
-  },
-];
+import { useApp } from "@/contexts/AppContext";
 
 export function Payments() {
-  const todaysPayments = value;
+  const { state } = useApp();
+  const todaysPayments = state.payments;
 
   const todaysIncome = todaysPayments
     .filter((p) => p.type === "income")
