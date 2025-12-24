@@ -8,7 +8,6 @@ const value = [
     title: "Salary",
     amount: 350,
     type: "income",
-    date: "2025-12-23",
     icon: "💲",
   },
   {
@@ -16,7 +15,6 @@ const value = [
     title: "Family",
     amount: 100,
     type: "expense",
-    date: "2025-12-23",
     icon: "👪",
   },
   {
@@ -24,7 +22,6 @@ const value = [
     title: "Rent",
     amount: 75,
     type: "expense",
-    date: "2025-12-23",
     icon: "🏠",
   },
   {
@@ -32,7 +29,6 @@ const value = [
     title: "Food",
     amount: 75,
     type: "expense",
-    date: "2025-12-23",
     icon: "🍛",
   },
   {
@@ -40,14 +36,12 @@ const value = [
     title: "Motorbike",
     amount: 20,
     type: "expense",
-    date: "2025-12-23",
     icon: "⛽",
   },
 ];
 
 export function Payments() {
-  const today = new Date().toISOString().split("T")[0];
-  const todaysPayments = value.filter((payment) => payment.date === today);
+  const todaysPayments = value;
 
   const todaysIncome = todaysPayments
     .filter((p) => p.type === "income")

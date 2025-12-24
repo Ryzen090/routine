@@ -18,7 +18,7 @@ export function Routine() {
   const { state, dispatch } = useApp();
 
   const todaysTasks = state.tasks
-    .filter((task) => task.recurring || task.id === state.selectedDate)
+    .filter((task) => task.recurring)
     .sort((a, b) => a.startTime.localeCompare(b.startTime));
 
   const handleTaskToggle = (task: Task) => {
