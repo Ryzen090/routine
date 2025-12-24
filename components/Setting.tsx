@@ -162,44 +162,10 @@ export function Setting() {
   ];
 
   return (
-    <div className="space-y-6 bg-white min-h-screen p-5 pb-20 lg:pb-6">
-      <h2 className="text-2xl font-bold flex items-center gap-2 text-black">
-        <BarChart3 className="h-6 w-6 text-blue-600" />
-        Statistics
+    <div className="space-y-4 bg-white min-h-screen p-5 pb-20 lg:pb-6">
+      <h2 className="text-2xl font-bold flex items-center justify-center gap-2 text-black">
+        Setting
       </h2>
-
-      {/* Today Progress */}
-      <Card className="bg-white border border-gray-200 shadow-sm">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-black">
-            <Clock className="h-5 w-5 text-blue-600" />
-            Today&apos;s Progress
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-black">
-                Daily Completion
-              </span>
-              <span className="text-sm text-gray-600">
-                {completedToday.length}/{todaysTasks.length} Tasks
-              </span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-3">
-              <div
-                className="bg-blue-600 h-3 rounded-full transition-all duration-300"
-                style={{ width: `${dailyProgress}%` }}
-              />
-            </div>
-            <p className="text-xs text-gray-600">
-              {dailyProgress === 100
-                ? "Perfect day! All tasks completed."
-                : `${Math.round(dailyProgress)}% of today's tasks completed`}
-            </p>
-          </div>
-        </CardContent>
-      </Card>
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
