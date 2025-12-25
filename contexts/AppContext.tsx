@@ -42,7 +42,7 @@ interface Payment {
   icon: string;
 }
 
-interface MonthlyGoal {
+interface Goal {
   id: string;
   title: string;
   icon: string;
@@ -57,7 +57,8 @@ interface AppState {
   notes: Note[];
   myTools: MyTool[];
   payments: Payment[];
-  monthlyGoals: MonthlyGoal[];
+  monthlyGoals: Goal[];
+  weeklyPlan: Record<string, Record<string, string>>;
 }
 
 type AppAction =
@@ -80,7 +81,12 @@ type AppAction =
     }
   | { type: "ADD_PAYMENT"; payload: Payment }
   | { type: "UPDATE_PAYMENT"; payload: Payment }
-  | { type: "DELETE_PAYMENT"; payload: string };
+  | { type: "DELETE_PAYMENT"; payload: string }
+  | { type: "SET_WEEKLY_PLAN"; payload: Record<string, Record<string, string>> }
+  | {
+      type: "UPDATE_DAY_PLAN";
+      payload: { day: string; period: string; value: string };
+    };
 
 const defaultTasks: Task[] = [
   {
@@ -374,13 +380,20 @@ const defaultPayments: Payment[] = [
   },
 ];
 
-const monthlyGoals: MonthlyGoal[] = [
+const monthlyGoals: Goal[] = [
   {
     id: "1",
-    title: "Save Money",
+    title: "Save Money For Family 100$",
+    icon: "💲",
+  },
+  {
+    id: "2",
+    title: "Save Money For Self 30$",
     icon: "💲",
   },
 ];
+
+const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
 const initialState: AppState = {
   tasks: defaultTasks,
@@ -425,6 +438,10 @@ const initialState: AppState = {
   myTools: defaultMyTools,
   payments: defaultPayments,
   monthlyGoals: monthlyGoals,
+  weeklyPlan: days.reduce((acc, day) => {
+    acc[day] = { Trade: "" };
+    return acc;
+  }, {} as Record<string, Record<string, string>>),
 };
 
 function appReducer(state: AppState, action: AppAction): AppState {
@@ -522,6 +539,22 @@ function appReducer(state: AppState, action: AppAction): AppState {
             : tool
         ),
       };
+    case "SET_WEEKLY_PLAN":
+      return {
+        ...state,
+        weeklyPlan: action.payload,
+      };
+    case "UPDATE_DAY_PLAN":
+      return {
+        ...state,
+        weeklyPlan: {
+          ...state.weeklyPlan,
+          [action.payload.day]: {
+            ...state.weeklyPlan[action.payload.day],
+            [action.payload.period]: action.payload.value,
+          },
+        },
+      };
     default:
       return state;
   }
@@ -560,6 +593,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           }, {} as Record<string, boolean>);
           return acc;
         }, {} as Record<string, Record<string, boolean>>),
+        weeklyPlan: state.weeklyPlan,
       };
 
       localStorage.setItem(
@@ -573,8 +607,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         userStats: state.userStats,
         notes: state.notes,
         myTools: state.myTools,
-        // Note: intentionally NOT saving `payments` so the app always
-        // uses `defaultPayments` and payments cannot be modified/persisted.
+        weeklyPlan: state.weeklyPlan,
       };
       localStorage.setItem("appState", JSON.stringify(appStateToSave));
     } catch (error) {
@@ -589,7 +622,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       const savedAppState = localStorage.getItem("appState");
       if (savedAppState) {
         const parsedAppState = JSON.parse(savedAppState);
-        // Ensure we do NOT load persisted `payments` (keep defaultPayments)
         const { payments, ...rest } = parsedAppState as Partial<AppState>;
         dispatch({ type: "LOAD_DATA", payload: rest });
       }
@@ -631,6 +663,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             myTools: updatedTools,
           },
         });
+
+        if (parsedTodayData.weeklyPlan) {
+          dispatch({
+            type: "SET_WEEKLY_PLAN",
+            payload: parsedTodayData.weeklyPlan,
+          });
+        }
       }
 
       const lastActiveDate = localStorage.getItem("lastActiveDate");
