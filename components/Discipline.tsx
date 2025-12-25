@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useApp } from "@/contexts/AppContext";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CheckSquare, Goal, Calculator, Calendar } from "lucide-react";
@@ -8,7 +8,7 @@ type Tab = "daily" | "trade" | "monthly";
 
 export function Discipline() {
   const { state, dispatch } = useApp();
-  const [activeTab, setActiveTab] = useState<Tab>("daily");
+  const [activeTab, setActiveTab] = React.useState<Tab>("daily");
 
   const monthlyGoals = state.monthlyGoals;
 
@@ -66,9 +66,7 @@ export function Discipline() {
 
   return (
     <div className="space-y-6 bg-white min-h-screen pt-5 pb-20 px-4">
-      {/* Header Section */}
       <div className="space-y-6">
-        {/* Clean Header */}
         <div className="text-center space-y-3">
           <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl mb-2 shadow-lg">
             <Goal className="w-7 h-7 text-white" />
@@ -81,7 +79,6 @@ export function Discipline() {
           </div>
         </div>
 
-        {/* Elegant Tab Navigation */}
         <div className="flex justify-center">
           <div className="inline-flex items-center bg-gray-50 rounded-xl p-1.5">
             {(["daily", "trade", "monthly"] as Tab[]).map((tab, index) => (

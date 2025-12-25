@@ -1,20 +1,6 @@
 import React, { useEffect } from "react";
 import { useApp } from "@/contexts/AppContext";
-import {
-  Target,
-  Calendar,
-  TrendingUp,
-  CheckCircle,
-  BarChart3,
-  Trophy,
-  Flame,
-  Zap,
-  Clock,
-  Activity,
-  TrendingDown,
-  Bell,
-} from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Calendar, Trophy, Clock } from "lucide-react";
 
 interface DailyStats {
   date: string;
@@ -131,14 +117,15 @@ export function Setting() {
   const recentActivity = weeklyStats.slice(-5);
 
   return (
-    <div className="space-y-6 bg-white min-h-screen p-4 pb-20">
-      {/* Header */}
-      <div className="text-center space-y-2">
-        <div className="w-16 h-16 bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg">
-          <Trophy className="h-8 w-8 text-white" />
+    <div className="space-y-6 bg-white min-h-screen pt-5 pb-20 px-4">
+      <div className="text-center space-y-3">
+        <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl mb-2 shadow-lg">
+          <Trophy className="w-7 h-7 text-white" />
         </div>
-        <h1 className="text-2xl font-bold text-gray-900">Performance</h1>
-        <p className="text-gray-600">Track your productivity metrics</p>
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900">Performance</h2>
+          <p className="text-gray-600 mt-1">Track your productivity metrics</p>
+        </div>
       </div>
 
       {/* Key Metrics */}
@@ -302,102 +289,6 @@ export function Setting() {
             })}
           </div>
         )}
-      </div>
-
-      {/* Insights */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-semibold text-gray-900 px-1">Insights</h3>
-
-        <div className="grid grid-cols-1 gap-3">
-          {/* Performance Card */}
-          <div className="bg-gradient-to-r from-gray-50 to-white border border-gray-200 rounded-2xl p-4">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 bg-gray-900 rounded-xl flex items-center justify-center">
-                <Activity className="h-5 w-5 text-white" />
-              </div>
-              <div>
-                <div className="font-semibold text-gray-900">
-                  Performance Trend
-                </div>
-                <div className="text-xs text-gray-600">Last 7 days</div>
-              </div>
-            </div>
-            <div
-              className={`text-sm font-medium ${
-                weeklyCompletion >
-                (weeklyStats[weeklyStats.length - 2]?.completionRate || 0)
-                  ? "text-emerald-600"
-                  : "text-amber-600"
-              }`}
-            >
-              {weeklyCompletion >
-              (weeklyStats[weeklyStats.length - 2]?.completionRate || 0)
-                ? "↗ Improving"
-                : "→ Stable"}
-            </div>
-          </div>
-
-          {/* Streak Card */}
-          <div className="bg-gradient-to-r from-gray-50 to-white border border-gray-200 rounded-2xl p-4">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-500 rounded-xl flex items-center justify-center">
-                <Flame className="h-5 w-5 text-white" />
-              </div>
-              <div>
-                <div className="font-semibold text-gray-900">
-                  Current Streak
-                </div>
-                <div className="text-xs text-gray-600">
-                  Perfect days in a row
-                </div>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="text-2xl font-bold text-gray-900">
-                {currentStreak}
-              </div>
-              <div className="text-xs text-gray-600">
-                {currentStreak === 0
-                  ? "Start your streak!"
-                  : currentStreak === 1
-                  ? "First perfect day!"
-                  : currentStreak < 3
-                  ? "Keep going!"
-                  : "🔥 Amazing!"}
-              </div>
-            </div>
-          </div>
-
-          {/* Next Goal */}
-          <div className="bg-gradient-to-r from-gray-50 to-white border border-gray-200 rounded-2xl p-4">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center">
-                <Target className="h-5 w-5 text-white" />
-              </div>
-              <div>
-                <div className="font-semibold text-gray-900">Next Goal</div>
-                <div className="text-xs text-gray-600">Weekly target</div>
-              </div>
-            </div>
-            <div className="space-y-2">
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Progress</span>
-                <span className="font-medium text-gray-900">
-                  {totalCompleted}/35 tasks
-                </span>
-              </div>
-              <div className="relative h-2 bg-gray-200 rounded-full overflow-hidden">
-                <div
-                  className="absolute left-0 top-0 h-full bg-blue-500 rounded-full"
-                  style={{ width: `${(totalCompleted / 35) * 100}%` }}
-                ></div>
-              </div>
-              <div className="text-xs text-gray-600">
-                {35 - totalCompleted} tasks remaining this week
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* Quick Stats */}

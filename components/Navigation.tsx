@@ -15,7 +15,7 @@ import {
 const navigationItems = [
   { id: "dashboard", label: "Routine", icon: BadgeCheck },
   { id: "discipline", label: "Discipline", icon: DumbbellIcon },
-  { id: "payments", label: "Payments", icon: BadgeDollarSign },
+  { id: "financial", label: "Financial", icon: BadgeDollarSign },
   { id: "setting", label: "Setting", icon: Settings },
 ];
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 
 const motivationalQuotes = [
@@ -17,8 +17,8 @@ const motivationalQuotes = [
 ];
 
 export function Quotes() {
-  const [currentQuote, setCurrentQuote] = useState(motivationalQuotes[0]);
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [currentQuote, setCurrentQuote] = React.useState(motivationalQuotes[0]);
+  const [isAnimating, setIsAnimating] = React.useState(false);
 
   const getRandomQuote = () => {
     const randomIndex = Math.floor(Math.random() * motivationalQuotes.length);
@@ -33,7 +33,7 @@ export function Quotes() {
     }, 300);
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     const interval = setInterval(() => {
       handleNewQuote();
     }, 30000);
@@ -41,7 +41,7 @@ export function Quotes() {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
+  React.useEffect(() => {
     setCurrentQuote(getRandomQuote());
   }, []);
 

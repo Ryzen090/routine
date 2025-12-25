@@ -1,3 +1,5 @@
+"use client";
+
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Task, UserStats, AppState, Payment } from "@/types";
 import React, { createContext, useContext, useReducer, useEffect } from "react";

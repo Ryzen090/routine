@@ -82,7 +82,7 @@ export interface AppState {
   achievements: Achievement[];
   userStats: UserStats;
   selectedDate: string;
-  currentView: "dashboard" | "tasks" | "setting" | "payments" | "discipline";
+  currentView: "dashboard" | "tasks" | "setting" | "financial" | "discipline";
   notes: Note[];
   myTools: MyTool[];
   payments: Payment[];

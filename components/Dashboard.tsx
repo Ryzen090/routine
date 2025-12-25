@@ -54,10 +54,20 @@ export function Dashboard() {
         </div>
       </div>
 
-      {/* Quotes */}
-      <section className="rounded-xl bg-white p-3 shadow-sm">
-        <Quotes />
-      </section>
+      {/* Motivation & Tools */}
+      <div className="space-y-4">
+        <div className="bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-200 rounded-2xl p-5">
+          <div className="flex items-center gap-2 mb-3">
+            <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+              <span className="text-lg">💭</span>
+            </div>
+            <span className="text-sm font-semibold text-gray-900">
+              Daily Motivation
+            </span>
+          </div>
+          <Quotes />
+        </div>
+      </div>
 
       {/* My Tools */}
       <section className="rounded-xl bg-white p-3 shadow-sm">
