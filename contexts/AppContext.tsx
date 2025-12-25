@@ -1,65 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Task, Achievement, UserStats } from "@/types";
+import { Task, UserStats, AppState, Payment } from "@/types";
 import React, { createContext, useContext, useReducer, useEffect } from "react";
-
-interface Note {
-  id: string;
-  title: string;
-  content: string;
-  subNotes: SubNote[];
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface SubNote {
-  id: string;
-  content: string;
-  completed: boolean;
-}
-
-interface MyTool {
-  id: string;
-  title: string;
-  icon: string;
-  target: number;
-  current: number;
-  unit: string;
-  subItems: ToolSubItem[];
-}
-
-interface ToolSubItem {
-  id: string;
-  amount: string;
-  unit: string;
-  completed: boolean;
-}
-
-interface Payment {
-  id: string;
-  title: string;
-  amount: number;
-  type: "expense" | "income";
-  icon: string;
-}
-
-interface Goal {
-  id: string;
-  title: string;
-  icon: string;
-}
-
-interface AppState {
-  tasks: Task[];
-  achievements: Achievement[];
-  userStats: UserStats;
-  selectedDate: string;
-  currentView: "dashboard" | "tasks" | "setting" | "payments" | "discipline";
-  notes: Note[];
-  myTools: MyTool[];
-  payments: Payment[];
-  monthlyGoals: Goal[];
-  weeklyPlan: Record<string, Record<string, string>>;
-}
+import {
+  days,
+  defaultMyTools,
+  defaultNotes,
+  defaultPayments,
+  defaultTasks,
+  monthlyGoals,
+} from "./data";
 
 type AppAction =
   | { type: "SET_TASKS"; payload: Task[] }
@@ -71,6 +20,7 @@ type AppAction =
   | { type: "LOAD_DATA"; payload: Partial<AppState> }
   | { type: "RESET_TO_DEFAULT"; payload: void }
   | { type: "RESET_DAILY_TASKS"; payload: void }
+  | { type: "RESET_MONTHLY_GOALS"; payload: void }
   | {
       type: "UPDATE_NOTE_SUBNOTE";
       payload: { noteId: string; subNoteId: string };
@@ -86,314 +36,12 @@ type AppAction =
   | {
       type: "UPDATE_DAY_PLAN";
       payload: { day: string; period: string; value: string };
+    }
+  | { type: "TOGGLE_GOAL_COMPLETION"; payload: string }
+  | {
+      type: "UPDATE_GOAL_PROGRESS";
+      payload: { id: string; currentAmount: number };
     };
-
-const defaultTasks: Task[] = [
-  {
-    id: "1",
-    title: "Wake Up",
-    icon: "🌅",
-    startTime: "06:30",
-    endTime: "07:00",
-    category: "routine",
-    completed: false,
-    recurring: true,
-    priority: "medium",
-  },
-  {
-    id: "2",
-    title: "Cooking & Cleaning",
-    icon: "🍳",
-    startTime: "07:40",
-    endTime: "08:00",
-    category: "health",
-    completed: false,
-    recurring: true,
-    priority: "high",
-  },
-  {
-    id: "3",
-    title: "Shower & Dress Up",
-    icon: "🚿",
-    startTime: "08:00",
-    endTime: "08:20",
-    category: "routine",
-    completed: false,
-    recurring: true,
-    priority: "medium",
-  },
-  {
-    id: "4",
-    title: "Commute",
-    icon: "🏍️",
-    startTime: "08:30",
-    endTime: "08:40",
-    category: "work",
-    completed: false,
-    recurring: true,
-    priority: "high",
-  },
-  {
-    id: "5",
-    title: "Plan the Day & Working Day",
-    icon: "💻",
-    startTime: "08:40",
-    endTime: "09:00",
-    category: "work",
-    completed: false,
-    recurring: true,
-    priority: "high",
-  },
-  {
-    id: "7",
-    title: "Lunch",
-    icon: "🍱",
-    startTime: "12:00",
-    endTime: "12:50",
-    category: "health",
-    completed: false,
-    recurring: true,
-    priority: "high",
-  },
-  {
-    id: "9",
-    title: "Evening Relaxation",
-    icon: "🎮",
-    startTime: "17:00",
-    endTime: "18:00",
-    category: "routine",
-    completed: false,
-    recurring: true,
-    priority: "low",
-  },
-  {
-    id: "10",
-    title: "Dinner",
-    icon: "🍳",
-    startTime: "18:00",
-    endTime: "19:15",
-    category: "routine",
-    completed: false,
-    recurring: true,
-    priority: "medium",
-  },
-  {
-    id: "11",
-    title: "Evening Exercise",
-    icon: "🏋️‍♂️",
-    startTime: "18:20",
-    endTime: "18:40",
-    category: "health",
-    completed: false,
-    recurring: true,
-    priority: "high",
-  },
-  {
-    id: "12",
-    title: "Take a Shower",
-    icon: "🚿",
-    startTime: "18:50",
-    endTime: "19:10",
-    category: "routine",
-    completed: false,
-    recurring: true,
-    priority: "medium",
-  },
-  {
-    id: "13",
-    title: "Trading Learning",
-    icon: "📈",
-    startTime: "19:00",
-    endTime: "19:45",
-    category: "learning",
-    completed: false,
-    recurring: true,
-    priority: "medium",
-  },
-  {
-    id: "14",
-    title: "Healthy Dinner",
-    icon: "🍽️",
-    startTime: "19:45",
-    endTime: "20:00",
-    category: "routine",
-    completed: false,
-    recurring: true,
-    priority: "high",
-  },
-  {
-    id: "15",
-    title: "Learning",
-    icon: "📚",
-    startTime: "20:00",
-    endTime: "21:00",
-    category: "learning",
-    completed: false,
-    recurring: true,
-    priority: "medium",
-  },
-
-  {
-    id: "16",
-    title: "Relaxation",
-    icon: "🎲",
-    startTime: "21:15",
-    endTime: "22:00",
-    category: "routine",
-    completed: false,
-    recurring: true,
-    priority: "high",
-  },
-  {
-    id: "17",
-    title: "Healthy night Sleep",
-    icon: "🌙",
-    startTime: "23:30",
-    endTime: "23:30",
-    category: "routine",
-    completed: false,
-    recurring: true,
-    priority: "high",
-  },
-];
-
-const defaultNotes: Note[] = [
-  {
-    id: "1",
-    title: "Motivation Skill",
-    content: "Continuous learning and skill development",
-    subNotes: [
-      {
-        id: "1-1",
-        content: "Trade",
-        completed: false,
-      },
-      {
-        id: "1-2",
-        content: "Upwork",
-        completed: false,
-      },
-      {
-        id: "1-3",
-        content: "Improve English",
-        completed: false,
-      },
-    ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "3",
-    title: "Regular Exercise",
-    content: "Stay physically active",
-    subNotes: [
-      {
-        id: "3-1",
-        content: "ហាត់ប្រាណ ១៥–៣០ នាទីក្នុងមួយថ្ងៃ",
-        completed: false,
-      },
-    ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "4",
-    title: "Plan Your Day for Tomorrow",
-    content: "Daily planning for success",
-    subNotes: [
-      {
-        id: "4-1",
-        content: "កំណត់តំលៃការងារសំខាន់ ៣ យ៉ាងក្នុងមួយថ្ងៃ",
-        completed: false,
-      },
-    ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "5",
-    title: "Eat Nutritious Food",
-    content: "Healthy eating habits",
-    subNotes: [
-      { id: "5-1", content: "ផឹកទឹក ២-៣ លីតក្នុងមួយថ្ងៃ", completed: false },
-      {
-        id: "5-2",
-        content: "កាត់បន្ថយសារជាតិផ្អែម",
-        completed: false,
-      },
-    ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-];
-
-const defaultMyTools: MyTool[] = [
-  {
-    id: "1",
-    title: "Drink Water",
-    icon: "💧",
-    target: 3,
-    current: 0,
-    unit: "bottle",
-    subItems: [
-      { id: "1-1", amount: "1 Bottle", unit: "bottle", completed: false },
-      { id: "1-2", amount: "1 Bottle", unit: "bottle", completed: false },
-    ],
-  },
-];
-
-const defaultPayments: Payment[] = [
-  {
-    id: "1",
-    title: "Salary",
-    amount: 350,
-    type: "income",
-    icon: "💲",
-  },
-  {
-    id: "5",
-    title: "Family",
-    amount: 100,
-    type: "expense",
-    icon: "👪",
-  },
-  {
-    id: "2",
-    title: "Rent",
-    amount: 75,
-    type: "expense",
-    icon: "🏠",
-  },
-  {
-    id: "4",
-    title: "Food",
-    amount: 75,
-    type: "expense",
-    icon: "🍛",
-  },
-  {
-    id: "3",
-    title: "Motorbike",
-    amount: 20,
-    type: "expense",
-    icon: "⛽",
-  },
-];
-
-const monthlyGoals: Goal[] = [
-  {
-    id: "1",
-    title: "Save Money For Family 100$",
-    icon: "💲",
-  },
-  {
-    id: "2",
-    title: "Save Money For Self 30$",
-    icon: "💲",
-  },
-];
-
-const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
 const initialState: AppState = {
   tasks: defaultTasks,
@@ -501,6 +149,16 @@ function appReducer(state: AppState, action: AppAction): AppState {
           })),
         })),
       };
+    case "RESET_MONTHLY_GOALS":
+      return {
+        ...state,
+        monthlyGoals: state.monthlyGoals.map((goal) => ({
+          ...goal,
+          completed: false,
+          completedDate: undefined,
+          currentAmount: 0,
+        })),
+      };
     case "UPDATE_NOTE_SUBNOTE":
       return {
         ...state,
@@ -555,6 +213,35 @@ function appReducer(state: AppState, action: AppAction): AppState {
           },
         },
       };
+    case "TOGGLE_GOAL_COMPLETION":
+      return {
+        ...state,
+        monthlyGoals: state.monthlyGoals.map((goal) =>
+          goal.id === action.payload
+            ? {
+                ...goal,
+                completed: !goal.completed,
+                completedDate: !goal.completed
+                  ? new Date().toISOString()
+                  : undefined,
+              }
+            : goal
+        ),
+      };
+    case "UPDATE_GOAL_PROGRESS":
+      return {
+        ...state,
+        monthlyGoals: state.monthlyGoals.map((goal) =>
+          goal.id === action.payload.id
+            ? {
+                ...goal,
+                currentAmount: action.payload.currentAmount,
+                completed:
+                  action.payload.currentAmount >= (goal.targetAmount || 0),
+              }
+            : goal
+        ),
+      };
     default:
       return state;
   }
@@ -568,6 +255,36 @@ const AppContext = createContext<{
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(appReducer, initialState);
   const [isLoaded, setIsLoaded] = React.useState(false);
+
+  const checkAndResetMonthlyGoals = () => {
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+
+    const lastResetMonth = localStorage.getItem("lastResetMonth");
+    const lastResetYear = localStorage.getItem("lastResetYear");
+
+    if (!lastResetMonth || !lastResetYear) {
+      localStorage.setItem("lastResetMonth", currentMonth.toString());
+      localStorage.setItem("lastResetYear", currentYear.toString());
+      return false;
+    }
+
+    const lastMonth = parseInt(lastResetMonth);
+    const lastYear = parseInt(lastResetYear);
+
+    if (
+      currentYear > lastYear ||
+      (currentYear === lastYear && currentMonth > lastMonth)
+    ) {
+      localStorage.setItem("lastResetMonth", currentMonth.toString());
+      localStorage.setItem("lastResetYear", currentYear.toString());
+      dispatch({ type: "RESET_MONTHLY_GOALS", payload: undefined });
+      return true;
+    }
+
+    return false;
+  };
 
   const saveToLocalStorage = () => {
     try {
@@ -607,6 +324,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         userStats: state.userStats,
         notes: state.notes,
         myTools: state.myTools,
+        monthlyGoals: state.monthlyGoals,
         weeklyPlan: state.weeklyPlan,
       };
       localStorage.setItem("appState", JSON.stringify(appStateToSave));
@@ -618,6 +336,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const loadFromLocalStorage = () => {
     try {
       const today = new Date().toISOString().split("T")[0];
+
+      checkAndResetMonthlyGoals();
 
       const savedAppState = localStorage.getItem("appState");
       if (savedAppState) {
@@ -696,6 +416,14 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       saveToLocalStorage();
     }
   }, [state, isLoaded]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      checkAndResetMonthlyGoals();
+    }, 24 * 60 * 60 * 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <AppContext.Provider value={{ state, dispatch }}>

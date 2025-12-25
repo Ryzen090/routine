@@ -1,16 +1,10 @@
 import React, { useState } from "react";
 import { useApp } from "@/contexts/AppContext";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  CheckSquare,
-  Goal,
-  TrendingUp,
-  Calculator,
-  Calendar,
-} from "lucide-react";
+import { CheckSquare, Goal, Calculator, Calendar } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-type Tab = "daily" | "weekly" | "monthly";
+type Tab = "daily" | "trade" | "monthly";
 
 export function Discipline() {
   const { state, dispatch } = useApp();
@@ -28,12 +22,10 @@ export function Discipline() {
   const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
   const periods = ["Trade"];
 
-  // Get today's day name
   const getTodayDayName = () => {
     const today = new Date();
-    const dayIndex = today.getDay(); // 0 = Sunday, 1 = Monday, etc.
+    const dayIndex = today.getDay();
 
-    // Convert to Monday-Friday format
     const dayMap: Record<number, string> = {
       1: "Monday",
       2: "Tuesday",
@@ -54,7 +46,6 @@ export function Discipline() {
     });
   };
 
-  // Calculate total weekly trading sum
   const calculateWeeklyTotal = () => {
     let total = 0;
 
@@ -75,28 +66,47 @@ export function Discipline() {
 
   return (
     <div className="space-y-6 bg-white min-h-screen pt-5 pb-20 px-4">
-      <div className="text-center">
-        <h2 className="text-xl lg:text-2xl font-bold text-black">Discipline</h2>
-        <p className="text-sm text-gray-600">
-          Becoming the best version of myself
-        </p>
-      </div>
+      {/* Header Section */}
+      <div className="space-y-6">
+        {/* Clean Header */}
+        <div className="text-center space-y-3">
+          <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl mb-2 shadow-lg">
+            <Goal className="w-7 h-7 text-white" />
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900">Discipline</h2>
+            <p className="text-gray-600 mt-1">
+              Becoming the best version of myself
+            </p>
+          </div>
+        </div>
 
-      <div className="flex justify-center gap-2">
-        {(["daily", "weekly", "monthly"] as Tab[]).map((tab) => (
-          <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            className={`px-4 py-1 rounded-full text-sm capitalize transition
-              ${
-                activeTab === tab
-                  ? "bg-black text-white"
-                  : "bg-gray-100 text-gray-600"
-              }`}
-          >
-            {tab}
-          </button>
-        ))}
+        {/* Elegant Tab Navigation */}
+        <div className="flex justify-center">
+          <div className="inline-flex items-center bg-gray-50 rounded-xl p-1.5">
+            {(["daily", "trade", "monthly"] as Tab[]).map((tab, index) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`relative px-6 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
+                  activeTab === tab
+                    ? "text-gray-900 bg-white shadow"
+                    : "text-gray-500 hover:text-gray-700"
+                }`}
+              >
+                <span className="capitalize flex items-center gap-2">
+                  {tab}
+                  {activeTab === tab && (
+                    <span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
+                  )}
+                </span>
+                {index < 2 && activeTab !== tab && (
+                  <div className="absolute right-0 top-1/2 -translate-y-1/2 w-px h-4 bg-gray-300"></div>
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
       {activeTab === "daily" && (
@@ -141,7 +151,7 @@ export function Discipline() {
         </div>
       )}
 
-      {activeTab === "weekly" && (
+      {activeTab === "trade" && (
         <div className="space-y-4">
           <Card>
             <CardHeader className="pb-0">
@@ -207,13 +217,11 @@ export function Discipline() {
                   <div className="mt-3">
                     {weeklyTotal > 0 && (
                       <div className="text-xs text-green-600 font-semibold flex items-center gap-1">
-                        <span>📈</span>
                         Profit: +${weeklyTotal.toFixed(2)}
                       </div>
                     )}
                     {weeklyTotal < 0 && (
                       <div className="text-xs text-red-600 font-semibold flex items-center gap-1">
-                        <span>📉</span>
                         Loss: -${Math.abs(weeklyTotal).toFixed(2)}
                       </div>
                     )}
@@ -458,26 +466,170 @@ export function Discipline() {
       )}
 
       {activeTab === "monthly" && (
-        <div className="space-y-4">
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {monthlyGoals.map((goal, index) => (
+              <Card
+                key={goal.id}
+                className="border-l-4 hover:shadow-md transition-shadow duration-200"
+                style={{ borderLeftColor: "#667eea" }}
+              >
+                <CardContent className="p-4">
+                  <div className="flex items-start gap-3">
+                    <button
+                      onClick={() =>
+                        dispatch({
+                          type: "TOGGLE_GOAL_COMPLETION",
+                          payload: goal.id,
+                        })
+                      }
+                      className="flex-shrink-0"
+                    >
+                      <div
+                        className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 ${
+                          goal.completed
+                            ? "bg-gradient-to-br from-green-100 to-emerald-100 ring-2 ring-green-300 ring-offset-1"
+                            : "bg-gradient-to-br from-blue-50 to-purple-50 hover:from-blue-100 hover:to-purple-100"
+                        }`}
+                      >
+                        {goal.completed ? (
+                          <div className="w-6 h-6 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center">
+                            <svg
+                              className="w-4 h-4 text-white"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={3}
+                                d="M5 13l4 4L19 7"
+                              />
+                            </svg>
+                          </div>
+                        ) : (
+                          <span className="text-lg">{goal.icon}</span>
+                        )}
+                      </div>
+                    </button>
+
+                    <div className="flex-1">
+                      <div className="flex justify-between items-start mb-1">
+                        <h4
+                          className={`font-semibold text-sm ${
+                            goal.completed
+                              ? "text-gray-500 line-through"
+                              : "text-gray-800"
+                          }`}
+                        >
+                          Goal #{index + 1}
+                        </h4>
+                        {goal.completed ? (
+                          <span className="text-xs bg-gradient-to-r from-green-100 to-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
+                            Completed
+                          </span>
+                        ) : (
+                          <span className="text-xs text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 font-medium">
+                            Monthly
+                          </span>
+                        )}
+                      </div>
+
+                      <p
+                        className={`text-sm mb-2 ${
+                          goal.completed
+                            ? "text-gray-400 line-through"
+                            : "text-gray-700"
+                        }`}
+                      >
+                        {goal.title}
+                      </p>
+
+                      {!goal.completed && (
+                        <div className="flex items-center justify-between mt-3">
+                          <span className="inline-flex items-center gap-1 text-xs bg-gradient-to-r from-blue-50 to-purple-50 text-blue-700 px-2 py-1 rounded-full">
+                            <div className="w-1.5 h-1.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div>
+                            Monthly Target
+                          </span>
+
+                          <button
+                            onClick={() =>
+                              dispatch({
+                                type: "TOGGLE_GOAL_COMPLETION",
+                                payload: goal.id,
+                              })
+                            }
+                            className="text-xs bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700 hover:from-blue-200 hover:to-purple-200 px-3 py-1 rounded transition-all duration-200"
+                          >
+                            Mark Complete
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
           <Card>
-            <CardHeader>
-              <CardTitle className="text-sm">
-                <div className="flex items-center gap-2">
-                  <Goal className="h-6 w-6" />
-                  <p>Monthly Goals</p>
-                </div>
+            <CardHeader className="pb-3 px-4">
+              <CardTitle className="text-sm flex items-center gap-2">
+                <Goal className="h-5 w-5 bg-gradient-to-r from-blue-50 to-purple-50 text-blue-700" />
+                Monthly Overview
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3">
-              {monthlyGoals.map((item, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-2 bg-gray-50 p-2 rounded"
-                >
-                  <span>{item.icon}</span>
-                  <span className="text-sm">{item.title}</span>
+            <CardContent className="px-4">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between p-3 bg-gradient-to-r from-blue-50 to-purple-50 text-blue-700 rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
+                      <Goal className="h-5 w-5 bg-gradient-to-r from-blue-50 to-purple-50 text-blue-700" />
+                    </div>
+                    <div>
+                      <div className="text-sm font-medium text-gray-900">
+                        Active Goals
+                      </div>
+                      <div className="text-xs text-gray-600">
+                        {monthlyGoals.filter((g) => g.completed).length} of{" "}
+                        {monthlyGoals.length} completed
+                      </div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-lg font-bold bg-gradient-to-r from-blue-50 to-purple-50 text-blue-700">
+                      {Math.round(
+                        (monthlyGoals.filter((g) => g.completed).length /
+                          monthlyGoals.length) *
+                          100
+                      )}
+                      %
+                    </div>
+                  </div>
                 </div>
-              ))}
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-gray-50 p-3 rounded-lg">
+                    <div className="text-xs text-gray-600 mb-1">
+                      Savings Target
+                    </div>
+                    <div className="text-sm font-semibold text-gray-900">
+                      $130
+                    </div>
+                    <div className="text-xs text-gray-500">Family + Self</div>
+                  </div>
+                  <div className="bg-gray-50 p-3 rounded-lg">
+                    <div className="text-xs text-gray-600 mb-1">
+                      Days Remaining
+                    </div>
+                    <div className="text-sm font-semibold text-gray-900">
+                      ~15 days
+                    </div>
+                    <div className="text-xs text-gray-500">Until month end</div>
+                  </div>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </div>
