@@ -1,7 +1,7 @@
 import React from "react";
 import { useApp } from "@/contexts/AppContext";
 import { Checkbox } from "@/components/ui/checkbox";
-import { CheckSquare, Goal, Calculator, Calendar } from "lucide-react";
+import { CheckSquare, Goal, Calendar } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 type Tab = "daily" | "trade" | "monthly";
@@ -39,20 +39,39 @@ export function Discipline() {
 
   const todayDayName = getTodayDayName();
 
-  const updateWeeklyPlan = (day: string, period: string, value: string) => {
+  const getWeekNumber = () => {
+    const now = new Date();
+    const startOfYear = new Date(now.getFullYear(), 0, 1);
+    const pastDaysOfYear = (now.getTime() - startOfYear.getTime()) / 86400000;
+    return Math.ceil((pastDaysOfYear + startOfYear.getDay() + 1) / 7);
+  };
+
+  const currentWeekNumber = getWeekNumber().toString();
+
+  const updateWeeklyTrade = (day: string, value: string) => {
     dispatch({
-      type: "UPDATE_DAY_PLAN",
-      payload: { day, period, value },
+      type: "UPDATE_WEEKLY_TRADE",
+      payload: {
+        weekNumber: currentWeekNumber,
+        day,
+        value,
+      },
     });
   };
+
+  const getCurrentWeekTradeData = () => {
+    return state.weeklyTrades[currentWeekNumber] || {};
+  };
+
+  const currentWeekData = getCurrentWeekTradeData();
 
   const calculateWeeklyTotal = () => {
     let total = 0;
 
     days.forEach((day) => {
-      const dayData = state.weeklyPlan[day];
-      if (dayData && dayData.Trade) {
-        const value = parseFloat(dayData.Trade);
+      const dayData = currentWeekData[day];
+      if (dayData) {
+        const value = parseFloat(dayData);
         if (!isNaN(value)) {
           total += value;
         }
@@ -63,6 +82,23 @@ export function Discipline() {
   };
 
   const weeklyTotal = calculateWeeklyTotal();
+
+  const calculateAllWeeksTotal = () => {
+    let allWeeksTotal = 0;
+    Object.keys(state.weeklyTrades).forEach((week) => {
+      const weekData = state.weeklyTrades[week];
+      days.forEach((day) => {
+        const dayValue = parseFloat(weekData?.[day] || "0");
+        if (!isNaN(dayValue)) {
+          allWeeksTotal += dayValue;
+        }
+      });
+    });
+    return allWeeksTotal;
+  };
+
+  const allWeeksTotal = calculateAllWeeksTotal();
+  const totalBalance = 10 + allWeeksTotal;
 
   return (
     <div className="space-y-6 bg-white min-h-screen pt-5 pb-20 px-4">
@@ -163,15 +199,15 @@ export function Discipline() {
                 </div>
                 <div
                   className={`text-xl font-bold ${
-                    weeklyTotal < 0
+                    allWeeksTotal < 0
                       ? "text-red-600"
-                      : weeklyTotal > 0
+                      : allWeeksTotal > 0
                       ? "text-green-600"
                       : "text-gray-600"
                   }`}
                 >
-                  {weeklyTotal < 0 ? "-$" : "$"}
-                  {Math.abs(weeklyTotal).toFixed(2)}
+                  {allWeeksTotal < 0 ? "-$" : "$"}
+                  {Math.abs(totalBalance).toFixed(2)}
                 </div>
               </div>
             </CardHeader>
@@ -187,20 +223,30 @@ export function Discipline() {
                     <span>Current Balance:</span>
                     <span
                       className={`font-semibold ${
-                        weeklyTotal < 0
+                        totalBalance < 10
                           ? "text-red-600"
-                          : weeklyTotal > 0
+                          : totalBalance > 10
                           ? "text-green-600"
                           : "text-gray-600"
                       }`}
                     >
-                      ${(10 + weeklyTotal).toFixed(2)}
+                      ${totalBalance.toFixed(2)}
                     </span>
                   </div>
 
-                  {/* Net Profit/Loss */}
                   <div className="flex justify-between text-xs font-semibold border-t pt-2">
                     <span>Net P/L:</span>
+                    <span
+                      className={
+                        allWeeksTotal >= 0 ? "text-green-600" : "text-red-600"
+                      }
+                    >
+                      {allWeeksTotal >= 0 ? "+" : ""}${allWeeksTotal.toFixed(2)}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between text-xs font-semibold border-t pt-2 mt-2">
+                    <span>This Week P/L :</span>
                     <span
                       className={
                         weeklyTotal >= 0 ? "text-green-600" : "text-red-600"
@@ -210,7 +256,6 @@ export function Discipline() {
                     </span>
                   </div>
 
-                  {/* Profit/Loss Status */}
                   <div className="mt-3">
                     {weeklyTotal > 0 && (
                       <div className="text-xs text-green-600 font-semibold flex items-center gap-1">
@@ -242,51 +287,58 @@ export function Discipline() {
                       <div className="flex justify-between text-xs">
                         <span
                           className={`${
-                            weeklyTotal >= 0 ? "text-green-600" : "text-red-600"
+                            allWeeksTotal >= 0
+                              ? "text-green-600"
+                              : "text-red-600"
                           }`}
                         >
-                          {weeklyTotal >= 0 ? "Profit" : "Loss"}:
+                          {allWeeksTotal >= 0 ? "Profit" : "Loss"}:
                         </span>
                         <span
                           className={`font-medium ${
-                            weeklyTotal >= 0 ? "text-green-600" : "text-red-600"
+                            allWeeksTotal >= 0
+                              ? "text-green-600"
+                              : "text-red-600"
                           }`}
                         >
-                          {weeklyTotal >= 0 ? "+" : ""}${weeklyTotal.toFixed(2)}
+                          {allWeeksTotal >= 0 ? "+" : ""}$
+                          {allWeeksTotal.toFixed(2)}
                         </span>
                       </div>
                       <div className="flex justify-between text-xs">
                         <span
                           className={`${
-                            weeklyTotal >= 0 ? "text-green-600" : "text-red-600"
+                            allWeeksTotal >= 0
+                              ? "text-green-600"
+                              : "text-red-600"
                           }`}
                         >
                           Return on Capital:
                         </span>
                         <span
                           className={
-                            weeklyTotal > 0
+                            allWeeksTotal > 0
                               ? "text-green-600"
-                              : weeklyTotal < 0
+                              : allWeeksTotal < 0
                               ? "text-red-600"
                               : "text-gray-600"
                           }
                         >
-                          {((weeklyTotal / 10) * 100).toFixed(1)}%
+                          {((allWeeksTotal / 10) * 100).toFixed(1)}%
                         </span>
                       </div>
                       <div className="flex justify-between text-xs font-bold border-t pt-2">
                         <span>Total Balance:</span>
                         <span
                           className={
-                            10 + weeklyTotal > 10
+                            totalBalance > 10
                               ? "text-green-600"
-                              : 10 + weeklyTotal < 10
+                              : totalBalance < 10
                               ? "text-red-600"
                               : "text-gray-600"
                           }
                         >
-                          ${(10 + weeklyTotal).toFixed(2)}
+                          ${totalBalance.toFixed(2)}
                         </span>
                       </div>
                     </div>
@@ -304,17 +356,17 @@ export function Discipline() {
               >
                 <div className="text-xs font-semibold">
                   {weeklyTotal > 0
-                    ? "📈 Profit this week!"
+                    ? `📈 Profit this week!`
                     : weeklyTotal < 0
-                    ? "📉 Loss this week"
-                    : " Break even"}
+                    ? `📉 Loss this week!`
+                    : `Break Even`}
                 </div>
                 <div className="text-xs mt-1">
                   {weeklyTotal > 0
-                    ? `+${((weeklyTotal / 10) * 100).toFixed(1)}% return`
+                    ? `+${((weeklyTotal / 10) * 100).toFixed(1)}% Return`
                     : weeklyTotal < 0
-                    ? `${((weeklyTotal / 10) * 100).toFixed(1)}% loss`
-                    : "0% change"}
+                    ? `${((weeklyTotal / 10) * 100).toFixed(1)}% Loss`
+                    : "0% Change"}
                 </div>
               </div>
             </CardContent>
@@ -324,40 +376,39 @@ export function Discipline() {
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-semibold flex items-center gap-2">
                 <Calendar className="h-4 w-4 text-blue-600" />
-                Today&apos;s Trading ({todayDayName})
+                Today&apos;s Trading {todayDayName}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
               {periods.map((period) => (
                 <div key={period}>
                   <label className="text-xs text-gray-600 mb-1 block">
-                    Enter your trading amount for {todayDayName}:
+                    Enter your trading amount for {todayDayName} :
                   </label>
                   <input
                     key={period}
                     type="number"
-                    value={state.weeklyPlan[todayDayName]?.[period] || ""}
-                    placeholder={period}
+                    step="0.01"
+                    value={currentWeekData[todayDayName] || ""}
+                    placeholder="Enter amount (e.g., 5.50)"
                     onChange={(e) =>
-                      updateWeeklyPlan(todayDayName, period, e.target.value)
+                      updateWeeklyTrade(todayDayName, e.target.value)
                     }
-                    className="w-full rounded-md border px-3 py-1 text-xs focus:outline-none focus:border"
+                    className="w-full rounded-md border px-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                   />
-                  {state.weeklyPlan[todayDayName]?.Trade && (
+                  {currentWeekData[todayDayName] && (
                     <div className="text-xs text-gray-600 pt-2 flex justify-between">
-                      <span className="font-medium">
-                        Amount for {todayDayName}:{" "}
-                      </span>
+                      <span className="font-medium">Amount Today : </span>
                       {(() => {
                         const amount = parseFloat(
-                          state.weeklyPlan[todayDayName]?.Trade || "0"
+                          currentWeekData[todayDayName] || "0"
                         );
                         let colorClass = "text-gray-600";
 
                         if (amount < 0) {
                           colorClass = "text-red-600";
                         } else if (amount > 0) {
-                          colorClass = "text-blue-600";
+                          colorClass = "text-green-600";
                         }
 
                         const formattedAmount =
@@ -381,8 +432,8 @@ export function Discipline() {
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-semibold flex items-center gap-2">
-                <Calculator className="h-4 w-4" />
-                Weekly Progress Summary
+                <Calendar className="h-4 w-4" />
+                All Weeks Overview
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -405,11 +456,9 @@ export function Discipline() {
                       )}
                     </div>
                     <div className="text-sm font-semibold">
-                      {state.weeklyPlan[day]?.Trade ? (
+                      {currentWeekData[day] ? (
                         (() => {
-                          const tradeAmount = parseFloat(
-                            state.weeklyPlan[day]?.Trade || "0"
-                          );
+                          const tradeAmount = parseFloat(currentWeekData[day]);
                           const isNegative = tradeAmount < 0;
                           const isPositive = tradeAmount > 0;
 
@@ -435,25 +484,28 @@ export function Discipline() {
                 ))}
                 <div className="bg-blue-100 p-3 rounded-lg col-span-2 md:col-span-5 border border-blue-300">
                   <div className="flex justify-between items-center">
-                    <div className="text-sm font-bold text-gray-800">
-                      Weekly Total
+                    <div>
+                      <div className="text-sm font-bold text-gray-800">
+                        Weekly Total
+                      </div>
+                      <div className="flex justify-between text-xs text-gray-600 mt-1">
+                        <span>
+                          Daily Average:{" "}
+                          {((allWeeksTotal / 10) * 100).toFixed(1)}%
+                        </span>
+                      </div>
                     </div>
-                    <div className="text-xl font-bold text-blue-700">
-                      ${weeklyTotal.toFixed(2)}
+                    <div
+                      className={`text-xl font-bold ${
+                        weeklyTotal > 0
+                          ? "text-green-600"
+                          : weeklyTotal < 0
+                          ? "text-red-600"
+                          : "text-gray-600"
+                      }`}
+                    >
+                      {Math.abs(weeklyTotal).toFixed(2)}$
                     </div>
-                  </div>
-                  <div className="flex justify-between text-xs text-gray-600 mt-1">
-                    <span>
-                      Daily Average: ${(weeklyTotal / days.length).toFixed(2)}
-                    </span>
-                    <span>
-                      Days Filled:{" "}
-                      {
-                        days.filter((day) => state.weeklyPlan[day]?.Trade)
-                          .length
-                      }
-                      /{days.length}
-                    </span>
                   </div>
                 </div>
               </div>
@@ -464,109 +516,105 @@ export function Discipline() {
 
       {activeTab === "monthly" && (
         <div className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {monthlyGoals.map((goal, index) => (
-              <Card
+              <div
                 key={goal.id}
-                className="border-l-4 hover:shadow-md transition-shadow duration-200"
-                style={{ borderLeftColor: "#667eea" }}
+                className={`relative overflow-hidden rounded-2xl border transition-all duration-300 hover:shadow-lg ${
+                  goal.completed
+                    ? "bg-gradient-to-br from-green-50 to-emerald-50 border-green-200"
+                    : "bg-gradient-to-br from-white to-gray-50 border-gray-200 hover:border-purple-300"
+                }`}
               >
-                <CardContent className="p-4">
-                  <div className="flex items-start gap-3">
-                    <button
-                      onClick={() =>
-                        dispatch({
-                          type: "TOGGLE_GOAL_COMPLETION",
-                          payload: goal.id,
-                        })
-                      }
-                      className="flex-shrink-0"
-                    >
-                      <div
-                        className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 ${
-                          goal.completed
-                            ? "bg-gradient-to-br from-green-100 to-emerald-100 ring-2 ring-green-300 ring-offset-1"
-                            : "bg-gradient-to-br from-blue-50 to-purple-50 hover:from-blue-100 hover:to-purple-100"
-                        }`}
-                      >
-                        {goal.completed ? (
-                          <div className="w-6 h-6 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center">
-                            <svg
-                              className="w-4 h-4 text-white"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={3}
-                                d="M5 13l4 4L19 7"
-                              />
-                            </svg>
-                          </div>
-                        ) : (
-                          <span className="text-lg">{goal.icon}</span>
-                        )}
-                      </div>
-                    </button>
+                <div
+                  className={`absolute -right-6 -top-6 w-20 h-20 rounded-full opacity-10 ${
+                    goal.completed ? "bg-green-400" : "bg-purple-400"
+                  }`}
+                ></div>
 
-                    <div className="flex-1">
-                      <div className="flex justify-between items-start mb-1">
-                        <h4
-                          className={`font-semibold text-sm ${
+                <div className="p-3 relative z-10">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={() =>
+                          dispatch({
+                            type: "TOGGLE_GOAL_COMPLETION",
+                            payload: goal.id,
+                          })
+                        }
+                        className="flex-shrink-0"
+                      >
+                        <div
+                          className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-300 shadow-sm ${
                             goal.completed
-                              ? "text-gray-500 line-through"
-                              : "text-gray-800"
+                              ? "bg-gradient-to-br from-green-500 to-emerald-600"
+                              : "bg-gradient-to-br from-purple-100 to-indigo-100 hover:from-purple-200 hover:to-indigo-200"
+                          }`}
+                        >
+                          {goal.completed ? (
+                            <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                              <svg
+                                className="w-5 h-5 text-green-600"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={3}
+                                  d="M5 13l4 4L19 7"
+                                />
+                              </svg>
+                            </div>
+                          ) : (
+                            <span className="text-2xl">{goal.icon}</span>
+                          )}
+                        </div>
+                      </button>
+                      <div>
+                        <div
+                          className={`text-xs font-semibold uppercase tracking-wider ${
+                            goal.completed
+                              ? "text-green-600"
+                              : "text-purple-600"
                           }`}
                         >
                           Goal #{index + 1}
-                        </h4>
-                        {goal.completed ? (
-                          <span className="text-xs bg-gradient-to-r from-green-100 to-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
-                            Completed
-                          </span>
-                        ) : (
-                          <span className="text-xs text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 font-medium">
-                            Monthly
-                          </span>
-                        )}
-                      </div>
-
-                      <p
-                        className={`text-sm mb-2 ${
-                          goal.completed
-                            ? "text-gray-400 line-through"
-                            : "text-gray-700"
-                        }`}
-                      >
-                        {goal.title}
-                      </p>
-
-                      {!goal.completed && (
-                        <div className="flex items-center justify-between mt-3">
-                          <span className="inline-flex items-center gap-1 text-xs bg-gradient-to-r from-blue-50 to-purple-50 text-blue-700 px-2 py-1 rounded-full">
-                            <div className="w-1.5 h-1.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div>
-                            Monthly Target
-                          </span>
-
-                          <button
-                            onClick={() =>
-                              dispatch({
-                                type: "TOGGLE_GOAL_COMPLETION",
-                                payload: goal.id,
-                              })
-                            }
-                            className="text-xs bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700 hover:from-blue-200 hover:to-purple-200 px-3 py-1 rounded transition-all duration-200"
-                          >
-                            Mark Complete
-                          </button>
                         </div>
-                      )}
+                        <h3
+                          className={`text-base mt-1 ${
+                            goal.completed ? "text-gray-500" : "text-gray-900"
+                          }`}
+                        >
+                          {goal.title}
+                        </h3>
+                      </div>
                     </div>
+
+                    {goal.completed ? (
+                      <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-full">
+                        <svg
+                          className="w-3 h-3"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        Completed
+                      </span>
+                    ) : (
+                      <span className="text-xs text-gray-500 font-medium">
+                        Active
+                      </span>
+                    )}
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             ))}
           </div>
 
@@ -609,12 +657,12 @@ export function Discipline() {
                 <div className="grid grid-cols-2 gap-3">
                   <div className="bg-gray-50 p-3 rounded-lg">
                     <div className="text-xs text-gray-600 mb-1">
-                      Savings Target
+                      Trading Weeks
                     </div>
                     <div className="text-sm font-semibold text-gray-900">
-                      $130
+                      {Object.keys(state.weeklyTrades).length} weeks
                     </div>
-                    <div className="text-xs text-gray-500">Family + Self</div>
+                    <div className="text-xs text-gray-500">Data recorded</div>
                   </div>
                   <div className="bg-gray-50 p-3 rounded-lg">
                     <div className="text-xs text-gray-600 mb-1">

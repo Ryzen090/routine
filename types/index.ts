@@ -46,7 +46,6 @@ export interface SubNote {
 export interface MyTool {
   id: string;
   title: string;
-  icon: string;
   target: number;
   current: number;
   unit: string;
@@ -77,6 +76,12 @@ export interface Goal {
   currentAmount?: number;
 }
 
+export interface WeeklyTradeData {
+  [weekNumber: string]: {
+    [day: string]: string;
+  };
+}
+
 export interface AppState {
   tasks: Task[];
   achievements: Achievement[];
@@ -88,4 +93,5 @@ export interface AppState {
   payments: Payment[];
   monthlyGoals: Goal[];
   weeklyPlan: Record<string, Record<string, string>>;
+  weeklyTrades: WeeklyTradeData;
 }

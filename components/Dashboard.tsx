@@ -70,7 +70,7 @@ export function Dashboard() {
       </div>
 
       {/* My Tools */}
-      <section className="rounded-xl bg-white p-3 shadow-sm">
+      <section className="rounded-xl bg-white shadow-sm">
         <MyTools />
       </section>
 

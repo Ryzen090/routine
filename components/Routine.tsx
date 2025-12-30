@@ -2,17 +2,7 @@ import React from "react";
 import { Task } from "@/types";
 import { Clock } from "lucide-react";
 import { useApp } from "@/contexts/AppContext";
-
-const taskBackgroundColors = [
-  "bg-orange-100",
-  "bg-teal-100",
-  "bg-purple-100",
-  "bg-green-100",
-  "bg-blue-100",
-  "bg-pink-100",
-  "bg-yellow-100",
-  "bg-indigo-100",
-];
+import { taskCompletedStyles } from "@/contexts/data";
 
 export function Routine() {
   const { state, dispatch } = useApp();
@@ -29,10 +19,8 @@ export function Routine() {
       payload: updatedTask,
     });
 
-    // Save daily statistics
     saveDailyStats();
 
-    // Update user stats when task is completed
     if (!task.completed) {
       dispatch({
         type: "UPDATE_STATS",
@@ -50,12 +38,10 @@ export function Routine() {
     const completionRate =
       totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
 
-    // Get existing stats
     const existingStats = JSON.parse(
       localStorage.getItem("dailyTaskStats") || "[]"
     );
 
-    // Update or add today's stats
     const todayIndex = existingStats.findIndex(
       (stat: any) => stat.date === today
     );
@@ -72,7 +58,6 @@ export function Routine() {
       existingStats.push(todayStats);
     }
 
-    // Keep only last 30 days
     const last30Days = existingStats.slice(-30);
     localStorage.setItem("dailyTaskStats", JSON.stringify(last30Days));
   };
@@ -116,11 +101,18 @@ export function Routine() {
           todaysTasks.map((task, index) => (
             <div
               key={task.id}
-              className={`${
-                taskBackgroundColors[index % taskBackgroundColors.length]
-              } rounded-xl lg:rounded-2xl p-3 lg:p-4 transition-all duration-200 hover:shadow-md ${
-                task.completed ? "opacity-60" : ""
-              }`}
+              onClick={() => handleTaskToggle(task)}
+              className={`
+              rounded-xl lg:rounded-2xl p-3 lg:p-4
+              transition-all duration-200
+              ${
+                task.completed
+                  ? "bg-gray-50 border-l-4 border-gray-300 opacity-70"
+                  : `${
+                      taskCompletedStyles[index % taskCompletedStyles.length]
+                    } hover:shadow-md`
+              }
+            `}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3 lg:gap-4 flex-1">
@@ -135,9 +127,7 @@ export function Routine() {
                     </div>
                     <h3
                       className={`text-sm lg:text-lg font-semibold truncate ${
-                        task.completed
-                          ? "line-through text-gray-500"
-                          : "text-gray-900"
+                        task.completed ? "text-gray-500" : "text-gray-900"
                       }`}
                     >
                       {task.title}

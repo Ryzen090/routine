@@ -243,7 +243,6 @@ export const defaultMyTools: MyTool[] = [
   {
     id: "1",
     title: "Drink Water",
-    icon: "💧",
     target: 3,
     current: 0,
     unit: "bottle",
@@ -272,7 +271,7 @@ export const defaultPayments: Payment[] = [
   {
     id: "2",
     title: "Rent",
-    amount: 75,
+    amount: 70,
     type: "expense",
     icon: "🏠",
   },
@@ -295,7 +294,7 @@ export const defaultPayments: Payment[] = [
 export const monthlyGoals: Goal[] = [
   {
     id: "1",
-    title: "Save Money For Family 100$",
+    title: "Save 100$",
     icon: "💲",
     completed: false,
     targetAmount: 100,
@@ -303,7 +302,7 @@ export const monthlyGoals: Goal[] = [
   },
   {
     id: "2",
-    title: "Save Money For Self 30$",
+    title: "Save 30$",
     icon: "💲",
     completed: false,
     targetAmount: 30,
@@ -312,3 +311,14 @@ export const monthlyGoals: Goal[] = [
 ];
 
 export const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+
+export const taskCompletedStyles = [
+  "bg-orange-50 border-l-4 border-orange-300",
+  "bg-teal-50 border-l-4 border-teal-300",
+  "bg-purple-50 border-l-4 border-purple-300",
+  "bg-green-50 border-l-4 border-green-300",
+  "bg-blue-50 border-l-4 border-blue-300",
+  "bg-pink-50 border-l-4 border-pink-300",
+  "bg-yellow-50 border-l-4 border-yellow-300",
+  "bg-indigo-50 border-l-4 border-indigo-300",
+];

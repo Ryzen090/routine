@@ -43,6 +43,18 @@ type AppAction =
   | {
       type: "UPDATE_GOAL_PROGRESS";
       payload: { id: string; currentAmount: number };
+    }
+  | {
+      type: "UPDATE_WEEKLY_TRADE";
+      payload: { weekNumber: string; day: string; value: string };
+    }
+  | {
+      type: "CLEAR_WEEKLY_TRADE";
+      payload: { weekNumber: string };
+    }
+  | {
+      type: "DELETE_WEEKLY_TRADE";
+      payload: { weekNumber: string; day: string };
     };
 
 const initialState: AppState = {
@@ -92,6 +104,7 @@ const initialState: AppState = {
     acc[day] = { Trade: "" };
     return acc;
   }, {} as Record<string, Record<string, string>>),
+  weeklyTrades: {},
 };
 
 function appReducer(state: AppState, action: AppAction): AppState {
@@ -215,6 +228,35 @@ function appReducer(state: AppState, action: AppAction): AppState {
           },
         },
       };
+    case "UPDATE_WEEKLY_TRADE":
+      return {
+        ...state,
+        weeklyTrades: {
+          ...state.weeklyTrades,
+          [action.payload.weekNumber]: {
+            ...state.weeklyTrades[action.payload.weekNumber],
+            [action.payload.day]: action.payload.value,
+          },
+        },
+      };
+    case "CLEAR_WEEKLY_TRADE":
+      return {
+        ...state,
+        weeklyTrades: {
+          ...state.weeklyTrades,
+          [action.payload.weekNumber]: {},
+        },
+      };
+    case "DELETE_WEEKLY_TRADE":
+      const weekData = { ...state.weeklyTrades[action.payload.weekNumber] };
+      delete weekData[action.payload.day];
+      return {
+        ...state,
+        weeklyTrades: {
+          ...state.weeklyTrades,
+          [action.payload.weekNumber]: weekData,
+        },
+      };
     case "TOGGLE_GOAL_COMPLETION":
       return {
         ...state,
@@ -328,6 +370,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         myTools: state.myTools,
         monthlyGoals: state.monthlyGoals,
         weeklyPlan: state.weeklyPlan,
+        weeklyTrades: state.weeklyTrades,
       };
       localStorage.setItem("appState", JSON.stringify(appStateToSave));
     } catch (error) {
