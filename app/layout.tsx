@@ -47,10 +47,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <meta name="application-name" content="Discipline" />
+        <meta name="application-name" content="Routine" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-title" content="Discipline" />
+        <meta name="apple-mobile-web-app-title" content="Routine" />
         <meta
           name="apple-mobile-web-app-status-bar-style"
           content="black-translucent"

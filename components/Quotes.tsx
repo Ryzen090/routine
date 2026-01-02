@@ -1,20 +1,6 @@
 import React from "react";
+import { motivationalQuotes } from "@/contexts/data";
 import { Card, CardContent } from "@/components/ui/card";
-
-const motivationalQuotes = [
-  {
-    text: "Remember who you are.",
-  },
-  {
-    text: "If you want to be strong, learn to fight alone.",
-  },
-  {
-    text: "You don’t have to be great to start, but you have to start to be great.",
-  },
-  {
-    text: "The first steps are always the hardest.",
-  },
-];
 
 export function Quotes() {
   const [currentQuote, setCurrentQuote] = React.useState(motivationalQuotes[0]);
@@ -46,20 +32,14 @@ export function Quotes() {
   }, []);
 
   return (
-    <Card
-      className="
-        bg-gradient-to-br from-blue-100 via-indigo-100 to-purple-100
-        border border-indigo-200 shadow-sm
-        transition-all duration-300 ease-in-out
-      "
-    >
-      <CardContent className="p-4 lg:p-6 pb-0 lg:pb-0">
+    <Card className="shadow-sm border-none transition-all duration-300 ease-in-out">
+      <CardContent className="p-4 lg:p-6">
         <div
           className={`transition-all duration-300 ${
             isAnimating ? "opacity-0 scale-95" : "opacity-100 scale-100"
           }`}
         >
-          <blockquote className="text-base text-center lg:text-lg font-medium text-gray-800 italic leading-relaxed mb-3 pl-4">
+          <blockquote className="text-base text-center lg:text-lg font-medium text-gray-800 italic leading-relaxed">
             "{currentQuote.text}"
           </blockquote>
         </div>

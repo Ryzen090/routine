@@ -159,7 +159,7 @@ export const defaultTasks: Task[] = [
   {
     id: "17",
     title: "Healthy night Sleep",
-    icon: "🌙",
+    icon: "🛏️",
     startTime: "23:30",
     endTime: "23:30",
     category: "routine",
@@ -321,4 +321,19 @@ export const taskCompletedStyles = [
   "bg-pink-50 border-l-4 border-pink-300",
   "bg-yellow-50 border-l-4 border-yellow-300",
   "bg-indigo-50 border-l-4 border-indigo-300",
+];
+
+export const motivationalQuotes = [
+  {
+    text: "Remember who you are.",
+  },
+  {
+    text: "If you want to be strong, learn to fight alone.",
+  },
+  {
+    text: "You don’t have to be great to start, but you have to start to be great.",
+  },
+  {
+    text: "The first steps are always the hardest.",
+  },
 ];
