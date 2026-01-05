@@ -113,7 +113,6 @@ export function Setting() {
   };
 
   const currentStreak = calculateStreak();
-
   const recentActivity = weeklyStats.slice(-5);
 
   return (
@@ -196,6 +195,47 @@ export function Setting() {
             {Math.round(weeklyCompletion)}%
           </div>
           <div className="text-xs text-gray-600">Completion rate</div>
+        </div>
+      </div>
+
+      {/* Chart */}
+      <div className="bg-gray-50 rounded-2xl p-4">
+        <div className="text-sm font-semibold text-gray-900">
+          Weekly Performance
+        </div>
+
+        <div className="bg-white/5 rounded-2xl p-0">
+          <div className="flex items-end justify-between h-32">
+            {[...recentActivity].reverse().map((day) => {
+              const rate = getRate(day);
+              const isTodayDate = isToday(day.date);
+
+              return (
+                <div key={day.date} className="flex flex-col items-center">
+                  <div
+                    className={`text-xs mb-1 ${
+                      isTodayDate ? "text-blue-400" : "text-gray-400"
+                    }`}
+                  >
+                    {new Date(day.date).toLocaleDateString("en-US", {
+                      weekday: "short",
+                    })}
+                  </div>
+                  <div
+                    className={`w-7 rounded-t-lg transition-all duration-300 ${
+                      isTodayDate
+                        ? "bg-gradient-to-t from-blue-500 to-cyan-500"
+                        : "bg-gradient-to-t from-white/30 to-white/20"
+                    }`}
+                    style={{ height: `${rate * 0.8}px` }}
+                  ></div>
+                  <div className="text-xs font-medium mt-1">
+                    {Math.round(rate)}%
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
 
