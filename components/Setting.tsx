@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
 import { useApp } from "@/contexts/AppContext";
+import React, { useEffect, useMemo } from "react";
 import { Calendar, Trophy, Clock } from "lucide-react";
 
 interface DailyStats {
@@ -115,6 +115,59 @@ export function Setting() {
   const currentStreak = calculateStreak();
   const recentActivity = weeklyStats.slice(-5);
 
+  const getDayLabel = (date: Date): string => {
+    return date.toLocaleDateString("en-US", { weekday: "short" });
+  };
+
+  const chartData = useMemo(() => {
+    const weekDays = Array.from({ length: 5 }, (_, i) => {
+      const date = new Date(startOfWeek);
+      date.setDate(startOfWeek.getDate() + i);
+      return date;
+    });
+
+    return weekDays.map((date) => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      const dateStr = `${year}-${month}-${day}`;
+
+      const existingData = weeklyStats.find((d) => {
+        const storedDate = new Date(d.date);
+        const storedYear = storedDate.getFullYear();
+        const storedMonth = String(storedDate.getMonth() + 1).padStart(2, "0");
+        const storedDay = String(storedDate.getDate()).padStart(2, "0");
+        const storedDateStr = `${storedYear}-${storedMonth}-${storedDay}`;
+
+        return storedDateStr === dateStr;
+      });
+
+      const rate = existingData ? getRate(existingData) : 0;
+      const completed = existingData ? getCompletedCount(existingData) : 0;
+      const total = existingData ? getTotalCount(existingData) : 0;
+
+      const today = new Date();
+      const todayYear = today.getFullYear();
+      const todayMonth = String(today.getMonth() + 1).padStart(2, "0");
+      const todayDay = String(today.getDate()).padStart(2, "0");
+      const todayStr = `${todayYear}-${todayMonth}-${todayDay}`;
+      const isTodayDate = dateStr === todayStr;
+
+      return {
+        date: dateStr,
+        dayLabel: getDayLabel(date),
+        rate,
+        completed,
+        total,
+        isTodayDate,
+        hasData: !!existingData,
+      };
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [weeklyStats, startOfWeek]);
+
+  const maxRate = Math.max(...chartData.map((d) => d.rate), 100);
+
   return (
     <div className="space-y-6 bg-white min-h-screen pt-5 pb-20 px-4">
       <div className="text-center space-y-3">
@@ -204,33 +257,56 @@ export function Setting() {
           Weekly Performance
         </div>
 
-        <div className="bg-white/5 rounded-2xl p-0">
-          <div className="flex items-end justify-between h-32">
-            {[...recentActivity].reverse().map((day) => {
-              const rate = getRate(day);
-              const isTodayDate = isToday(day.date);
+        <div className="bg-gray-50 rounded-xl py-4">
+          <div className="flex justify-between h-28">
+            {chartData.map((day, index) => {
+              const barHeight = (day.rate / maxRate) * 80;
 
               return (
-                <div key={day.date} className="flex flex-col items-center">
+                <div
+                  key={day.date}
+                  className="flex flex-col items-center flex-1"
+                >
                   <div
-                    className={`text-xs mb-1 ${
-                      isTodayDate ? "text-blue-400" : "text-gray-400"
+                    className={`text-xs mb-2 ${
+                      day.isTodayDate ? "text-blue-400" : "text-gray-400"
                     }`}
                   >
-                    {new Date(day.date).toLocaleDateString("en-US", {
-                      weekday: "short",
-                    })}
+                    {day.dayLabel}
                   </div>
-                  <div
-                    className={`w-7 rounded-t-lg transition-all duration-300 ${
-                      isTodayDate
-                        ? "bg-gradient-to-t from-blue-500 to-cyan-500"
-                        : "bg-gradient-to-t from-white/30 to-white/20"
-                    }`}
-                    style={{ height: `${rate * 0.8}px` }}
-                  ></div>
-                  <div className="text-xs font-medium mt-1">
-                    {Math.round(rate)}%
+
+                  <div className="relative w-10 flex flex-col items-center justify-end h-full">
+                    <div className="relative h-32 w-7 flex items-end">
+                      <div
+                        className={`w-7 rounded-lg absolute bottom-0 ${
+                          day.hasData ? "bg-gray-200" : "bg-gray-100"
+                        }`}
+                        style={{ height: "80px" }}
+                      ></div>
+                      {day.hasData && (
+                        <div
+                          className={`w-7 absolute bottom-0 transition-all duration-500 ${
+                            barHeight >= 79.5 ? "rounded-lg" : "rounded-b-lg"
+                          } ${
+                            day.isTodayDate
+                              ? "bg-gradient-to-b from-blue-500 to-cyan-500"
+                              : "bg-gradient-to-b from-gray-400 to-gray-300"
+                          }`}
+                          style={{
+                            height: `${barHeight}px`,
+                          }}
+                        />
+                      )}
+                    </div>
+
+                    <div className="mt-2 text-xs font-medium">
+                      {day.hasData ? `${Math.round(day.rate)}%` : "-%"}
+                    </div>
+
+                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
+                      {day.date}: {Math.round(day.rate)}%
+                      {day.hasData && ` (${day.completed}/${day.total})`}
+                    </div>
                   </div>
                 </div>
               );
