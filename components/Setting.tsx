@@ -108,15 +108,17 @@ export function Setting() {
       ? (totalCompleted / totalPossibleThisWeek) * 100
       : 0;
 
-  console.log(weeklyTaskCompletion);
-
   const calculateStreak = () => {
     let streak = 0;
-    const sorted = [...weeklyStats].reverse();
-    for (const day of sorted) {
-      if (getRate(day) === 100) streak++;
-      else break;
+
+    for (const item of weeklyStats) {
+      if (item.completionRate === 100) {
+        streak++;
+      } else {
+        break;
+      }
     }
+
     return streak;
   };
 
