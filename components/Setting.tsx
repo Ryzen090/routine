@@ -102,6 +102,14 @@ export function Setting() {
         weeklyStats.length
       : 0;
 
+  const totalPossibleThisWeek = 5 * 15;
+  const weeklyTaskCompletion =
+    totalPossibleThisWeek > 0
+      ? (totalCompleted / totalPossibleThisWeek) * 100
+      : 0;
+
+  console.log(weeklyTaskCompletion);
+
   const calculateStreak = () => {
     let streak = 0;
     const sorted = [...weeklyStats].reverse();
@@ -223,14 +231,14 @@ export function Setting() {
             <div className="text-xs font-medium text-gray-500">WEEK</div>
             <div
               className={`text-xs font-semibold ${
-                weeklyCompletion > 80
+                weeklyTaskCompletion > 80
                   ? "text-emerald-600"
-                  : weeklyCompletion > 60
+                  : weeklyTaskCompletion > 60
                   ? "text-blue-600"
                   : "text-gray-600"
               }`}
             >
-              {Math.round(weeklyCompletion)}%
+              {Math.round(weeklyTaskCompletion)}%
             </div>
           </div>
           <div className="text-xl font-bold text-gray-900 mb-2">
@@ -252,8 +260,8 @@ export function Setting() {
       </div>
 
       {/* Chart */}
-      <div className="bg-gray-50 rounded-2xl p-4">
-        <div className="text-sm font-semibold text-gray-900">
+      <div className="bg-gray-50 rounded-2xl py-4">
+        <div className="text-sm font-semibold px-4 text-gray-900">
           Weekly Performance
         </div>
 
@@ -275,17 +283,17 @@ export function Setting() {
                     {day.dayLabel}
                   </div>
 
-                  <div className="relative w-10 flex flex-col items-center justify-end h-full">
-                    <div className="relative h-32 w-7 flex items-end">
+                  <div className="relative w-8 flex flex-col items-center justify-end h-full">
+                    <div className="relative h-32 w-8 flex items-end">
                       <div
-                        className={`w-7 rounded-lg absolute bottom-0 ${
+                        className={`w-8 rounded-lg absolute bottom-0 ${
                           day.hasData ? "bg-gray-200" : "bg-gray-100"
                         }`}
                         style={{ height: "80px" }}
                       ></div>
                       {day.hasData && (
                         <div
-                          className={`w-7 absolute bottom-0 transition-all duration-500 ${
+                          className={`w-8 absolute bottom-0 transition-all duration-500 ${
                             barHeight >= 79.5 ? "rounded-lg" : "rounded-b-lg"
                           } ${
                             day.isTodayDate
