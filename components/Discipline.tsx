@@ -208,7 +208,7 @@ export function Discipline() {
 
                     <span
                       className={`
-                        text-sm font-medium flex-1 transition-all duration-300
+                        text-sm font-medium flex-1 transition-all duration-300 capitalize
                         ${
                           sub.completed
                             ? "text-gray-400"
