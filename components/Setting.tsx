@@ -102,23 +102,13 @@ export function Setting() {
         weeklyStats.length
       : 0;
 
-  const totalPossibleThisWeek = 5 * 15;
-  const weeklyTaskCompletion =
-    totalPossibleThisWeek > 0
-      ? (totalCompleted / totalPossibleThisWeek) * 100
-      : 0;
-
   const calculateStreak = () => {
     let streak = 0;
-
-    for (const item of weeklyStats) {
-      if (item.completionRate === 100) {
-        streak++;
-      } else {
-        break;
-      }
+    const sorted = [...weeklyStats].reverse();
+    for (const day of sorted) {
+      if (getRate(day) === 100) streak++;
+      else break;
     }
-
     return streak;
   };
 
@@ -238,14 +228,14 @@ export function Setting() {
             <div className="text-xs font-medium text-gray-500">WEEK</div>
             <div
               className={`text-xs font-semibold ${
-                weeklyTaskCompletion > 80
+                weeklyCompletion > 80
                   ? "text-emerald-600"
-                  : weeklyTaskCompletion > 60
+                  : weeklyCompletion > 60
                   ? "text-blue-600"
                   : "text-gray-600"
               }`}
             >
-              {Math.round(weeklyTaskCompletion)}%
+              {Math.round(weeklyCompletion)}%
             </div>
           </div>
           <div className="text-xl font-bold text-gray-900 mb-2">
