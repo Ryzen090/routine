@@ -146,7 +146,7 @@ export function Discipline() {
           {state.notes.map((note) => (
             <div
               key={note.id}
-              className="relative group bg-gradient-to-br from-white to-gray-50 rounded-2xl border border-gray-200/60 p-5 hover:border-gray-300/80 transition-all duration-300 hover:shadow-xl"
+              className="relative group bg-gradient-to-br from-white to-gray-50 rounded-2xl border border-gray-200/60 p-5 hover:border-gray-300/80 transition-all duration-300"
             >
               <div className="absolute -top-2 -right-2 w-10 h-10 rounded-xl bg-white border border-gray-200 shadow-sm flex items-center justify-center">
                 <svg
@@ -179,14 +179,14 @@ export function Discipline() {
                     <div className="relative flex-shrink-0">
                       <div
                         className={`
-                  w-5 h-5 rounded-lg border-2 flex items-center justify-center
-                  transition-all duration-300 ease-out
-                  ${
-                    sub.completed
-                      ? "border-emerald-500 bg-emerald-500 scale-110"
-                      : "border-gray-300 group-hover/item:border-gray-400"
-                  }
-                `}
+                          w-5 h-5 rounded-lg border-2 flex items-center justify-center
+                          transition-all duration-300 ease-out
+                          ${
+                            sub.completed
+                              ? "border-emerald-500 bg-emerald-500 scale-110"
+                              : "border-gray-300 group-hover/item:border-gray-400"
+                          }
+                        `}
                       >
                         {sub.completed && (
                           <svg
