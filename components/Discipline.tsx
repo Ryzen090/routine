@@ -1,14 +1,13 @@
 import React from "react";
+import { Goal, Calendar } from "lucide-react";
 import { useApp } from "@/contexts/AppContext";
-import { Checkbox } from "@/components/ui/checkbox";
-import { CheckSquare, Goal, Calendar } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 type Tab = "daily" | "trade" | "monthly";
 
 export function Discipline() {
   const { state, dispatch } = useApp();
-  const [activeTab, setActiveTab] = React.useState<Tab>("daily");
+  const [activeTab, setActiveTab] = React.useState<Tab>("trade");
 
   const monthlyGoals = state.monthlyGoals;
 
@@ -143,43 +142,92 @@ export function Discipline() {
       </div>
 
       {activeTab === "daily" && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {state.notes.map((note) => (
-            <Card key={note.id}>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm">{note.title}</CardTitle>
+            <div
+              key={note.id}
+              className="relative group bg-gradient-to-br from-white to-gray-50 rounded-2xl border border-gray-200/60 p-5 hover:border-gray-300/80 transition-all duration-300 hover:shadow-xl"
+            >
+              <div className="absolute -top-2 -right-2 w-10 h-10 rounded-xl bg-white border border-gray-200 shadow-sm flex items-center justify-center">
+                <svg
+                  className="w-5 h-5 text-gray-600"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
+                </svg>
+              </div>
+
+              <div className="pr-8">
+                <h3 className="text-xl font-bold text-gray-900 mb-2">
+                  {note.title}
+                </h3>
                 {note.content && (
-                  <p className="text-sm text-gray-600">{note.content}</p>
+                  <p className="text-gray-600 text-sm leading-relaxed mb-6">
+                    {note.content}
+                  </p>
                 )}
-              </CardHeader>
-              <CardContent className="space-y-2">
+              </div>
+
+              <div className="space-y-3 mb-6">
                 {note.subNotes.map((sub) => (
                   <div
                     key={sub.id}
-                    className="flex items-center gap-3 p-2 bg-gray-50 rounded"
+                    onClick={() => toggleSubNote(note.id, sub.id)}
+                    className="flex items-center gap-3 p-3 rounded-xl bg-white border border-gray-100 hover:bg-gray-50/80 hover:border-gray-200 transition-all duration-200 cursor-pointer group/item"
                   >
-                    <Checkbox
-                      checked={sub.completed}
-                      onCheckedChange={() => toggleSubNote(note.id, sub.id)}
-                    />
+                    <div className="relative flex-shrink-0">
+                      <div
+                        className={`
+                  w-5 h-5 rounded-lg border-2 flex items-center justify-center
+                  transition-all duration-300 ease-out
+                  ${
+                    sub.completed
+                      ? "border-emerald-500 bg-emerald-500 scale-110"
+                      : "border-gray-300 group-hover/item:border-gray-400"
+                  }
+                `}
+                      >
+                        {sub.completed && (
+                          <svg
+                            className="w-3 h-3 text-white animate-pop"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="3"
+                              d="M5 13l4 4L19 7"
+                            />
+                          </svg>
+                        )}
+                      </div>
+                    </div>
+
                     <span
-                      className={`text-sm ${
-                        sub.completed
-                          ? "line-through text-gray-400"
-                          : "text-black"
-                      }`}
+                      className={`
+                        text-sm font-medium flex-1 transition-all duration-300
+                        ${
+                          sub.completed
+                            ? "text-gray-400"
+                            : "text-gray-700 group-hover/item:text-gray-900"
+                        }
+                      `}
                     >
                       {sub.content}
                     </span>
+
+                    {sub.completed && (
+                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    )}
                   </div>
                 ))}
-                <div className="flex items-center gap-2 text-xs text-gray-500 pt-2">
-                  <CheckSquare className="h-3 w-3" />
-                  {note.subNotes.filter((s) => s.completed).length} /{" "}
-                  {note.subNotes.length} completed
-                </div>
-              </CardContent>
-            </Card>
+              </div>
+
+              <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500/20 via-emerald-500/20 to-amber-500/20 rounded-b-2xl" />
+            </div>
           ))}
         </div>
       )}

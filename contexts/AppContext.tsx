@@ -4,6 +4,7 @@
 import { Task, UserStats, AppState, Payment } from "@/types";
 import React, { createContext, useContext, useReducer, useEffect } from "react";
 import {
+  achievements,
   days,
   defaultMyTools,
   defaultNotes,
@@ -59,35 +60,7 @@ type AppAction =
 
 const initialState: AppState = {
   tasks: defaultTasks,
-  achievements: [
-    {
-      id: "first-week",
-      title: "First Week Complete",
-      description: "Complete 7 days of tasks",
-      icon: "Trophy",
-      unlocked: false,
-      progress: 0,
-      target: 7,
-    },
-    {
-      id: "task-master",
-      title: "Task Master",
-      description: "Complete 100 tasks",
-      icon: "CheckCircle",
-      unlocked: false,
-      progress: 0,
-      target: 100,
-    },
-    {
-      id: "consistency-king",
-      title: "Consistency King",
-      description: "Maintain a 30-day streak",
-      icon: "Target",
-      unlocked: false,
-      progress: 0,
-      target: 30,
-    },
-  ],
+  achievements: achievements,
   userStats: {
     totalTasksCompleted: 0,
     currentStreak: 0,

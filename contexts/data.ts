@@ -172,22 +172,31 @@ export const defaultTasks: Task[] = [
 export const defaultNotes: Note[] = [
   {
     id: "1",
-    title: "Motivation Skill",
-    content: "Continuous learning and skill development",
+    title: "Coding",
+    content: "Build digital solutions",
     subNotes: [
       {
         id: "1-1",
-        content: "Trade",
+        content: "Learn backend development",
         completed: false,
       },
       {
         id: "1-2",
-        content: "Upwork",
+        content: "Learn frontend development",
         completed: false,
       },
+    ],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: "2",
+    title: "Reading",
+    content: "Grow knowledge",
+    subNotes: [
       {
-        id: "1-3",
-        content: "Improve English",
+        id: "1-1",
+        content: "Read one book per month",
         completed: false,
       },
     ],
@@ -196,12 +205,12 @@ export const defaultNotes: Note[] = [
   },
   {
     id: "3",
-    title: "Regular Exercise",
-    content: "Stay physically active",
+    title: "Language",
+    content: "Improve communication",
     subNotes: [
       {
-        id: "3-1",
-        content: "ហាត់ប្រាណ ១៥–៣០ នាទីក្នុងមួយថ្ងៃ",
+        id: "1-1",
+        content: "Improve English",
         completed: false,
       },
     ],
@@ -210,12 +219,12 @@ export const defaultNotes: Note[] = [
   },
   {
     id: "4",
-    title: "Plan Your Day for Tomorrow",
-    content: "Daily planning for success",
+    title: "Travel",
+    content: "Explore new places",
     subNotes: [
       {
-        id: "4-1",
-        content: "កំណត់តំលៃការងារសំខាន់ ៣ យ៉ាងក្នុងមួយថ្ងៃ",
+        id: "1-1",
+        content: "Travel once this year",
         completed: false,
       },
     ],
@@ -224,13 +233,59 @@ export const defaultNotes: Note[] = [
   },
   {
     id: "5",
-    title: "Eat Nutritious Food",
-    content: "Healthy eating habits",
+    title: "Forex Trading",
+    content: "Learn trading",
     subNotes: [
-      { id: "5-1", content: "ផឹកទឹក ២-៣ លីតក្នុងមួយថ្ងៃ", completed: false },
       {
-        id: "5-2",
-        content: "កាត់បន្ថយសារជាតិផ្អែម",
+        id: "1-1",
+        content: "Learn forex basics",
+        completed: false,
+      },
+    ],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: "6",
+    title: "Fitness",
+    content: "Stay healthy",
+    subNotes: [
+      {
+        id: "1-1",
+        content: "Work out 4 times a week",
+        completed: false,
+      },
+      {
+        id: "1-2",
+        content: "Practice martial arts",
+        completed: false,
+      },
+    ],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: "7",
+    title: "Art",
+    content: "Be creative",
+    subNotes: [
+      {
+        id: "1-1",
+        content: "Draw mountains",
+        completed: false,
+      },
+    ],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: "8",
+    title: "Blog",
+    content: "Share ideas",
+    subNotes: [
+      {
+        id: "1-1",
+        content: "Blog with GPT",
         completed: false,
       },
     ],
@@ -307,6 +362,36 @@ export const monthlyGoals: Goal[] = [
     completed: false,
     targetAmount: 30,
     currentAmount: 0,
+  },
+];
+
+export const achievements = [
+  {
+    id: "first-week",
+    title: "First Week Complete",
+    description: "Complete 7 days of tasks",
+    icon: "Trophy",
+    unlocked: false,
+    progress: 0,
+    target: 7,
+  },
+  {
+    id: "task-master",
+    title: "Task Master",
+    description: "Complete 100 tasks",
+    icon: "CheckCircle",
+    unlocked: false,
+    progress: 0,
+    target: 100,
+  },
+  {
+    id: "consistency-king",
+    title: "Consistency King",
+    description: "Maintain a 30-day streak",
+    icon: "Target",
+    unlocked: false,
+    progress: 0,
+    target: 30,
   },
 ];
 
