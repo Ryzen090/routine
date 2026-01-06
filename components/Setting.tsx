@@ -45,6 +45,7 @@ export function Setting() {
   const startOfWeek = getStartOfWeek();
 
   const todaysTasks = state.tasks.filter((t) => t.recurring);
+  const totalTasks = todaysTasks.length * 5;
   const completedToday = todaysTasks.filter((t) => t.completed);
 
   const dailyProgress =
@@ -214,11 +215,12 @@ export function Setting() {
           <div className="flex items-center justify-between mb-3">
             <div className="text-xs font-medium text-gray-500">STREAK</div>
             <div className="text-xs font-semibold text-amber-600">
-              {currentStreak} days
+              {weeklyStats.filter((d) => getRate(d) === 100).length} days
             </div>
           </div>
           <div className="text-xl font-bold text-gray-900 mb-2">
-            {currentStreak}
+            {weeklyStats.filter((d) => getRate(d) === 100).length}/
+            {weeklyStats.length}
           </div>
           <div className="text-xs text-gray-600">Perfect days</div>
         </div>
@@ -252,7 +254,7 @@ export function Setting() {
           <div className="text-xl font-bold text-gray-900 mb-2">
             {totalLiters}L
           </div>
-          <div className="text-xs text-gray-600">Completion rate</div>
+          <div className="text-xs text-gray-600">Completion</div>
         </div>
       </div>
 
@@ -438,10 +440,9 @@ export function Setting() {
           </div>
 
           <div className="bg-white rounded-xl p-3">
-            <div className="text-xs text-gray-500 mb-1">Success Rate</div>
+            <div className="text-xs text-gray-500 mb-1">Week Success Rate</div>
             <div className="font-medium text-gray-900">
-              {weeklyStats.filter((d) => getRate(d) === 100).length}/
-              {weeklyStats.length}
+              {totalCompleted}/{totalTasks}
             </div>
           </div>
 
