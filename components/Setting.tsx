@@ -176,6 +176,11 @@ export function Setting() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [weeklyStats, startOfWeek]);
 
+  const completedCount = state.myTools[0].subItems.filter(
+    (item) => item.completed
+  ).length;
+
+  const totalLiters = completedCount * 1.5;
   const maxRate = Math.max(...chartData.map((d) => d.rate), 100);
 
   return (
@@ -255,7 +260,7 @@ export function Setting() {
             <div className="text-xs font-semibold text-blue-600">Daily</div>
           </div>
           <div className="text-xl font-bold text-gray-900 mb-2">
-            {Math.round(weeklyCompletion)}%
+            {totalLiters}L
           </div>
           <div className="text-xs text-gray-600">Completion rate</div>
         </div>
