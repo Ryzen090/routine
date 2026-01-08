@@ -17,31 +17,32 @@ export function MyTools() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
       {state.myTools.map((tool) => {
-        const completed = tool.subItems.filter((item) => item.completed).length;
         const total = tool.subItems.length;
+        const completed = tool.subItems.filter((item) => item.completed).length;
         const progress = Math.round((completed / total) * 100);
 
         return (
-          <Card
-            key={tool.id}
-            className="border-none shadow-sm hover:shadow transition-shadow"
-          >
+          <Card key={tool.id} className="border border-gray-100 bg-white">
             <CardContent className="p-4">
               <div className="mb-4">
-                <h4 className="font-semibold text-gray-900 mb-1">
-                  {tool.title}
-                </h4>
-                <div className="flex items-center justify-between text-sm text-gray-600">
-                  <span>Progress</span>
-                  <span className="font-medium">({progress}%)</span>
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="font-semibold text-gray-900 text-base">
+                    {tool.title}
+                  </h4>
                 </div>
-              </div>
 
-              <div className="w-full bg-gray-200 rounded-full h-2 mb-4 overflow-hidden">
-                <div
-                  className="bg-blue-600 h-full rounded-full transition-all duration-300"
-                  style={{ width: `${progress}%` }}
-                />
+                <div className="space-y-1">
+                  <div className="flex justify-between text-xs text-gray-500">
+                    <span>Progress</span>
+                    <span>{progress}%</span>
+                  </div>
+                  <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-blue-500 rounded-full transition-all duration-300"
+                      style={{ width: `${progress}%` }}
+                    />
+                  </div>
+                </div>
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -50,24 +51,24 @@ export function MyTools() {
                     key={item.id}
                     onClick={() => toggleSubItem(tool.id, item.id)}
                     className={`
-                      px-3 py-2 rounded-lg border text-sm
-                      flex items-center gap-2 transition-colors
+                      px-3 py-2 rounded-md border text-sm
+                      flex items-center justify-center gap-2 transition-colors
                       ${
                         item.completed
-                          ? "bg-green-50 border-green-300 text-green-700"
-                          : "bg-white border-gray-200 text-gray-700 hover:bg-blue-50"
+                          ? "bg-green-50 border-green-200 text-green-700"
+                          : "bg-gray-50 border-gray-200 text-gray-700 hover:bg-blue-50"
                       }
                     `}
                   >
                     <div
                       className={`
-                      w-3 h-3 rounded-full border flex items-center justify-center
-                      ${
-                        item.completed
-                          ? "bg-green-500 border-green-500"
-                          : "border-gray-300"
-                      }
-                    `}
+                        w-3 h-3 rounded-full border flex items-center justify-center flex-shrink-0
+                        ${
+                          item.completed
+                            ? "bg-green-500 border-green-500"
+                            : "bg-white border-gray-300"
+                        }
+                      `}
                     >
                       {item.completed && (
                         <svg
