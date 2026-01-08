@@ -64,7 +64,6 @@ export interface Payment {
   title: string;
   amount: number;
   type: "expense" | "income";
-  icon: string;
 }
 
 export interface Goal {

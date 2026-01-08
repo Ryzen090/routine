@@ -314,35 +314,36 @@ export const defaultPayments: Payment[] = [
     title: "Salary",
     amount: 350,
     type: "income",
-    icon: "💲",
   },
   {
     id: "5",
     title: "Family",
     amount: 100,
     type: "expense",
-    icon: "👪",
   },
   {
     id: "2",
     title: "Rent",
     amount: 70,
     type: "expense",
-    icon: "🏠",
   },
   {
     id: "4",
     title: "Food",
     amount: 75,
     type: "expense",
-    icon: "🍛",
   },
   {
     id: "3",
     title: "Motorbike",
     amount: 20,
     type: "expense",
-    icon: "⛽",
+  },
+  {
+    id: "1",
+    title: "Save",
+    amount: 20,
+    type: "expense",
   },
 ];
 
@@ -357,7 +358,7 @@ export const monthlyGoals: Goal[] = [
   },
   {
     id: "2",
-    title: "Save 30$",
+    title: "Save 20$",
     icon: "💲",
     completed: false,
     targetAmount: 30,

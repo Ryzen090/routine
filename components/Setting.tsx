@@ -103,17 +103,6 @@ export function Setting() {
         weeklyStats.length
       : 0;
 
-  const calculateStreak = () => {
-    let streak = 0;
-    const sorted = [...weeklyStats].reverse();
-    for (const day of sorted) {
-      if (getRate(day) === 100) streak++;
-      else break;
-    }
-    return streak;
-  };
-
-  const currentStreak = calculateStreak();
   const recentActivity = weeklyStats.slice(-5);
 
   const getDayLabel = (date: Date): string => {
