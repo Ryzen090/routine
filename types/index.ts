@@ -69,7 +69,6 @@ export interface Payment {
 export interface Goal {
   id: string;
   title: string;
-  icon: string;
   completed: boolean;
   targetAmount?: number;
   currentAmount?: number;

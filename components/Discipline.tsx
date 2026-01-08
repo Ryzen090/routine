@@ -169,7 +169,7 @@ export function Discipline() {
                 )}
               </div>
 
-              <div className="space-y-3 mb-6">
+              <div className="space-y-3">
                 {note.subNotes.map((sub) => (
                   <div
                     key={sub.id}
@@ -225,8 +225,6 @@ export function Discipline() {
                   </div>
                 ))}
               </div>
-
-              <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500/20 via-emerald-500/20 to-amber-500/20 rounded-b-2xl" />
             </div>
           ))}
         </div>
@@ -574,12 +572,6 @@ export function Discipline() {
                     : "bg-gradient-to-br from-white to-gray-50 border-gray-200 hover:border-purple-300"
                 }`}
               >
-                <div
-                  className={`absolute -right-6 -top-6 w-20 h-20 rounded-full opacity-10 ${
-                    goal.completed ? "bg-green-400" : "bg-purple-400"
-                  }`}
-                ></div>
-
                 <div className="p-3 relative z-10">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
@@ -593,31 +585,27 @@ export function Discipline() {
                         className="flex-shrink-0"
                       >
                         <div
-                          className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-300 shadow-sm ${
+                          className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all duration-300 shadow-sm ${
                             goal.completed
                               ? "bg-gradient-to-br from-green-500 to-emerald-600"
                               : "bg-gradient-to-br from-purple-100 to-indigo-100 hover:from-purple-200 hover:to-indigo-200"
                           }`}
                         >
-                          {goal.completed ? (
-                            <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
-                              <svg
-                                className="w-5 h-5 text-green-600"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={3}
-                                  d="M5 13l4 4L19 7"
-                                />
-                              </svg>
-                            </div>
-                          ) : (
-                            <span className="text-2xl">{goal.icon}</span>
-                          )}
+                          <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
+                            <svg
+                              className="w-4 h-4 text-green-600"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={3}
+                                d="M5 13l4 4L19 7"
+                              />
+                            </svg>
+                          </div>
                         </div>
                       </button>
                       <div>
@@ -631,7 +619,7 @@ export function Discipline() {
                           Goal #{index + 1}
                         </div>
                         <h3
-                          className={`text-base mt-1 ${
+                          className={`text-sm mt-1 ${
                             goal.completed ? "text-gray-500" : "text-gray-900"
                           }`}
                         >
@@ -639,27 +627,6 @@ export function Discipline() {
                         </h3>
                       </div>
                     </div>
-
-                    {goal.completed ? (
-                      <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-full">
-                        <svg
-                          className="w-3 h-3"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                        Completed
-                      </span>
-                    ) : (
-                      <span className="text-xs text-gray-500 font-medium">
-                        Active
-                      </span>
-                    )}
                   </div>
                 </div>
               </div>

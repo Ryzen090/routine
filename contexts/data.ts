@@ -351,7 +351,6 @@ export const monthlyGoals: Goal[] = [
   {
     id: "1",
     title: "Save 100$",
-    icon: "💲",
     completed: false,
     targetAmount: 100,
     currentAmount: 0,
@@ -359,7 +358,6 @@ export const monthlyGoals: Goal[] = [
   {
     id: "2",
     title: "Save 20$",
-    icon: "💲",
     completed: false,
     targetAmount: 30,
     currentAmount: 0,
