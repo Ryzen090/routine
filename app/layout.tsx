@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "Routine",
-    title: "Routine - Daily Routine Tracker",
+    title: "",
     description:
       "A beautiful daily task scheduler to organize your routine, track payments, and stay motivated",
   },
