@@ -81,23 +81,7 @@ export function Discipline() {
   };
 
   const weeklyTotal = calculateWeeklyTotal();
-
-  const calculateAllWeeksTotal = () => {
-    let allWeeksTotal = 0;
-    Object.keys(state.weeklyTrades).forEach((week) => {
-      const weekData = state.weeklyTrades[week];
-      days.forEach((day) => {
-        const dayValue = parseFloat(weekData?.[day] || "0");
-        if (!isNaN(dayValue)) {
-          allWeeksTotal += dayValue;
-        }
-      });
-    });
-    return allWeeksTotal;
-  };
-
-  const allWeeksTotal = calculateAllWeeksTotal();
-  const totalBalance = 10 + allWeeksTotal;
+  const totalBalance = 10 + weeklyTotal;
 
   return (
     <div className="space-y-6 bg-white min-h-screen pt-5 pb-20 px-4">
@@ -245,14 +229,14 @@ export function Discipline() {
                 </div>
                 <div
                   className={`text-xl font-bold ${
-                    allWeeksTotal < 0
+                    weeklyTotal < 0
                       ? "text-red-600"
-                      : allWeeksTotal > 0
-                      ? "text-green-600"
-                      : "text-gray-600"
+                      : weeklyTotal > 0
+                        ? "text-green-600"
+                        : "text-gray-600"
                   }`}
                 >
-                  {allWeeksTotal < 0 ? "-$" : "$"}
+                  {weeklyTotal < 0 ? "-$" : "$"}
                   {Math.abs(totalBalance).toFixed(2)}
                 </div>
               </div>
@@ -272,8 +256,8 @@ export function Discipline() {
                         totalBalance < 10
                           ? "text-red-600"
                           : totalBalance > 10
-                          ? "text-green-600"
-                          : "text-gray-600"
+                            ? "text-green-600"
+                            : "text-gray-600"
                       }`}
                     >
                       ${totalBalance.toFixed(2)}
@@ -284,10 +268,10 @@ export function Discipline() {
                     <span>Net P/L:</span>
                     <span
                       className={
-                        allWeeksTotal >= 0 ? "text-green-600" : "text-red-600"
+                        weeklyTotal >= 0 ? "text-green-600" : "text-red-600"
                       }
                     >
-                      {allWeeksTotal >= 0 ? "+" : ""}${allWeeksTotal.toFixed(2)}
+                      {weeklyTotal >= 0 ? "+" : ""}${weeklyTotal.toFixed(2)}
                     </span>
                   </div>
 
@@ -333,44 +317,37 @@ export function Discipline() {
                       <div className="flex justify-between text-xs">
                         <span
                           className={`${
-                            allWeeksTotal >= 0
-                              ? "text-green-600"
-                              : "text-red-600"
+                            weeklyTotal >= 0 ? "text-green-600" : "text-red-600"
                           }`}
                         >
-                          {allWeeksTotal >= 0 ? "Profit" : "Loss"}:
+                          {weeklyTotal >= 0 ? "Profit" : "Loss"}:
                         </span>
                         <span
                           className={`font-medium ${
-                            allWeeksTotal >= 0
-                              ? "text-green-600"
-                              : "text-red-600"
+                            weeklyTotal >= 0 ? "text-green-600" : "text-red-600"
                           }`}
                         >
-                          {allWeeksTotal >= 0 ? "+" : ""}$
-                          {allWeeksTotal.toFixed(2)}
+                          {weeklyTotal >= 0 ? "+" : ""}${weeklyTotal.toFixed(2)}
                         </span>
                       </div>
                       <div className="flex justify-between text-xs">
                         <span
                           className={`${
-                            allWeeksTotal >= 0
-                              ? "text-green-600"
-                              : "text-red-600"
+                            weeklyTotal >= 0 ? "text-green-600" : "text-red-600"
                           }`}
                         >
                           Return on Capital:
                         </span>
                         <span
                           className={
-                            allWeeksTotal > 0
+                            weeklyTotal > 0
                               ? "text-green-600"
-                              : allWeeksTotal < 0
-                              ? "text-red-600"
-                              : "text-gray-600"
+                              : weeklyTotal < 0
+                                ? "text-red-600"
+                                : "text-gray-600"
                           }
                         >
-                          {((allWeeksTotal / 10) * 100).toFixed(1)}%
+                          {((weeklyTotal / 10) * 100).toFixed(1)}%
                         </span>
                       </div>
                       <div className="flex justify-between text-xs font-bold border-t pt-2">
@@ -380,8 +357,8 @@ export function Discipline() {
                             totalBalance > 10
                               ? "text-green-600"
                               : totalBalance < 10
-                              ? "text-red-600"
-                              : "text-gray-600"
+                                ? "text-red-600"
+                                : "text-gray-600"
                           }
                         >
                           ${totalBalance.toFixed(2)}
@@ -396,23 +373,23 @@ export function Discipline() {
                   weeklyTotal > 0
                     ? "bg-green-50 text-green-700"
                     : weeklyTotal < 0
-                    ? "bg-red-50 text-red-700"
-                    : "bg-gray-50 text-gray-700"
+                      ? "bg-red-50 text-red-700"
+                      : "bg-gray-50 text-gray-700"
                 }`}
               >
                 <div className="text-xs font-semibold">
                   {weeklyTotal > 0
                     ? `📈 Profit this week!`
                     : weeklyTotal < 0
-                    ? `📉 Loss this week!`
-                    : `Break Even`}
+                      ? `📉 Loss this week!`
+                      : `Break Even`}
                 </div>
                 <div className="text-xs mt-1">
                   {weeklyTotal > 0
                     ? `+${((weeklyTotal / 10) * 100).toFixed(1)}% Return`
                     : weeklyTotal < 0
-                    ? `${((weeklyTotal / 10) * 100).toFixed(1)}% Loss`
-                    : "0% Change"}
+                      ? `${((weeklyTotal / 10) * 100).toFixed(1)}% Loss`
+                      : "0% Change"}
                 </div>
               </div>
             </CardContent>
@@ -447,7 +424,7 @@ export function Discipline() {
                       <span className="font-medium">Amount Today : </span>
                       {(() => {
                         const amount = parseFloat(
-                          currentWeekData[todayDayName] || "0"
+                          currentWeekData[todayDayName] || "0",
                         );
                         let colorClass = "text-gray-600";
 
@@ -514,8 +491,8 @@ export function Discipline() {
                                 isNegative
                                   ? "text-red-600"
                                   : isPositive
-                                  ? "text-green-600"
-                                  : "text-gray-600"
+                                    ? "text-green-600"
+                                    : "text-gray-600"
                               }
                             >
                               ${tradeAmount.toFixed(2)}
@@ -536,8 +513,8 @@ export function Discipline() {
                       </div>
                       <div className="flex justify-between text-xs text-gray-600 mt-1">
                         <span>
-                          Daily Average:{" "}
-                          {((allWeeksTotal / 10) * 100).toFixed(1)}%
+                          Daily Average: {((weeklyTotal / 10) * 100).toFixed(1)}
+                          %
                         </span>
                       </div>
                     </div>
@@ -546,8 +523,8 @@ export function Discipline() {
                         weeklyTotal > 0
                           ? "text-green-600"
                           : weeklyTotal < 0
-                          ? "text-red-600"
-                          : "text-gray-600"
+                            ? "text-red-600"
+                            : "text-gray-600"
                       }`}
                     >
                       {Math.abs(weeklyTotal).toFixed(2)}$
@@ -662,7 +639,7 @@ export function Discipline() {
                       {Math.round(
                         (monthlyGoals.filter((g) => g.completed).length /
                           monthlyGoals.length) *
-                          100
+                          100,
                       )}
                       %
                     </div>
