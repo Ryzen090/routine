@@ -14,9 +14,10 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 export function Financial() {
   const { state } = useApp();
   const tradingTransactions = buildTradingTransactions(state.weeklyTrades);
+  const Transaction = [...state.payments];
   const allTransactions = [...state.payments, ...tradingTransactions];
 
-  const mergedTransactions = allTransactions.reduce(
+  const transactions = Transaction.reduce(
     (acc, curr) => {
       const existing = acc.find(
         (t) => t.title === curr.title && t.type === curr.type,
@@ -33,23 +34,22 @@ export function Financial() {
     [] as typeof allTransactions,
   );
 
-  const incomeCount = mergedTransactions.filter(
-    (p) => p.type === "income",
-  ).length;
-  const expenseCount = mergedTransactions.filter(
-    (p) => p.type === "expense",
-  ).length;
+  const incomeCount = transactions.filter((p) => p.type === "income").length;
+  const expenseCount = transactions.filter((p) => p.type === "expense").length;
 
-  const totalIncome = mergedTransactions
+  const totalIncome = transactions
     .filter((p) => p.type === "income")
     .reduce((sum, p) => sum + p.amount, 0);
 
-  const totalExpenses = mergedTransactions
+  const totalExpenses = transactions
     .filter((p) => p.type === "expense")
     .reduce((sum, p) => sum + p.amount, 0);
 
   const balance = totalIncome - totalExpenses;
-  const todaysPayments = [...mergedTransactions];
+
+  const tradingAmount = tradingTransactions.reduce((sum, t) => {
+    return t.type === "income" ? sum + t.amount : sum - t.amount;
+  }, 0);
 
   return (
     <div className="space-y-6 bg-white min-h-screen pt-5 pb-20 px-4">
@@ -129,10 +129,14 @@ export function Financial() {
                 <CreditCard className="h-3 w-3 text-purple-600" />
               </div>
             </div>
-            <div className="text-xl font-bold text-gray-900 mb-1">
-              {todaysPayments.length}
+            <div
+              className={`text-xl font-bold mb-1 ${
+                tradingAmount >= 0 ? "text-emerald-600" : "text-red-600"
+              }`}
+            >
+              ${tradingAmount.toFixed(2)}
             </div>
-            <div className="text-xs text-gray-600">All transactions</div>
+            <div className="text-xs text-gray-600">Trading income</div>
           </CardContent>
         </Card>
       </div>
@@ -182,6 +186,16 @@ export function Financial() {
 
           <div className="border-t pt-3">
             <div className="flex justify-between items-center">
+              <span className="text-xs text-gray-600">Net Trade</span>
+              <div
+                className={`text-sm font-semibold ${
+                  tradingAmount >= 0 ? "text-emerald-600" : "text-red-600"
+                }`}
+              >
+                ${tradingAmount.toFixed(2)}
+              </div>
+            </div>
+            <div className="flex justify-between items-center">
               <span className="text-xs text-gray-600">Net Balance</span>
               <div
                 className={`text-sm font-semibold ${
@@ -191,6 +205,7 @@ export function Financial() {
                 ${balance.toFixed(2)}
               </div>
             </div>
+
             <div className="text-xs text-gray-500 mt-1">
               {balance >= 0 ? "Positive cash flow" : "Negative cash flow"}
             </div>
@@ -211,22 +226,33 @@ export function Financial() {
             </div>
           </div>
         </CardHeader>
+
         <CardContent className="space-y-3 mt-4">
-          {mergedTransactions.map((item) => (
-            <div
-              key={item.title + item.type}
-              className="flex justify-between text-xs"
-            >
-              <span className="text-gray-600">{item.title}</span>
-              <span
-                className={`text-xs ${
-                  item.type === "income" ? "text-emerald-600" : "text-red-600"
-                }`}
+          {transactions
+            .slice() // copy array so we don't mutate original
+            .sort((a, b) => {
+              // Income first, then expenses
+              if (a.type === b.type) {
+                // Same type → sort descending by amount
+                return b.amount - a.amount;
+              }
+              return a.type === "income" ? -1 : 1; // income first
+            })
+            .map((item) => (
+              <div
+                key={item.title + item.type}
+                className="flex justify-between text-xs"
               >
-                {item.type === "income" ? "+" : "-"}${item.amount.toFixed(2)}
-              </span>
-            </div>
-          ))}
+                <span className="text-gray-600">{item.title}</span>
+                <span
+                  className={`text-xs ${
+                    item.type === "income" ? "text-emerald-600" : "text-red-600"
+                  }`}
+                >
+                  {item.type === "income" ? "+" : "-"}${item.amount.toFixed(2)}
+                </span>
+              </div>
+            ))}
 
           <div className="flex justify-between text-xs">
             <span className="text-gray-600">Savings Rate</span>

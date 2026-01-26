@@ -339,11 +339,23 @@ export const defaultPayments: Payment[] = [
     amount: 20,
     type: "expense",
   },
+  // {
+  //   id: "1",
+  //   title: "Save",
+  //   amount: 20,
+  //   type: "expense",
+  // },
   {
-    id: "1",
-    title: "Save",
-    amount: 20,
+    id: "6",
+    title: "Trade Account",
+    amount: 100,
     type: "expense",
+  },
+  {
+    id: "7",
+    title: "Machines",
+    amount: 45,
+    type: "income",
   },
 ];
 
