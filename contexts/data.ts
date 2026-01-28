@@ -354,7 +354,7 @@ export const defaultPayments: Payment[] = [
   {
     id: "7",
     title: "Machines",
-    amount: 45,
+    amount: 25,
     type: "income",
   },
 ];
