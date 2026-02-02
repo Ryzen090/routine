@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { AppProvider, useApp } from "@/contexts/AppContext";
-import { Navigation } from "@/components/Navigation";
-import { Dashboard } from "@/components/Dashboard";
-import { Financial } from "@/components/Financial";
-import { Discipline } from "@/components/Discipline";
+import { Finance } from "@/components/Finance";
 import { Setting } from "@/components/Setting";
+import { Dashboard } from "@/components/Dashboard";
+import { Discipline } from "@/components/Discipline";
+import { Navigation } from "@/components/Navigation";
+import { AppProvider, useApp } from "@/contexts/AppContext";
 
 function AppContent() {
   const { state, dispatch } = useApp();
@@ -24,8 +24,8 @@ function AppContent() {
         return <Dashboard />;
       case "setting":
         return <Setting />;
-      case "financial":
-        return <Financial />;
+      case "finance":
+        return <Finance />;
       case "discipline":
         return <Discipline />;
       default:

@@ -217,20 +217,7 @@ export const defaultNotes: Note[] = [
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
-  {
-    id: "4",
-    title: "Travel",
-    content: "Explore new places",
-    subNotes: [
-      {
-        id: "1-1",
-        content: "Travel once this year",
-        completed: false,
-      },
-    ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
+
   {
     id: "5",
     title: "Forex Trading",
@@ -238,7 +225,7 @@ export const defaultNotes: Note[] = [
     subNotes: [
       {
         id: "1-1",
-        content: "Learn forex basics",
+        content: "Learn forex",
         completed: false,
       },
     ],
@@ -265,27 +252,13 @@ export const defaultNotes: Note[] = [
     updatedAt: new Date().toISOString(),
   },
   {
-    id: "7",
-    title: "Art",
-    content: "Be creative",
+    id: "4",
+    title: "Travel",
+    content: "Explore new places",
     subNotes: [
       {
         id: "1-1",
-        content: "Draw mountains",
-        completed: false,
-      },
-    ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "8",
-    title: "Blog",
-    content: "Share ideas",
-    subNotes: [
-      {
-        id: "1-1",
-        content: "Blog with GPT",
+        content: "Travel once this year",
         completed: false,
       },
     ],

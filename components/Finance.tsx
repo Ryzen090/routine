@@ -11,7 +11,7 @@ import { useApp } from "@/contexts/AppContext";
 import { buildTradingTransactions } from "@/lib/helper";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
-export function Financial() {
+export function Finance() {
   const { state } = useApp();
   const tradingTransactions = buildTradingTransactions(state.weeklyTrades);
   const Transaction = [...state.payments];
@@ -59,7 +59,7 @@ export function Financial() {
         </div>
         <div>
           <h2 className="text-2xl font-bold text-gray-900">
-            Financial Overview
+            Finance Overview
           </h2>
           <p className="text-gray-600 mt-1">
             Track your daily income and expenses
@@ -145,7 +145,7 @@ export function Financial() {
         <CardHeader className="pb-0">
           <div className="flex justify-between items-center">
             <div>
-              <CardTitle className="text-sm">Financial Breakdown</CardTitle>
+              <CardTitle className="text-sm">Finance Breakdown</CardTitle>
               <div className="text-xs text-gray-600">
                 Daily cash flow analysis
               </div>

@@ -6,7 +6,7 @@ export const getProgressCircleColor = (completionRate: number): string => {
   return "#10b981";
 };
 
-// #region Financial
+// #region Finance
 function getMonthlyTradingTotals(
   weeklyTrades: Record<string, Record<string, string>>,
 ) {
