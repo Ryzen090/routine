@@ -1,13 +1,24 @@
 import React from "react";
 import { useApp } from "@/contexts/AppContext";
-import { Goal, Calendar, Target, TrendingUp } from "lucide-react";
+import {
+  Goal,
+  Calendar,
+  Target,
+  TrendingUp,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 type Tab = "daily" | "trade";
 
 export function Discipline() {
   const { state, dispatch } = useApp();
-  const [activeTab, setActiveTab] = React.useState<Tab>("trade");
+  const [activeTab, setActiveTab] = React.useState<Tab>("daily");
+  const [currentMonth, setCurrentMonth] = React.useState(new Date().getMonth());
+  const [currentYear, setCurrentYear] = React.useState(
+    new Date().getFullYear(),
+  );
 
   const toggleSubNote = (noteId: string, subNoteId: string) => {
     dispatch({
@@ -36,20 +47,28 @@ export function Discipline() {
 
   const todayDayName = getTodayDayName();
 
-  const getWeekNumber = () => {
-    const now = new Date();
+  const getWeekNumber = (date = new Date()) => {
+    const now = new Date(date);
     const startOfYear = new Date(now.getFullYear(), 0, 1);
     const pastDaysOfYear = (now.getTime() - startOfYear.getTime()) / 86400000;
     return Math.ceil((pastDaysOfYear + startOfYear.getDay() + 1) / 7);
   };
 
-  const currentWeekNumber = getWeekNumber().toString();
+  const getCurrentWeekNumber = () => {
+    return getWeekNumber().toString();
+  };
 
-  const updateWeeklyTrade = (day: string, value: string) => {
+  const currentWeekNumber = getCurrentWeekNumber();
+
+  const updateWeeklyTrade = (
+    weekNumber: string,
+    day: string,
+    value: string,
+  ) => {
     dispatch({
       type: "UPDATE_WEEKLY_TRADE",
       payload: {
-        weekNumber: currentWeekNumber,
+        weekNumber,
         day,
         value,
       },
@@ -62,11 +81,12 @@ export function Discipline() {
 
   const currentWeekData = getCurrentWeekTradeData();
 
-  const calculateWeeklyTotal = () => {
+  const calculateWeeklyTotal = (weekData?: Record<string, string>) => {
     let total = 0;
+    const data = weekData || currentWeekData;
 
     days.forEach((day) => {
-      const dayData = currentWeekData[day];
+      const dayData = data[day];
       if (dayData) {
         const value = parseFloat(dayData);
         if (!isNaN(value)) {
@@ -80,6 +100,81 @@ export function Discipline() {
 
   const weeklyTotal = calculateWeeklyTotal();
   const totalBalance = 25 + weeklyTotal;
+
+  const getWeeksInMonth = (month: number, year: number) => {
+    const weeks = [];
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+
+    let currentWeekStart = new Date(firstDay);
+    while (currentWeekStart.getDay() !== 1) {
+      currentWeekStart.setDate(currentWeekStart.getDate() - 1);
+    }
+
+    while (currentWeekStart <= lastDay) {
+      const weekNumber = getWeekNumber(currentWeekStart);
+      const weekEnd = new Date(currentWeekStart);
+      weekEnd.setDate(weekEnd.getDate() + 6);
+
+      weeks.push({
+        number: weekNumber,
+        start: new Date(currentWeekStart),
+        end: new Date(weekEnd),
+        isCurrentMonth: currentWeekStart.getMonth() === month,
+      });
+
+      currentWeekStart.setDate(currentWeekStart.getDate() + 7);
+    }
+
+    return weeks.filter((w) => w.isCurrentMonth);
+  };
+
+  const weeksInCurrentMonth = getWeeksInMonth(currentMonth, currentYear);
+
+  const getWeekData = (weekNumber: string) => {
+    return state.weeklyTrades[weekNumber] || {};
+  };
+
+  const goToPreviousMonth = () => {
+    setCurrentMonth((prev) => {
+      if (prev === 0) {
+        setCurrentYear((year) => year - 1);
+        return 11;
+      }
+      return prev - 1;
+    });
+  };
+
+  const goToNextMonth = () => {
+    setCurrentMonth((prev) => {
+      if (prev === 11) {
+        setCurrentYear((year) => year + 1);
+        return 0;
+      }
+      return prev + 1;
+    });
+  };
+
+  const resetToCurrentMonth = () => {
+    const now = new Date();
+    setCurrentMonth(now.getMonth());
+    setCurrentYear(now.getFullYear());
+  };
+
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
 
   return (
     <div className="space-y-6 bg-white min-h-screen pt-5 pb-20 px-4">
@@ -116,7 +211,7 @@ export function Discipline() {
                     <span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
                   )}
                 </span>
-                {index < 2 && activeTab !== tab && (
+                {index < 3 && activeTab !== tab && (
                   <div className="absolute right-0 top-1/2 -translate-y-1/2 w-px h-4 bg-gray-300"></div>
                 )}
               </button>
@@ -415,7 +510,11 @@ export function Discipline() {
                     value={currentWeekData[todayDayName] || ""}
                     placeholder="Enter amount (e.g., 5.50)"
                     onChange={(e) =>
-                      updateWeeklyTrade(todayDayName, e.target.value)
+                      updateWeeklyTrade(
+                        currentWeekNumber,
+                        todayDayName,
+                        e.target.value,
+                      )
                     }
                     className="w-full rounded-md border px-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                   />
@@ -530,6 +629,135 @@ export function Discipline() {
                       {Math.abs(weeklyTotal).toFixed(2)}$
                     </div>
                   </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-2">
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="text-sm">
+                    Monthly Trading Overview
+                  </CardTitle>
+                  <div className="text-xs text-gray-600">
+                    {monthNames[currentMonth]} {currentYear}
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={goToPreviousMonth}
+                    className="p-2 hover:bg-gray-100 rounded-lg"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={resetToCurrentMonth}
+                    className="px-3 py-1 text-sm bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg"
+                  >
+                    Current
+                  </button>
+                  <button
+                    onClick={goToNextMonth}
+                    className="p-2 hover:bg-gray-100 rounded-lg"
+                  >
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+                  {weeksInCurrentMonth.map((week, index) => {
+                    const weekNumberInMonth = index + 1;
+                    const weekData = getWeekData(week.number.toString());
+                    const weekTotal = calculateWeeklyTotal(weekData);
+                    const isCurrentWeek =
+                      week.number.toString() === currentWeekNumber;
+
+                    const dayAmounts = days.map((day) => ({
+                      day,
+                      amount: weekData[day] ? parseFloat(weekData[day]) : null,
+                    }));
+
+                    return (
+                      <div
+                        key={week.number}
+                        className={`p-4 rounded-xl border ${
+                          isCurrentWeek
+                            ? "border-blue-300 bg-blue-50"
+                            : "border-gray-200 bg-white"
+                        }`}
+                      >
+                        <div className="flex justify-between items-start mb-2">
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <h3 className="font-semibold text-gray-900">
+                                Week {weekNumberInMonth}
+                              </h3>
+                              {isCurrentWeek && (
+                                <span className="px-2 py-1 text-xs bg-blue-100 text-blue-600 rounded-full">
+                                  Current
+                                </span>
+                              )}
+                            </div>
+                            <div className="text-xs text-gray-500 my-1">
+                              {week.start.toLocaleDateString("en-US", {
+                                month: "short",
+                                day: "numeric",
+                              })}{" "}
+                              -{" "}
+                              {week.end.toLocaleDateString("en-US", {
+                                month: "short",
+                                day: "numeric",
+                              })}
+                            </div>
+                            <div className="text-xs text-gray-500 ">
+                              Daily Summary:
+                            </div>
+                          </div>
+                          <div
+                            className={`text-lg font-bold ${
+                              weekTotal >= 0 ? "text-green-600" : "text-red-600"
+                            }`}
+                          >
+                            {weekTotal >= 0 ? "+" : ""}${weekTotal.toFixed(2)}
+                          </div>
+                        </div>
+
+                        <div className="mt-4 space-y-2">
+                          <div className="grid grid-cols-5 gap-2">
+                            {dayAmounts.map(({ day, amount }) => (
+                              <div key={day} className="text-center">
+                                <div className="text-xs text-gray-500 mb-1">
+                                  {day.slice(0, 1)}
+                                </div>
+                                <div
+                                  className={`h-10 rounded-lg flex items-center justify-center text-xs text-gray-600 border bg-gray-50`}
+                                >
+                                  {amount === null
+                                    ? "-"
+                                    : amount > 0
+                                      ? `${amount.toFixed(2)}`
+                                      : `${Math.abs(amount).toFixed(2)}`}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="mt-4 pt-3 border-t">
+                          <div className="flex justify-between items-center">
+                            <span className="text-xs text-gray-600">
+                              Daily avg: <span>${weekTotal.toFixed(2)}</span>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </CardContent>
