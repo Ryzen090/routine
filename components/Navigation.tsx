@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { useState } from "react";
 import { useApp } from "@/contexts/AppContext";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./ThemeToggle";
@@ -21,11 +20,9 @@ const navigationItems = [
 
 export function Navigation() {
   const { state, dispatch } = useApp();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleViewChange = (view: typeof state.currentView) => {
     dispatch({ type: "SET_CURRENT_VIEW", payload: view });
-    setIsMobileMenuOpen(false);
   };
 
   return (
@@ -83,9 +80,6 @@ export function Navigation() {
               >
                 <IconComponent className="h-5 w-5" />
                 <span className="text-xs font-medium">{item.label}</span>
-                {isActive && (
-                  <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-8 h-1 bg-black rounded-full"></div>
-                )}
               </button>
             );
           })}
