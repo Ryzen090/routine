@@ -291,13 +291,13 @@ export const defaultPayments: Payment[] = [
   {
     id: "5",
     title: "Family",
-    amount: 100,
+    amount: 200,
     type: "expense",
   },
   {
     id: "2",
     title: "Rent",
-    amount: 70,
+    amount: 75,
     type: "expense",
   },
   {
@@ -309,43 +309,8 @@ export const defaultPayments: Payment[] = [
   {
     id: "3",
     title: "Motorbike",
-    amount: 20,
+    amount: 15,
     type: "expense",
-  },
-  // {
-  //   id: "1",
-  //   title: "Save",
-  //   amount: 20,
-  //   type: "expense",
-  // },
-  {
-    id: "6",
-    title: "Trade Account",
-    amount: 100,
-    type: "expense",
-  },
-  {
-    id: "7",
-    title: "Machines",
-    amount: 25,
-    type: "income",
-  },
-];
-
-export const monthlyGoals: Goal[] = [
-  {
-    id: "1",
-    title: "Save 100$",
-    completed: false,
-    targetAmount: 100,
-    currentAmount: 0,
-  },
-  {
-    id: "2",
-    title: "Save 20$",
-    completed: false,
-    targetAmount: 30,
-    currentAmount: 0,
   },
 ];
 
