@@ -10,7 +10,6 @@ import {
   defaultNotes,
   defaultPayments,
   defaultTasks,
-  monthlyGoals,
 } from "./data";
 
 type AppAction =
@@ -72,11 +71,13 @@ const initialState: AppState = {
   notes: defaultNotes,
   myTools: defaultMyTools,
   payments: defaultPayments,
-  monthlyGoals: monthlyGoals,
-  weeklyPlan: days.reduce((acc, day) => {
-    acc[day] = { Trade: "" };
-    return acc;
-  }, {} as Record<string, Record<string, string>>),
+  weeklyPlan: days.reduce(
+    (acc, day) => {
+      acc[day] = { Trade: "" };
+      return acc;
+    },
+    {} as Record<string, Record<string, string>>,
+  ),
   weeklyTrades: {},
 };
 
@@ -88,7 +89,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
       return {
         ...state,
         tasks: state.tasks.map((task) =>
-          task.id === action.payload.id ? action.payload : task
+          task.id === action.payload.id ? action.payload : task,
         ),
       };
     case "SET_SELECTED_DATE":
@@ -105,7 +106,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
                 unlocked: true,
                 unlockedDate: new Date().toISOString(),
               }
-            : achievement
+            : achievement,
         ),
       };
     case "UPDATE_STATS":
@@ -147,11 +148,11 @@ function appReducer(state: AppState, action: AppAction): AppState {
                 subNotes: note.subNotes.map((subNote) =>
                   subNote.id === action.payload.subNoteId
                     ? { ...subNote, completed: !subNote.completed }
-                    : subNote
+                    : subNote,
                 ),
                 updatedAt: new Date().toISOString(),
               }
-            : note
+            : note,
         ),
       };
     case "UPDATE_TOOL_SUBITEM":
@@ -164,15 +165,15 @@ function appReducer(state: AppState, action: AppAction): AppState {
                 subItems: tool.subItems.map((item) =>
                   item.id === action.payload.subItemId
                     ? { ...item, completed: !item.completed }
-                    : item
+                    : item,
                 ),
                 current: tool.subItems.filter((item) =>
                   item.id === action.payload.subItemId
                     ? !item.completed
-                    : item.completed
+                    : item.completed,
                 ).length,
               }
-            : tool
+            : tool,
         ),
       };
     case "SET_WEEKLY_PLAN":
@@ -219,35 +220,6 @@ function appReducer(state: AppState, action: AppAction): AppState {
           ...state.weeklyTrades,
           [action.payload.weekNumber]: weekData,
         },
-      };
-    case "TOGGLE_GOAL_COMPLETION":
-      return {
-        ...state,
-        monthlyGoals: state.monthlyGoals.map((goal) =>
-          goal.id === action.payload
-            ? {
-                ...goal,
-                completed: !goal.completed,
-                completedDate: !goal.completed
-                  ? new Date().toISOString()
-                  : undefined,
-              }
-            : goal
-        ),
-      };
-    case "UPDATE_GOAL_PROGRESS":
-      return {
-        ...state,
-        monthlyGoals: state.monthlyGoals.map((goal) =>
-          goal.id === action.payload.id
-            ? {
-                ...goal,
-                currentAmount: action.payload.currentAmount,
-                completed:
-                  action.payload.currentAmount >= (goal.targetAmount || 0),
-              }
-            : goal
-        ),
       };
     default:
       return state;
@@ -299,30 +271,45 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
       const currentDayData = {
         date: today,
-        tasks: state.tasks.reduce((acc, task) => {
-          acc[task.id] = task.completed;
-          return acc;
-        }, {} as Record<string, boolean>),
-        notes: state.notes.reduce((acc, note) => {
-          acc[note.id] = note.subNotes.reduce((subAcc, subNote) => {
-            subAcc[subNote.id] = subNote.completed;
-            return subAcc;
-          }, {} as Record<string, boolean>);
-          return acc;
-        }, {} as Record<string, Record<string, boolean>>),
-        myTools: state.myTools.reduce((acc, tool) => {
-          acc[tool.id] = tool.subItems.reduce((subAcc, item) => {
-            subAcc[item.id] = item.completed;
-            return subAcc;
-          }, {} as Record<string, boolean>);
-          return acc;
-        }, {} as Record<string, Record<string, boolean>>),
+        tasks: state.tasks.reduce(
+          (acc, task) => {
+            acc[task.id] = task.completed;
+            return acc;
+          },
+          {} as Record<string, boolean>,
+        ),
+        notes: state.notes.reduce(
+          (acc, note) => {
+            acc[note.id] = note.subNotes.reduce(
+              (subAcc, subNote) => {
+                subAcc[subNote.id] = subNote.completed;
+                return subAcc;
+              },
+              {} as Record<string, boolean>,
+            );
+            return acc;
+          },
+          {} as Record<string, Record<string, boolean>>,
+        ),
+        myTools: state.myTools.reduce(
+          (acc, tool) => {
+            acc[tool.id] = tool.subItems.reduce(
+              (subAcc, item) => {
+                subAcc[item.id] = item.completed;
+                return subAcc;
+              },
+              {} as Record<string, boolean>,
+            );
+            return acc;
+          },
+          {} as Record<string, Record<string, boolean>>,
+        ),
         weeklyPlan: state.weeklyPlan,
       };
 
       localStorage.setItem(
         `dailyData_${today}`,
-        JSON.stringify(currentDayData)
+        JSON.stringify(currentDayData),
       );
 
       const appStateToSave = {
@@ -331,7 +318,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         userStats: state.userStats,
         notes: state.notes,
         myTools: state.myTools,
-        monthlyGoals: state.monthlyGoals,
         weeklyPlan: state.weeklyPlan,
         weeklyTrades: state.weeklyTrades,
       };
@@ -426,9 +412,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }, [state, isLoaded]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      checkAndResetMonthlyGoals();
-    }, 24 * 60 * 60 * 1000);
+    const interval = setInterval(
+      () => {
+        checkAndResetMonthlyGoals();
+      },
+      24 * 60 * 60 * 1000,
+    );
 
     return () => clearInterval(interval);
   }, []);

@@ -89,7 +89,6 @@ export interface AppState {
   notes: Note[];
   myTools: MyTool[];
   payments: Payment[];
-  monthlyGoals: Goal[];
   weeklyPlan: Record<string, Record<string, string>>;
   weeklyTrades: WeeklyTradeData;
 }
