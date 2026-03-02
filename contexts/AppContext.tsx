@@ -137,16 +137,6 @@ function appReducer(state: AppState, action: AppAction): AppState {
           })),
         })),
       };
-    case "RESET_MONTHLY_GOALS":
-      return {
-        ...state,
-        monthlyGoals: state.monthlyGoals.map((goal) => ({
-          ...goal,
-          completed: false,
-          completedDate: undefined,
-          currentAmount: 0,
-        })),
-      };
     case "UPDATE_NOTE_SUBNOTE":
       return {
         ...state,
