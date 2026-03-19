@@ -39,11 +39,11 @@ export function Routine() {
       totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
 
     const existingStats = JSON.parse(
-      localStorage.getItem("dailyTaskStats") || "[]"
+      localStorage.getItem("dailyTaskStats") || "[]",
     );
 
     const todayIndex = existingStats.findIndex(
-      (stat: any) => stat.date === today
+      (stat: any) => stat.date === today,
     );
     const todayStats = {
       date: today,
@@ -84,7 +84,7 @@ export function Routine() {
           <div>
             <h2 className="text-lg lg:text-xl font-bold flex items-center gap-2 text-gray-900">
               <Clock className="h-5 w-5 text-blue-600" />
-              Today&apos;s Schedule
+              Today&apos;s
             </h2>
             <p className="text-xs lg:text-sm text-gray-500 mt-1">{today}</p>
           </div>

@@ -94,7 +94,7 @@ export function Setting() {
 
   const totalCompleted = weeklyStats.reduce(
     (sum, day) => sum + getCompletedCount(day),
-    0
+    0,
   );
 
   const weeklyCompletion =
@@ -157,7 +157,7 @@ export function Setting() {
   }, [weeklyStats, startOfWeek]);
 
   const completedCount = state.myTools[0].subItems.filter(
-    (item) => item.completed
+    (item) => item.completed,
   ).length;
 
   const totalLiters = completedCount * 1.5;
@@ -185,10 +185,10 @@ export function Setting() {
                 dailyProgress === 100
                   ? "text-emerald-600"
                   : dailyProgress >= 70
-                  ? "text-blue-600"
-                  : dailyProgress >= 40
-                  ? "text-amber-600"
-                  : "text-gray-600"
+                    ? "text-blue-600"
+                    : dailyProgress >= 40
+                      ? "text-amber-600"
+                      : "text-gray-600"
               }`}
             >
               {Math.round(dailyProgress)}%
@@ -222,8 +222,8 @@ export function Setting() {
                 weeklyCompletion > 80
                   ? "text-emerald-600"
                   : weeklyCompletion > 60
-                  ? "text-blue-600"
-                  : "text-gray-600"
+                    ? "text-blue-600"
+                    : "text-gray-600"
               }`}
             >
               {Math.round(weeklyCompletion)}%
@@ -309,98 +309,6 @@ export function Setting() {
             })}
           </div>
         </div>
-      </div>
-
-      {/* Progress Chart */}
-      <div className="bg-white border border-gray-200 rounded-2xl p-5">
-        <div className="flex items-center justify-between mb-4">
-          <div className="text-sm font-semibold text-gray-900">
-            This Week&apos;s Progress
-          </div>
-          <div className="text-xs text-gray-500">
-            {new Date().toLocaleDateString("en-US", { month: "short" })}
-          </div>
-        </div>
-
-        {recentActivity.length === 0 ? (
-          <div className="text-center py-8">
-            <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
-              <Calendar className="h-6 w-6 text-gray-400" />
-            </div>
-            <p className="text-sm text-gray-600">No activity data yet</p>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {[...recentActivity].reverse().map((day) => {
-              const rate = getRate(day);
-              const isTodayDate = isToday(day.date);
-              const completed = getCompletedCount(day);
-              const total = getTotalCount(day);
-
-              return (
-                <div key={day.date} className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div
-                        className={`w-2 h-2 rounded-full ${
-                          rate === 100
-                            ? "bg-emerald-500"
-                            : rate >= 80
-                            ? "bg-blue-500"
-                            : rate >= 60
-                            ? "bg-amber-500"
-                            : "bg-gray-300"
-                        }`}
-                      ></div>
-                      <span
-                        className={`text-sm font-medium ${
-                          isTodayDate ? "text-blue-600" : "text-gray-700"
-                        }`}
-                      >
-                        {new Date(day.date).toLocaleDateString("en-US", {
-                          weekday: "short",
-                        })}
-                      </span>
-                      {isTodayDate && (
-                        <span className="text-xs text-blue-600">• Today</span>
-                      )}
-                    </div>
-                    <span className="text-sm font-semibold text-gray-900">
-                      {Math.round(rate)}%
-                    </span>
-                  </div>
-
-                  <div className="relative h-2 bg-gray-100 rounded-full overflow-hidden">
-                    <div
-                      className={`absolute left-0 top-0 h-full rounded-full transition-all duration-500 ${
-                        rate === 100
-                          ? "bg-emerald-500"
-                          : rate >= 80
-                          ? "bg-blue-500"
-                          : rate >= 60
-                          ? "bg-amber-500"
-                          : "bg-gray-400"
-                      }`}
-                      style={{ width: `${rate}%` }}
-                    ></div>
-                  </div>
-
-                  <div className="flex justify-between text-xs text-gray-500">
-                    <span>
-                      {completed}/{total} tasks
-                    </span>
-                    <span>
-                      {new Date(day.date).toLocaleDateString("en-US", {
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
       </div>
 
       {/* Quick Stats */}

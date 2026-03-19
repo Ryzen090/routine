@@ -15,7 +15,7 @@ export function Dashboard() {
   });
 
   const todaysTasks = state.tasks.filter(
-    (task) => task.recurring || task.id === state.selectedDate
+    (task) => task.recurring || task.id === state.selectedDate,
   );
 
   const completedTasks = todaysTasks.filter((task) => task.completed);
@@ -140,9 +140,9 @@ export function Dashboard() {
       </div>
 
       {/* My Tools */}
-      <section className="rounded-xl bg-white shadow-sm">
+      {/* <section className="rounded-xl bg-white shadow-sm">
         <MyTools />
-      </section>
+      </section> */}
 
       {/* Routine (PRIMARY) */}
       <section className="rounded-xl bg-white p-1 shadow-sm border border-blue-100">
