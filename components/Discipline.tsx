@@ -427,16 +427,16 @@ export function Discipline() {
                                 : "text-gray-600"
                           }
                         >
-                          {((weeklyTotal / 25) * 100).toFixed(1)}%
+                          {((weeklyTotal / 15) * 100).toFixed(1)}%
                         </span>
                       </div>
                       <div className="flex justify-between text-xs font-bold border-t pt-2">
                         <span>Total Balance:</span>
                         <span
                           className={
-                            totalBalance > 25
+                            totalBalance > 15
                               ? "text-green-600"
-                              : totalBalance < 25
+                              : totalBalance < 15
                                 ? "text-red-600"
                                 : "text-gray-600"
                           }
@@ -466,9 +466,9 @@ export function Discipline() {
                 </div>
                 <div className="text-xs mt-1">
                   {weeklyTotal > 0
-                    ? `+${((weeklyTotal / 25) * 100).toFixed(1)}% Return`
+                    ? `+${((weeklyTotal / 15) * 100).toFixed(1)}% Return`
                     : weeklyTotal < 0
-                      ? `${((weeklyTotal / 25) * 100).toFixed(1)}% Loss`
+                      ? `${((weeklyTotal / 15) * 100).toFixed(1)}% Loss`
                       : "0% Change"}
                 </div>
               </div>
