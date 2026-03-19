@@ -1,13 +1,6 @@
 import React from "react";
 import { useApp } from "@/contexts/AppContext";
-import {
-  Goal,
-  Calendar,
-  Target,
-  TrendingUp,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
+import { Goal, Calendar, Target, TrendingUp } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 type Tab = "daily" | "trade";
@@ -99,60 +92,53 @@ export function Discipline() {
   };
 
   const weeklyTotal = calculateWeeklyTotal();
-  const totalBalance = 25 + weeklyTotal;
+  const totalBalance = 15 + weeklyTotal;
 
   const getWeeksInMonth = (month: number, year: number) => {
     const weeks = [];
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
 
+    // Find the first Monday of the month
     let currentWeekStart = new Date(firstDay);
     while (currentWeekStart.getDay() !== 1) {
-      currentWeekStart.setDate(currentWeekStart.getDate() - 1);
+      currentWeekStart.setDate(currentWeekStart.getDate() + 1);
     }
 
+    // If we went past the last day, there are no weeks starting in this month
+    if (currentWeekStart > lastDay) {
+      return [];
+    }
+
+    // Keep adding weeks while they start within the month
     while (currentWeekStart <= lastDay) {
       const weekNumber = getWeekNumber(currentWeekStart);
       const weekEnd = new Date(currentWeekStart);
       weekEnd.setDate(weekEnd.getDate() + 6);
 
-      weeks.push({
-        number: weekNumber,
-        start: new Date(currentWeekStart),
-        end: new Date(weekEnd),
-        isCurrentMonth: currentWeekStart.getMonth() === month,
-      });
+      // Only include weeks that START AND END in the current month
+      if (
+        currentWeekStart.getMonth() === month &&
+        weekEnd.getMonth() === month
+      ) {
+        weeks.push({
+          number: weekNumber,
+          start: new Date(currentWeekStart),
+          end: new Date(weekEnd),
+          isCurrentMonth: true,
+        });
+      }
 
       currentWeekStart.setDate(currentWeekStart.getDate() + 7);
     }
 
-    return weeks.filter((w) => w.isCurrentMonth);
+    return weeks;
   };
 
   const weeksInCurrentMonth = getWeeksInMonth(currentMonth, currentYear);
 
   const getWeekData = (weekNumber: string) => {
     return state.weeklyTrades[weekNumber] || {};
-  };
-
-  const goToPreviousMonth = () => {
-    setCurrentMonth((prev) => {
-      if (prev === 0) {
-        setCurrentYear((year) => year - 1);
-        return 11;
-      }
-      return prev - 1;
-    });
-  };
-
-  const goToNextMonth = () => {
-    setCurrentMonth((prev) => {
-      if (prev === 11) {
-        setCurrentYear((year) => year + 1);
-        return 0;
-      }
-      return prev + 1;
-    });
   };
 
   const resetToCurrentMonth = () => {
@@ -316,7 +302,7 @@ export function Discipline() {
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap">
                   <div>
-                    <CardTitle className="text-sm">Weekly Trading</CardTitle>
+                    <CardTitle className="text-sm">Monthly Trading</CardTitle>
                     <div className="text-xs text-gray-600">
                       Balance Overview
                     </div>
@@ -324,15 +310,14 @@ export function Discipline() {
                 </div>
                 <div
                   className={`text-xl font-bold ${
-                    weeklyTotal < 0
+                    totalBalance < 0
                       ? "text-red-600"
-                      : weeklyTotal > 0
+                      : totalBalance > 0
                         ? "text-green-600"
                         : "text-gray-600"
                   }`}
                 >
-                  {weeklyTotal < 0 ? "-$" : "$"}
-                  {Math.abs(totalBalance).toFixed(2)}
+                  ${totalBalance.toFixed(2)}
                 </div>
               </div>
             </CardHeader>
@@ -341,16 +326,16 @@ export function Discipline() {
                 <div className="mt-4">
                   <div className="flex justify-between text-xs text-gray-600 mb-2">
                     <span>Starting Balance:</span>
-                    <span className="font-medium">$25.00</span>
+                    <span className="font-medium">$15.00</span>
                   </div>
 
                   <div className="flex justify-between text-xs mb-2">
                     <span>Current Balance:</span>
                     <span
                       className={`font-semibold ${
-                        totalBalance < 25
+                        totalBalance < 15
                           ? "text-red-600"
-                          : totalBalance > 25
+                          : totalBalance > 15
                             ? "text-green-600"
                             : "text-gray-600"
                       }`}
@@ -407,7 +392,7 @@ export function Discipline() {
                     <div className="space-y-2">
                       <div className="flex justify-between text-xs">
                         <span className="text-gray-600">Starting Capital:</span>
-                        <span className="font-medium">$25.00</span>
+                        <span className="font-medium">$15.00</span>
                       </div>
                       <div className="flex justify-between text-xs">
                         <span
@@ -500,9 +485,14 @@ export function Discipline() {
             <CardContent className="space-y-2">
               {periods.map((period) => (
                 <div key={period}>
-                  <label className="text-xs text-gray-600 mb-1 block">
-                    Enter your trading amount for {todayDayName} :
-                  </label>
+                  <div className="flex justify-between items-center mb-1">
+                    <label className="text-xs text-gray-600">
+                      Enter your trading amount for {todayDayName} :
+                    </label>
+                    <span className="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">
+                      Target: $5.00
+                    </span>
+                  </div>
                   <input
                     key={period}
                     type="number"
@@ -546,91 +536,42 @@ export function Discipline() {
                       })()}
                     </div>
                   )}
-                </div>
-              ))}
-            </CardContent>
-          </Card>
+                  {currentWeekData[todayDayName] && (
+                    <div className="text-xs pt-1 flex justify-between">
+                      <span className="text-gray-600">Target Progress:</span>
+                      {(() => {
+                        const amount = parseFloat(
+                          currentWeekData[todayDayName] || "0",
+                        );
+                        const target = 5;
+                        const percentage = (amount / target) * 100;
+                        const remaining = target - amount;
 
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-semibold flex items-center gap-2">
-                <Calendar className="h-4 w-4" />
-                All Weeks Overview
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-                {days.map((day) => (
-                  <div
-                    key={day}
-                    className={`p-3 rounded-lg ${
-                      day === todayDayName
-                        ? "bg-blue-50 border-2 border-blue-300"
-                        : "bg-gray-50"
-                    }`}
-                  >
-                    <div className="text-xs font-medium text-gray-700 mb-1">
-                      {day}
-                      {day === todayDayName && (
-                        <span className="ml-1 text-xs text-blue-600 font-bold">
-                          (Today)
-                        </span>
-                      )}
-                    </div>
-                    <div className="text-sm font-semibold">
-                      {currentWeekData[day] ? (
-                        (() => {
-                          const tradeAmount = parseFloat(currentWeekData[day]);
-                          const isNegative = tradeAmount < 0;
-                          const isPositive = tradeAmount > 0;
-
+                        if (amount >= target) {
                           return (
-                            <span
-                              className={
-                                isNegative
-                                  ? "text-red-600"
-                                  : isPositive
-                                    ? "text-green-600"
-                                    : "text-gray-600"
-                              }
-                            >
-                              ${tradeAmount.toFixed(2)}
+                            <span className="text-green-600 font-medium">
+                              ✓ Target (+${(amount - target).toFixed(2)} Over)
                             </span>
                           );
-                        })()
-                      ) : (
-                        <span className="text-gray-400">Not entered</span>
-                      )}
+                        } else if (amount > 0) {
+                          return (
+                            <span className="text-orange-600 font-medium">
+                              ${remaining.toFixed(2)} ({percentage.toFixed(0)}%)
+                            </span>
+                          );
+                        } else if (amount < 0) {
+                          return (
+                            <span className="text-red-600 font-medium">
+                              ${Math.abs(amount).toFixed(2)} Loss
+                            </span>
+                          );
+                        }
+                        return null;
+                      })()}
                     </div>
-                  </div>
-                ))}
-                <div className="bg-blue-100 p-3 rounded-lg col-span-2 md:col-span-5 border border-blue-300">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <div className="text-sm font-bold text-gray-800">
-                        Weekly
-                      </div>
-                      <div className="flex justify-between text-xs text-gray-600 mt-1">
-                        <span>
-                          Daily Average: {((weeklyTotal / 25) * 100).toFixed(1)}
-                          %
-                        </span>
-                      </div>
-                    </div>
-                    <div
-                      className={`text-xl font-bold ${
-                        weeklyTotal > 0
-                          ? "text-green-600"
-                          : weeklyTotal < 0
-                            ? "text-red-600"
-                            : "text-gray-600"
-                      }`}
-                    >
-                      {Math.abs(weeklyTotal).toFixed(2)}$
-                    </div>
-                  </div>
+                  )}
                 </div>
-              </div>
+              ))}
             </CardContent>
           </Card>
 
@@ -647,22 +588,10 @@ export function Discipline() {
                 </div>
                 <div className="flex items-center gap-2">
                   <button
-                    onClick={goToPreviousMonth}
-                    className="p-2 hover:bg-gray-100 rounded-lg"
-                  >
-                    <ChevronLeft className="w-4 h-4" />
-                  </button>
-                  <button
                     onClick={resetToCurrentMonth}
                     className="px-3 py-1 text-sm bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg"
                   >
                     Current
-                  </button>
-                  <button
-                    onClick={goToNextMonth}
-                    className="p-2 hover:bg-gray-100 rounded-lg"
-                  >
-                    <ChevronRight className="w-4 h-4" />
                   </button>
                 </div>
               </div>
@@ -693,17 +622,7 @@ export function Discipline() {
                       >
                         <div className="flex justify-between items-start mb-2">
                           <div>
-                            <div className="flex items-center gap-2">
-                              <h3 className="font-semibold text-gray-900">
-                                Week {weekNumberInMonth}
-                              </h3>
-                              {isCurrentWeek && (
-                                <span className="px-2 py-1 text-xs bg-blue-100 text-blue-600 rounded-full">
-                                  Current
-                                </span>
-                              )}
-                            </div>
-                            <div className="text-xs text-gray-500 my-1">
+                            <div className="text-xs text-gray-500">
                               {week.start.toLocaleDateString("en-US", {
                                 month: "short",
                                 day: "numeric",
@@ -714,7 +633,7 @@ export function Discipline() {
                                 day: "numeric",
                               })}
                             </div>
-                            <div className="text-xs text-gray-500 ">
+                            <div className="text-xs text-gray-500 mt-1">
                               Daily Summary:
                             </div>
                           </div>
