@@ -92,31 +92,26 @@ export function Discipline() {
   };
 
   const weeklyTotal = calculateWeeklyTotal();
-  const totalBalance = 15 + weeklyTotal;
 
   const getWeeksInMonth = (month: number, year: number) => {
     const weeks = [];
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
 
-    // Find the first Monday of the month
     let currentWeekStart = new Date(firstDay);
     while (currentWeekStart.getDay() !== 1) {
       currentWeekStart.setDate(currentWeekStart.getDate() + 1);
     }
 
-    // If we went past the last day, there are no weeks starting in this month
     if (currentWeekStart > lastDay) {
       return [];
     }
 
-    // Keep adding weeks while they start within the month
     while (currentWeekStart <= lastDay) {
       const weekNumber = getWeekNumber(currentWeekStart);
       const weekEnd = new Date(currentWeekStart);
       weekEnd.setDate(weekEnd.getDate() + 6);
 
-      // Only include weeks that START AND END in the current month
       if (
         currentWeekStart.getMonth() === month &&
         weekEnd.getMonth() === month
@@ -140,6 +135,18 @@ export function Discipline() {
   const getWeekData = (weekNumber: string) => {
     return state.weeklyTrades[weekNumber] || {};
   };
+
+  const calculateMonthlyTotal = () => {
+    let total = 0;
+    weeksInCurrentMonth.forEach((week) => {
+      const weekData = getWeekData(week.number.toString());
+      total += calculateWeeklyTotal(weekData);
+    });
+    return total;
+  };
+
+  const monthlyTotal = calculateMonthlyTotal();
+  const totalBalance = 15 + monthlyTotal;
 
   const resetToCurrentMonth = () => {
     const now = new Date();
@@ -345,13 +352,13 @@ export function Discipline() {
                   </div>
 
                   <div className="flex justify-between text-xs font-semibold border-t pt-2">
-                    <span>Net P/L:</span>
+                    <span>Monthly P/L:</span>
                     <span
                       className={
-                        weeklyTotal >= 0 ? "text-green-600" : "text-red-600"
+                        monthlyTotal >= 0 ? "text-green-600" : "text-red-600"
                       }
                     >
-                      {weeklyTotal >= 0 ? "+" : ""}${weeklyTotal.toFixed(2)}
+                      ${Math.abs(monthlyTotal).toFixed(2)}
                     </span>
                   </div>
 
@@ -362,24 +369,19 @@ export function Discipline() {
                         weeklyTotal >= 0 ? "text-green-600" : "text-red-600"
                       }
                     >
-                      {weeklyTotal >= 0 ? "+" : ""}${weeklyTotal.toFixed(2)}
+                      ${Math.abs(weeklyTotal).toFixed(2)}
                     </span>
                   </div>
 
                   <div className="mt-3">
-                    {weeklyTotal > 0 && (
+                    {monthlyTotal > 0 && (
                       <div className="text-xs text-green-600 font-semibold flex items-center gap-1">
-                        Profit: +${weeklyTotal.toFixed(2)}
+                        Monthly Profit: ${monthlyTotal.toFixed(2)}
                       </div>
                     )}
-                    {weeklyTotal < 0 && (
+                    {monthlyTotal < 0 && (
                       <div className="text-xs text-red-600 font-semibold flex items-center gap-1">
-                        Loss: -${Math.abs(weeklyTotal).toFixed(2)}
-                      </div>
-                    )}
-                    {weeklyTotal === 0 && (
-                      <div className="text-xs text-gray-600 font-semibold flex items-center gap-1">
-                        No profit or loss
+                        Monthly Loss: ${Math.abs(monthlyTotal).toFixed(2)}
                       </div>
                     )}
                   </div>
@@ -397,37 +399,46 @@ export function Discipline() {
                       <div className="flex justify-between text-xs">
                         <span
                           className={`${
-                            weeklyTotal >= 0 ? "text-green-600" : "text-red-600"
+                            monthlyTotal >= 0
+                              ? "text-green-600"
+                              : "text-red-600"
                           }`}
                         >
-                          {weeklyTotal >= 0 ? "Profit" : "Loss"}:
+                          {monthlyTotal >= 0
+                            ? "Monthly Profit"
+                            : "Monthly Loss"}
+                          :
                         </span>
                         <span
                           className={`font-medium ${
-                            weeklyTotal >= 0 ? "text-green-600" : "text-red-600"
+                            monthlyTotal >= 0
+                              ? "text-green-600"
+                              : "text-red-600"
                           }`}
                         >
-                          {weeklyTotal >= 0 ? "+" : ""}${weeklyTotal.toFixed(2)}
+                          ${Math.abs(monthlyTotal).toFixed(2)}
                         </span>
                       </div>
                       <div className="flex justify-between text-xs">
                         <span
                           className={`${
-                            weeklyTotal >= 0 ? "text-green-600" : "text-red-600"
+                            monthlyTotal >= 0
+                              ? "text-green-600"
+                              : "text-red-600"
                           }`}
                         >
                           Return on Capital:
                         </span>
                         <span
                           className={
-                            weeklyTotal > 0
+                            monthlyTotal > 0
                               ? "text-green-600"
-                              : weeklyTotal < 0
+                              : monthlyTotal < 0
                                 ? "text-red-600"
                                 : "text-gray-600"
                           }
                         >
-                          {((weeklyTotal / 15) * 100).toFixed(1)}%
+                          {Math.abs((monthlyTotal / 15) * 100).toFixed(1)}%
                         </span>
                       </div>
                       <div className="flex justify-between text-xs font-bold border-t pt-2">
@@ -450,25 +461,25 @@ export function Discipline() {
               </div>
               <div
                 className={`text-center py-2 rounded ${
-                  weeklyTotal > 0
+                  monthlyTotal > 0
                     ? "bg-green-50 text-green-700"
-                    : weeklyTotal < 0
+                    : monthlyTotal < 0
                       ? "bg-red-50 text-red-700"
                       : "bg-gray-50 text-gray-700"
                 }`}
               >
                 <div className="text-xs font-semibold">
-                  {weeklyTotal > 0
-                    ? `📈 Profit this week!`
-                    : weeklyTotal < 0
-                      ? `📉 Loss this week!`
+                  {monthlyTotal > 0
+                    ? `📈 Profitable month!`
+                    : monthlyTotal < 0
+                      ? `📉 Losing month!`
                       : `Break Even`}
                 </div>
                 <div className="text-xs mt-1">
-                  {weeklyTotal > 0
-                    ? `+${((weeklyTotal / 15) * 100).toFixed(1)}% Return`
-                    : weeklyTotal < 0
-                      ? `${((weeklyTotal / 15) * 100).toFixed(1)}% Loss`
+                  {monthlyTotal > 0
+                    ? `${Math.abs((monthlyTotal / 15) * 100).toFixed(1)}% Return`
+                    : monthlyTotal < 0
+                      ? `${Math.abs((monthlyTotal / 15) * 100).toFixed(1)}% Loss`
                       : "0% Change"}
                 </div>
               </div>
@@ -525,7 +536,7 @@ export function Discipline() {
 
                         const formattedAmount =
                           amount < 0
-                            ? `-$${Math.abs(amount).toFixed(2)}`
+                            ? `$${Math.abs(amount).toFixed(2)}`
                             : `$${amount.toFixed(2)}`;
 
                         return (
@@ -600,7 +611,6 @@ export function Discipline() {
               <div className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
                   {weeksInCurrentMonth.map((week, index) => {
-                    const weekNumberInMonth = index + 1;
                     const weekData = getWeekData(week.number.toString());
                     const weekTotal = calculateWeeklyTotal(weekData);
                     const isCurrentWeek =
@@ -642,7 +652,7 @@ export function Discipline() {
                               weekTotal >= 0 ? "text-green-600" : "text-red-600"
                             }`}
                           >
-                            {weekTotal >= 0 ? "+" : ""}${weekTotal.toFixed(2)}
+                            ${Math.abs(weekTotal).toFixed(2)}
                           </div>
                         </div>
 
@@ -654,13 +664,23 @@ export function Discipline() {
                                   {day.slice(0, 1)}
                                 </div>
                                 <div
-                                  className={`h-10 rounded-lg flex items-center justify-center text-xs text-gray-600 border bg-gray-50`}
+                                  className={`h-10 rounded-lg flex items-center justify-center text-xs border ${
+                                    amount === null
+                                      ? "text-gray-400 bg-gray-50"
+                                      : amount > 0
+                                        ? "text-green-600 bg-green-50 border-green-200"
+                                        : amount < 0
+                                          ? "text-red-600 bg-red-50 border-red-200"
+                                          : "text-gray-600 bg-gray-50"
+                                  }`}
                                 >
                                   {amount === null
                                     ? "-"
                                     : amount > 0
                                       ? `${amount.toFixed(2)}`
-                                      : `${Math.abs(amount).toFixed(2)}`}
+                                      : amount < 0
+                                        ? `${Math.abs(amount).toFixed(2)}`
+                                        : "0.00"}
                                 </div>
                               </div>
                             ))}
@@ -670,7 +690,24 @@ export function Discipline() {
                         <div className="mt-4 pt-3 border-t">
                           <div className="flex justify-between items-center">
                             <span className="text-xs text-gray-600">
-                              Daily avg: <span>${weekTotal.toFixed(2)}</span>
+                              Target avg:
+                            </span>
+                            <span className="text-xs text-gray-600">$25</span>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-xs text-gray-600">
+                              Daily avg:
+                            </span>
+                            <span
+                              className={`text-xs ${
+                                weekTotal === 0
+                                  ? "text-gray-600"
+                                  : weekTotal > 0
+                                    ? "font-semibold text-green-600"
+                                    : "font-semibold text-red-600"
+                              }`}
+                            >
+                              ${Math.abs(weekTotal / 5).toFixed(2)}
                             </span>
                           </div>
                         </div>
