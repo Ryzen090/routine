@@ -500,9 +500,6 @@ export function Discipline() {
                     <label className="text-xs text-gray-600">
                       Enter your trading amount for {todayDayName} :
                     </label>
-                    <span className="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">
-                      Target: $5.00
-                    </span>
                   </div>
                   <input
                     key={period}
@@ -609,7 +606,7 @@ export function Discipline() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-2">
                   {weeksInCurrentMonth.map((week, index) => {
                     const weekData = getWeekData(week.number.toString());
                     const weekTotal = calculateWeeklyTotal(weekData);
