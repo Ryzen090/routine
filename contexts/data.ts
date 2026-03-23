@@ -285,17 +285,17 @@ export const defaultPayments: Payment[] = [
   {
     id: "1",
     title: "Salary",
-    amount: 450,
+    amount: 440,
     type: "income",
   },
   {
-    id: "5",
+    id: "2",
     title: "Family",
     amount: 200,
     type: "expense",
   },
   {
-    id: "2",
+    id: "3",
     title: "Rent",
     amount: 75,
     type: "expense",
@@ -307,9 +307,33 @@ export const defaultPayments: Payment[] = [
     type: "expense",
   },
   {
-    id: "3",
+    id: "5",
     title: "Motorbike",
     amount: 15,
+    type: "expense",
+  },
+  {
+    id: "6",
+    title: "Trading",
+    amount: 15,
+    type: "expense",
+  },
+  {
+    id: "7",
+    title: "Brother",
+    amount: 20,
+    type: "expense",
+  },
+  {
+    id: "8",
+    title: "Grandpa",
+    amount: 10,
+    type: "expense",
+  },
+  {
+    id: "9",
+    title: "Wedding",
+    amount: 20,
     type: "expense",
   },
 ];
