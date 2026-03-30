@@ -5,13 +5,56 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 type Tab = "daily" | "trade";
 
+interface Week {
+  number: number;
+  start: Date;
+  end: Date;
+  isCurrentMonth: boolean;
+}
+
+interface CycleMonth {
+  month: number;
+  year: number;
+  startDate: Date;
+  endDate: Date;
+}
+
 export function Discipline() {
   const { state, dispatch } = useApp();
   const [activeTab, setActiveTab] = React.useState<Tab>("daily");
-  const [currentMonth, setCurrentMonth] = React.useState(new Date().getMonth());
-  const [currentYear, setCurrentYear] = React.useState(
-    new Date().getFullYear(),
-  );
+
+  const getCurrentCycleMonth = (): CycleMonth => {
+    const now = new Date();
+    const currentDay = now.getDate();
+
+    if (currentDay >= 26) {
+      const nextMonth = new Date(now);
+      nextMonth.setMonth(now.getMonth() + 1);
+      return {
+        month: nextMonth.getMonth(),
+        year: nextMonth.getFullYear(),
+        startDate: new Date(now.getFullYear(), now.getMonth(), 26),
+        endDate: new Date(nextMonth.getFullYear(), nextMonth.getMonth(), 25),
+      };
+    } else {
+      const previousMonth = new Date(now);
+      previousMonth.setMonth(now.getMonth() - 1);
+      return {
+        month: now.getMonth(),
+        year: now.getFullYear(),
+        startDate: new Date(
+          previousMonth.getFullYear(),
+          previousMonth.getMonth(),
+          26,
+        ),
+        endDate: new Date(now.getFullYear(), now.getMonth(), 25),
+      };
+    }
+  };
+
+  const currentCycle = getCurrentCycleMonth();
+  const [currentMonth, setCurrentMonth] = React.useState(currentCycle.month);
+  const [currentYear, setCurrentYear] = React.useState(currentCycle.year);
 
   const toggleSubNote = (noteId: string, subNoteId: string) => {
     dispatch({
@@ -93,10 +136,23 @@ export function Discipline() {
 
   const weeklyTotal = calculateWeeklyTotal();
 
-  const getWeeksInMonth = (month: number, year: number) => {
-    const weeks = [];
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
+  const getCycleMonthRange = (month: number, year: number): CycleMonth => {
+    const startDate = new Date(year, month - 1, 26);
+    const endDate = new Date(year, month, 25);
+
+    return {
+      month,
+      year,
+      startDate,
+      endDate,
+    };
+  };
+
+  const getWeeksInCycle = (month: number, year: number): Week[] => {
+    const weeks: Week[] = [];
+    const cycle = getCycleMonthRange(month, year);
+    const firstDay = cycle.startDate;
+    const lastDay = cycle.endDate;
 
     let currentWeekStart = new Date(firstDay);
     while (currentWeekStart.getDay() !== 1) {
@@ -104,25 +160,21 @@ export function Discipline() {
     }
 
     if (currentWeekStart > lastDay) {
-      return [];
+      return weeks;
     }
 
     while (currentWeekStart <= lastDay) {
-      const weekNumber = getWeekNumber(currentWeekStart);
       const weekEnd = new Date(currentWeekStart);
       weekEnd.setDate(weekEnd.getDate() + 6);
 
-      if (
-        currentWeekStart.getMonth() === month &&
-        weekEnd.getMonth() === month
-      ) {
-        weeks.push({
-          number: weekNumber,
-          start: new Date(currentWeekStart),
-          end: new Date(weekEnd),
-          isCurrentMonth: true,
-        });
-      }
+      const weekNumber = getWeekNumber(currentWeekStart);
+
+      weeks.push({
+        number: weekNumber,
+        start: new Date(currentWeekStart),
+        end: new Date(weekEnd),
+        isCurrentMonth: true,
+      });
 
       currentWeekStart.setDate(currentWeekStart.getDate() + 7);
     }
@@ -130,7 +182,7 @@ export function Discipline() {
     return weeks;
   };
 
-  const weeksInCurrentMonth = getWeeksInMonth(currentMonth, currentYear);
+  const weeksInCurrentMonth = getWeeksInCycle(currentMonth, currentYear);
 
   const getWeekData = (weekNumber: string) => {
     return state.weeklyTrades[weekNumber] || {};
@@ -138,9 +190,26 @@ export function Discipline() {
 
   const calculateMonthlyTotal = () => {
     let total = 0;
+    const cycle = getCycleMonthRange(currentMonth, currentYear);
+
     weeksInCurrentMonth.forEach((week) => {
       const weekData = getWeekData(week.number.toString());
-      total += calculateWeeklyTotal(weekData);
+      days.forEach((day) => {
+        const dayValue = weekData[day];
+        if (dayValue) {
+          const dayIndex = days.indexOf(day);
+          const weekStart = new Date(week.start);
+          const currentDate = new Date(weekStart);
+          currentDate.setDate(weekStart.getDate() + dayIndex);
+
+          if (currentDate >= cycle.startDate && currentDate <= cycle.endDate) {
+            const value = parseFloat(dayValue);
+            if (!isNaN(value)) {
+              total += value;
+            }
+          }
+        }
+      });
     });
     return total;
   };
@@ -149,9 +218,9 @@ export function Discipline() {
   const totalBalance = 15 + monthlyTotal;
 
   const resetToCurrentMonth = () => {
-    const now = new Date();
-    setCurrentMonth(now.getMonth());
-    setCurrentYear(now.getFullYear());
+    const newCycle = getCurrentCycleMonth();
+    setCurrentMonth(newCycle.month);
+    setCurrentYear(newCycle.year);
   };
 
   const monthNames = [
@@ -168,6 +237,18 @@ export function Discipline() {
     "November",
     "December",
   ];
+
+  const getCycleDisplayName = () => {
+    const cycle = getCycleMonthRange(currentMonth, currentYear);
+    const startMonth = monthNames[cycle.startDate.getMonth()];
+    const endMonth = monthNames[cycle.endDate.getMonth()];
+    return `${startMonth} 26 - ${endMonth} 25`;
+  };
+
+  const isDateInCycle = (date: Date) => {
+    const cycle = getCycleMonthRange(currentMonth, currentYear);
+    return date >= cycle.startDate && date <= cycle.endDate;
+  };
 
   return (
     <div className="space-y-6 bg-white min-h-screen pt-5 pb-20 px-4">
@@ -311,7 +392,7 @@ export function Discipline() {
                   <div>
                     <CardTitle className="text-sm">Monthly Trading</CardTitle>
                     <div className="text-xs text-gray-600">
-                      Balance Overview
+                      {getCycleDisplayName()}
                     </div>
                   </div>
                 </div>
@@ -591,7 +672,7 @@ export function Discipline() {
                     Monthly Trading Overview
                   </CardTitle>
                   <div className="text-xs text-gray-600">
-                    {monthNames[currentMonth]} {currentYear}
+                    {getCycleDisplayName()}
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
@@ -609,14 +690,35 @@ export function Discipline() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-2">
                   {weeksInCurrentMonth.map((week, index) => {
                     const weekData = getWeekData(week.number.toString());
-                    const weekTotal = calculateWeeklyTotal(weekData);
                     const isCurrentWeek =
                       week.number.toString() === currentWeekNumber;
 
-                    const dayAmounts = days.map((day) => ({
-                      day,
-                      amount: weekData[day] ? parseFloat(weekData[day]) : null,
-                    }));
+                    const dayAmounts = days.map((day, dayIndex) => {
+                      const weekStart = new Date(week.start);
+                      const currentDate = new Date(weekStart);
+                      currentDate.setDate(weekStart.getDate() + dayIndex);
+                      const amount = weekData[day]
+                        ? parseFloat(weekData[day])
+                        : null;
+                      const isInCycle = isDateInCycle(currentDate);
+
+                      return {
+                        day,
+                        amount,
+                        isInCycle,
+                        date: currentDate,
+                      };
+                    });
+
+                    const weekTotal = dayAmounts.reduce(
+                      (total, { amount, isInCycle }) => {
+                        if (isInCycle && amount !== null && !isNaN(amount)) {
+                          return total + amount;
+                        }
+                        return total;
+                      },
+                      0,
+                    );
 
                     return (
                       <div
@@ -655,32 +757,43 @@ export function Discipline() {
 
                         <div className="mt-4 space-y-2">
                           <div className="grid grid-cols-5 gap-2">
-                            {dayAmounts.map(({ day, amount }) => (
-                              <div key={day} className="text-center">
-                                <div className="text-xs text-gray-500 mb-1">
-                                  {day.slice(0, 1)}
+                            {dayAmounts.map(
+                              ({ day, amount, isInCycle, date }) => (
+                                <div key={day} className="text-center">
+                                  <div className="text-xs text-gray-500 mb-1">
+                                    {day.slice(0, 1)}
+                                  </div>
+                                  <div
+                                    className={`h-10 rounded-lg flex items-center justify-center text-xs border ${
+                                      !isInCycle
+                                        ? "text-gray-300 bg-gray-100 border-gray-200 opacity-50"
+                                        : amount === null
+                                          ? "text-gray-400 bg-gray-50"
+                                          : amount > 0
+                                            ? "text-green-600 bg-green-50 border-green-200"
+                                            : amount < 0
+                                              ? "text-red-600 bg-red-50 border-red-200"
+                                              : "text-gray-600 bg-gray-50"
+                                    }`}
+                                    title={
+                                      !isInCycle
+                                        ? `Not in ${getCycleDisplayName()}`
+                                        : ""
+                                    }
+                                  >
+                                    {!isInCycle
+                                      ? "✗"
+                                      : amount === null
+                                        ? "-"
+                                        : amount > 0
+                                          ? `${amount.toFixed(2)}`
+                                          : amount < 0
+                                            ? `${Math.abs(amount).toFixed(2)}`
+                                            : "0.00"}
+                                  </div>
                                 </div>
-                                <div
-                                  className={`h-10 rounded-lg flex items-center justify-center text-xs border ${
-                                    amount === null
-                                      ? "text-gray-400 bg-gray-50"
-                                      : amount > 0
-                                        ? "text-green-600 bg-green-50 border-green-200"
-                                        : amount < 0
-                                          ? "text-red-600 bg-red-50 border-red-200"
-                                          : "text-gray-600 bg-gray-50"
-                                  }`}
-                                >
-                                  {amount === null
-                                    ? "-"
-                                    : amount > 0
-                                      ? `${amount.toFixed(2)}`
-                                      : amount < 0
-                                        ? `${Math.abs(amount).toFixed(2)}`
-                                        : "0.00"}
-                                </div>
-                              </div>
-                            ))}
+                              ),
+                            )}
                           </div>
                         </div>
 
@@ -690,22 +803,6 @@ export function Discipline() {
                               Target avg:
                             </span>
                             <span className="text-xs text-gray-600">$25</span>
-                          </div>
-                          <div className="flex justify-between items-center">
-                            <span className="text-xs text-gray-600">
-                              Daily avg:
-                            </span>
-                            <span
-                              className={`text-xs ${
-                                weekTotal === 0
-                                  ? "text-gray-600"
-                                  : weekTotal > 0
-                                    ? "font-semibold text-green-600"
-                                    : "font-semibold text-red-600"
-                              }`}
-                            >
-                              ${Math.abs(weekTotal / 5).toFixed(2)}
-                            </span>
                           </div>
                         </div>
                       </div>
