@@ -26,28 +26,22 @@ export function Discipline() {
   const getCurrentCycleMonth = (): CycleMonth => {
     const now = new Date();
     const currentDay = now.getDate();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
 
     if (currentDay >= 26) {
-      const nextMonth = new Date(now);
-      nextMonth.setMonth(now.getMonth() + 1);
       return {
-        month: nextMonth.getMonth(),
-        year: nextMonth.getFullYear(),
-        startDate: new Date(now.getFullYear(), now.getMonth(), 26),
-        endDate: new Date(nextMonth.getFullYear(), nextMonth.getMonth(), 25),
+        month: currentMonth + 1,
+        year: currentYear,
+        startDate: new Date(currentYear, currentMonth, 26),
+        endDate: new Date(currentYear, currentMonth + 1, 25),
       };
     } else {
-      const previousMonth = new Date(now);
-      previousMonth.setMonth(now.getMonth() - 1);
       return {
-        month: now.getMonth(),
-        year: now.getFullYear(),
-        startDate: new Date(
-          previousMonth.getFullYear(),
-          previousMonth.getMonth(),
-          26,
-        ),
-        endDate: new Date(now.getFullYear(), now.getMonth(), 25),
+        month: currentMonth,
+        year: currentYear,
+        startDate: new Date(currentYear, currentMonth - 1, 26),
+        endDate: new Date(currentYear, currentMonth, 25),
       };
     }
   };
