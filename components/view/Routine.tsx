@@ -1,8 +1,8 @@
 import React from "react";
 import { Task } from "@/types";
 import { Clock } from "lucide-react";
+import { taskCompletedStyles } from "@/data";
 import { useApp } from "@/contexts/AppContext";
-import { taskCompletedStyles } from "@/contexts/data";
 
 export function Routine() {
   const { state, dispatch } = useApp();

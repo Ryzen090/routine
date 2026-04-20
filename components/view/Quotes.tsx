@@ -1,5 +1,5 @@
 import React from "react";
-import { motivationalQuotes } from "@/contexts/data";
+import { motivationalQuotes } from "@/data";
 import { Card, CardContent } from "@/components/ui/card";
 
 export function Quotes() {
@@ -7,7 +7,7 @@ export function Quotes() {
 
   const getRandomQuote = () => {
     const filteredQuotes = motivationalQuotes.filter(
-      (quote) => quote.text !== currentQuote.text
+      (quote) => quote.text !== currentQuote.text,
     );
     const randomIndex = Math.floor(Math.random() * filteredQuotes.length);
     return filteredQuotes[randomIndex] || motivationalQuotes[0];

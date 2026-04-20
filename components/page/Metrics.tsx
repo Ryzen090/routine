@@ -19,7 +19,7 @@ interface CycleMonth {
   endDate: Date;
 }
 
-export function Discipline() {
+export function Metrics() {
   const { state, dispatch } = useApp();
   const [activeTab, setActiveTab] = React.useState<Tab>("daily");
 
@@ -812,4 +812,4 @@ export function Discipline() {
   );
 }
 
-export default Discipline;
+export default Metrics;

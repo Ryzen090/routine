@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { Finance } from "@/components/Finance";
-import { Setting } from "@/components/Setting";
-import { Dashboard } from "@/components/Dashboard";
-import { Discipline } from "@/components/Discipline";
+import { Finance } from "@/components/page/Finance";
+import { Setting } from "@/components/page/Setting";
+import { Metrics } from "@/components/page/Metrics";
+import { Dashboard } from "@/components/page/Dashboard";
 import { Navigation } from "@/components/Navigation";
 import { AppProvider, useApp } from "@/contexts/AppContext";
 
@@ -26,8 +26,8 @@ function AppContent() {
         return <Setting />;
       case "finance":
         return <Finance />;
-      case "discipline":
-        return <Discipline />;
+      case "metrics":
+        return <Metrics />;
       default:
         return <Dashboard />;
     }

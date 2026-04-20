@@ -1,7 +1,6 @@
 import React from "react";
-import { Quotes } from "./Quotes";
-import { MyTools } from "./MyTools";
-import { Routine } from "./Routine";
+import { Quotes } from "../view/Quotes";
+import { Routine } from "../view/Routine";
 import { useApp } from "@/contexts/AppContext";
 import { getProgressCircleColor } from "@/lib/helper";
 

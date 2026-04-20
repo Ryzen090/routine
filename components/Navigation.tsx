@@ -3,7 +3,6 @@
 import React from "react";
 import { useApp } from "@/contexts/AppContext";
 import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "./ThemeToggle";
 import {
   BadgeCheck,
   Settings,
@@ -13,7 +12,7 @@ import {
 
 const navigationItems = [
   { id: "dashboard", label: "Routine", icon: BadgeCheck },
-  { id: "discipline", label: "Metrics", icon: DumbbellIcon },
+  { id: "metrics", label: "Metrics", icon: DumbbellIcon },
   { id: "finance", label: "Finance", icon: BadgeDollarSign },
   { id: "setting", label: "Setting", icon: Settings },
 ];
@@ -30,12 +29,10 @@ export function Navigation() {
       {/* Desktop Sidebar */}
       <div className="hidden lg:flex lg:fixed lg:left-0 lg:top-0 lg:h-full lg:border-r lg:border-gray-200 lg:z-40 lg:bg-white lg:w-64">
         <div className="p-6 w-full">
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
-              <div className="text-2xl">🎯</div>
               <h1 className="text-xl font-bold text-gray-900">Discipline</h1>
             </div>
-            <ThemeToggle />
           </div>
 
           <nav className="space-y-2">

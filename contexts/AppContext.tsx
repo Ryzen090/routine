@@ -10,7 +10,7 @@ import {
   defaultNotes,
   defaultPayments,
   defaultTasks,
-} from "./data";
+} from "../data";
 
 type AppAction =
   | { type: "SET_TASKS"; payload: Task[] }
