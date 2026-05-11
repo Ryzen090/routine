@@ -320,20 +320,22 @@ export function Metrics() {
                 {note.subNotes.map((sub) => (
                   <div
                     key={sub.id}
-                    onClick={() => toggleSubNote(note.id, sub.id)}
-                    className="flex items-center gap-3 p-3 rounded-xl bg-white border border-gray-100 hover:bg-gray-50/80 hover:border-gray-200 transition-all duration-200 cursor-pointer group/item"
+                    className="flex gap-3 p-3 rounded-xl bg-white border border-gray-100 hover:bg-gray-50/80 hover:border-gray-200 transition-all duration-200 group/item"
                   >
-                    <div className="relative flex-shrink-0">
+                    <div
+                      onClick={() => toggleSubNote(note.id, sub.id)}
+                      className="relative flex-shrink-0 cursor-pointer"
+                    >
                       <div
                         className={`
-                          w-5 h-5 rounded-lg border-2 flex items-center justify-center
-                          transition-all duration-300 ease-out
-                          ${
-                            sub.completed
-                              ? "border-emerald-500 bg-emerald-500 scale-110"
-                              : "border-gray-300 group-hover/item:border-gray-400"
-                          }
-                        `}
+                                    w-5 h-5 rounded-lg border-2 flex items-center justify-center
+                                    transition-all duration-300 ease-out
+                                    ${
+                                      sub.completed
+                                        ? "border-emerald-500 bg-emerald-500 scale-110"
+                                        : "border-gray-300 group-hover/item:border-gray-400"
+                                    }
+                                  `}
                       >
                         {sub.completed && (
                           <svg
@@ -353,21 +355,41 @@ export function Metrics() {
                       </div>
                     </div>
 
-                    <span
-                      className={`
-                        text-sm font-medium flex-1 transition-all duration-300 capitalize
-                        ${
-                          sub.completed
-                            ? "text-gray-400"
-                            : "text-gray-700 group-hover/item:text-gray-900"
-                        }
-                      `}
-                    >
-                      {sub.content}
-                    </span>
+                    <div className="flex-1 flex flex-col">
+                      <span
+                        onClick={() => toggleSubNote(note.id, sub.id)}
+                        className={`
+                                    text-sm font-medium cursor-pointer transition-all duration-300 capitalize
+                                    ${
+                                      sub.completed
+                                        ? "text-gray-400 line-through"
+                                        : "text-gray-700 group-hover/item:text-gray-900"
+                                    }
+                                  `}
+                      >
+                        {sub.content}
+                      </span>
+
+                      {sub.description && sub.description.length > 0 && (
+                        <ul className="mt-2 space-y-1 pointer-events-none">
+                          {sub.description.map((item, index) => (
+                            <li
+                              key={index}
+                              className={`
+                                          text-[11px] flex items-start gap-1
+                                          ${sub.completed ? "text-gray-300" : "text-gray-500"}
+                                        `}
+                            >
+                              <span className="mt-[4px] w-1 h-1 rounded-full bg-gray-400 flex-shrink-0" />
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
 
                     {sub.completed && (
-                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse mt-2" />
                     )}
                   </div>
                 ))}

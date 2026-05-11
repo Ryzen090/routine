@@ -41,6 +41,7 @@ export interface SubNote {
   id: string;
   content: string;
   completed: boolean;
+  description?: string[];
 }
 
 export interface MyTool {
