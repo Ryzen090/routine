@@ -323,13 +323,7 @@ export const motivationalQuotes = [
   {
     text: "Remember who you are.",
   },
-  {
-    text: "If you want to be strong, learn to fight alone.",
-  },
-  {
-    text: "You don’t have to be great to start, but you have to start to be great.",
-  },
-  {
-    text: "The first steps are always the hardest.",
-  },
+  // {
+  //   text: "You don’t have to be great to start, but you have to start to be great.",
+  // },
 ];
