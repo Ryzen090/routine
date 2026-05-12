@@ -1,61 +1,49 @@
 import React from "react";
 import { motivationalQuotes } from "@/data";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from "../ui/card";
+
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export function Quotes() {
-  const [displayedText, setDisplayedText] = React.useState("");
-  const [currentQuote, setCurrentQuote] = React.useState(motivationalQuotes[0]);
+  const [displayed, setDisplayed] = React.useState("");
 
-  const quoteRef = React.useRef(currentQuote);
-  quoteRef.current = currentQuote;
-
-  const getRandomQuote = React.useCallback(() => {
-    const filteredQuotes = motivationalQuotes.filter(
-      (q) => q.text !== currentQuote.text,
-    );
-    const randomIndex = Math.floor(Math.random() * filteredQuotes.length);
-    return filteredQuotes[randomIndex] || motivationalQuotes[0];
-  }, [currentQuote]);
-
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentQuote(getRandomQuote());
-    }, 20000);
-
-    return () => clearInterval(interval);
-  }, [getRandomQuote]);
+  const ref = React.useRef(motivationalQuotes[0]);
 
   React.useEffect(() => {
     let isMounted = true;
-    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-    const runAnimation = async () => {
-      while (isMounted) {
-        const text = quoteRef.current.text;
+    const typeText = async (text: string) => {
+      for (let i = 0; i <= text.length; i++) {
+        if (!isMounted) return;
 
-        for (let i = 0; i <= text.length; i++) {
-          if (!isMounted) return;
-          setDisplayedText(text.slice(0, i));
-          await sleep(200);
-        }
-
-        await sleep(5000);
-
-        for (let i = text.length; i >= 0; i--) {
-          if (!isMounted) return;
-          setDisplayedText(text.slice(0, i));
-          await sleep(15);
-        }
-
-        const next = getRandomQuote();
-        setCurrentQuote(next);
-        quoteRef.current = next;
-
-        await sleep(400);
+        setDisplayed(text.slice(0, i));
+        await sleep(30);
       }
     };
 
-    runAnimation();
+    const clearText = async () => {
+      setDisplayed("");
+    };
+
+    const run = async () => {
+      while (isMounted) {
+        const quote = ref.current.text;
+
+        await clearText();
+        await typeText(quote);
+
+        await sleep(2000);
+
+        const next =
+          motivationalQuotes[
+            Math.floor(Math.random() * motivationalQuotes.length)
+          ];
+
+        ref.current = next;
+      }
+    };
+
+    run();
 
     return () => {
       isMounted = false;
@@ -63,13 +51,13 @@ export function Quotes() {
   }, []);
 
   return (
-    <Card className="relative overflow-hidden border-0 transition-all duration-500">
+    <Card className="relative overflow-hidden border-0 transition-all duration-500 ">
       <div className="absolute -top-10 -left-10 w-40 h-40 bg-indigo-200/30 rounded-full blur-3xl"></div>
       <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-purple-200/30 rounded-full blur-3xl"></div>
 
       <CardContent className="relative p-4 flex flex-col items-center justify-center text-center">
         <blockquote className="text-xl  font-semibold text-gray-800 leading-relaxed max-w-2xl uppercase">
-          {displayedText}
+          {displayed}
           <span className="animate-pulse ml-1"></span>
         </blockquote>
       </CardContent>

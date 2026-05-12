@@ -138,11 +138,6 @@ export function Dashboard() {
         <Quotes />
       </div>
 
-      {/* My Tools */}
-      {/* <section className="rounded-xl bg-white shadow-sm">
-        <MyTools />
-      </section> */}
-
       {/* Routine (PRIMARY) */}
       <section className="rounded-xl bg-white p-1 shadow-sm border border-blue-100">
         <Routine />

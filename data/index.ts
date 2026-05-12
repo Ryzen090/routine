@@ -16,7 +16,7 @@ export const defaultTasks: Task[] = [
     id: "2",
     title: "Cleaning",
     icon: "🍳",
-    startTime: "07:40",
+    startTime: "07:50",
     endTime: "08:00",
     category: "health",
     completed: false,
@@ -113,28 +113,40 @@ export const defaultTasks: Task[] = [
   },
   {
     id: "11",
-    title: "Trading",
-    icon: "📈",
+    title: "Reading",
+    icon: "📖",
     startTime: "19:00",
-    endTime: "19:45",
-    category: "learning",
-    completed: false,
-    recurring: true,
-    priority: "medium",
-  },
-  {
-    id: "12",
-    title: "Dinner",
-    icon: "🍽️",
-    startTime: "19:45",
-    endTime: "20:00",
+    endTime: "19:20",
     category: "routine",
     completed: false,
     recurring: true,
     priority: "high",
   },
   {
+    id: "12",
+    title: "Trading",
+    icon: "📈",
+    startTime: "19:20",
+    endTime: "21:45",
+    category: "learning",
+    completed: false,
+    recurring: true,
+    priority: "medium",
+  },
+
+  {
     id: "13",
+    title: "Dinner",
+    icon: "🍽️",
+    startTime: "21:45",
+    endTime: "22:00",
+    category: "routine",
+    completed: false,
+    recurring: true,
+    priority: "high",
+  },
+  {
+    id: "14",
     title: "Healthy Night",
     icon: "🛏️",
     startTime: "23:30",
@@ -167,13 +179,32 @@ export const defaultNotes: Note[] = [
     updatedAt: new Date().toISOString(),
   },
   {
-    id: "5",
-    title: "Forex Trading",
-    content: "Learn trading",
+    id: "2",
+    title: "Reading",
+    content: "Grow knowledge",
     subNotes: [
       {
         id: "1-1",
-        content: "Learn forex",
+        content: "បណ្តាំកញ្រ្ជោងចាស់",
+        completed: true,
+      },
+    ],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: "5",
+    title: "Trading",
+    content: "Learn Trading Forex",
+    subNotes: [
+      {
+        id: "1-1",
+        content: "Inner Circle Trader (ICT)",
+        completed: false,
+      },
+      {
+        id: "1-2",
+        content: "Candle Range Theory (CRT)",
         completed: false,
       },
     ],
@@ -187,7 +218,12 @@ export const defaultNotes: Note[] = [
     subNotes: [
       {
         id: "1-1",
-        content: "Work out 5 times a week",
+        content: "Workout",
+        completed: false,
+      },
+      {
+        id: "1-2",
+        content: "Drink Water",
         completed: false,
       },
     ],
@@ -197,13 +233,32 @@ export const defaultNotes: Note[] = [
   {
     id: "4",
     title: "Travel",
-    content: "Explore new places",
+    content: "Explore New Places",
     subNotes: [
       {
         id: "1-1",
-        content: "Travel once this year",
-        completed: false,
-        description: ["កោះស្តេច", "កំពត", "ពយយាយម៉ៅ", "ជីផាត"],
+        content: "កោះស្តេច",
+        completed: true,
+      },
+      {
+        id: "1-2",
+        content: "កំពត",
+        completed: true,
+      },
+      {
+        id: "1-3",
+        content: "បូកគោ",
+        completed: true,
+      },
+      {
+        id: "1-4",
+        content: "ពយយាយម៉ៅ",
+        completed: true,
+      },
+      {
+        id: "1-5",
+        content: "ជីផាត",
+        completed: true,
       },
     ],
     createdAt: new Date().toISOString(),
@@ -323,7 +378,4 @@ export const motivationalQuotes = [
   {
     text: "Remember who you are.",
   },
-  // {
-  //   text: "You don’t have to be great to start, but you have to start to be great.",
-  // },
 ];
