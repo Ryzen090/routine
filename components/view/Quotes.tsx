@@ -67,8 +67,8 @@ export function Quotes() {
       <div className="absolute -top-10 -left-10 w-40 h-40 bg-indigo-200/30 rounded-full blur-3xl"></div>
       <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-purple-200/30 rounded-full blur-3xl"></div>
 
-      <CardContent className="relative p-10 flex flex-col items-center justify-center text-center">
-        <blockquote className="text-2xl md:text-3xl font-semibold text-gray-800 leading-relaxed max-w-2xl uppercase">
+      <CardContent className="relative p-4 flex flex-col items-center justify-center text-center">
+        <blockquote className="text-xl  font-semibold text-gray-800 leading-relaxed max-w-2xl uppercase">
           {displayedText}
           <span className="animate-pulse ml-1"></span>
         </blockquote>
