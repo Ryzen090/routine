@@ -287,12 +287,12 @@ export const defaultPayments: Payment[] = [
     amount: 440,
     type: "income",
   },
-  // {
-  //   id: "2",
-  //   title: "Family",
-  //   amount: 200,
-  //   type: "expense",
-  // },
+  {
+    id: "2",
+    title: "Family",
+    amount: 200,
+    type: "expense",
+  },
   {
     id: "3",
     title: "Rent",
@@ -301,32 +301,20 @@ export const defaultPayments: Payment[] = [
   },
   {
     id: "4",
-    title: "Food",
-    amount: 75,
+    title: "Food & Motorbike",
+    amount: 100,
     type: "expense",
   },
   {
     id: "5",
-    title: "Motorbike",
+    title: "Trading",
     amount: 15,
     type: "expense",
   },
   {
     id: "6",
-    title: "Trading",
-    amount: 100,
-    type: "expense",
-  },
-  {
-    id: "7",
-    title: "Wedding",
-    amount: 40,
-    type: "expense",
-  },
-  {
-    id: "8",
-    title: "TaoBao",
-    amount: 40,
+    title: "Installment",
+    amount: 20,
     type: "expense",
   },
 ];
