@@ -300,14 +300,26 @@ export const defaultPayments: Payment[] = [
   },
   {
     id: "3",
-    title: "Rent & Food & Motorbike",
-    amount: 180,
+    title: "Rent & Food",
+    amount: 160,
+    type: "expense",
+  },
+  {
+    id: "4",
+    title: "Other",
+    amount: 20,
     type: "expense",
   },
   {
     id: "5",
     title: "Savings",
     amount: 40,
+    type: "expense",
+  },
+  {
+    id: "6",
+    title: "Tao Bao",
+    amount: 20,
     type: "expense",
   },
 ];
