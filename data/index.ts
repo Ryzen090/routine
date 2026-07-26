@@ -104,8 +104,8 @@ export const defaultTasks: Task[] = [
     id: "10",
     title: "Shower",
     icon: "🚿",
-    startTime: "18:50",
-    endTime: "19:10",
+    startTime: "18:40",
+    endTime: "19:00",
     category: "routine",
     completed: false,
     recurring: true,
@@ -116,7 +116,7 @@ export const defaultTasks: Task[] = [
     title: "Reading",
     icon: "📖",
     startTime: "19:00",
-    endTime: "19:20",
+    endTime: "19:30",
     category: "routine",
     completed: false,
     recurring: true,
@@ -126,7 +126,7 @@ export const defaultTasks: Task[] = [
     id: "12",
     title: "Trading",
     icon: "📈",
-    startTime: "19:20",
+    startTime: "19:30",
     endTime: "21:45",
     category: "learning",
     completed: false,
@@ -138,7 +138,7 @@ export const defaultTasks: Task[] = [
     id: "13",
     title: "Dinner",
     icon: "🍽️",
-    startTime: "21:45",
+    startTime: "21:00",
     endTime: "22:00",
     category: "routine",
     completed: false,
@@ -369,6 +369,6 @@ export const taskCompletedStyles = [
 
 export const motivationalQuotes = [
   {
-    text: "Remember who you are.",
+    text: "Remember who you are",
   },
 ];
