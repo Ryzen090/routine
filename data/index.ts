@@ -306,19 +306,19 @@ export const defaultPayments: Payment[] = [
   },
   {
     id: "4",
-    title: "Other",
+    title: "Investing",
     amount: 20,
     type: "expense",
   },
   {
     id: "5",
-    title: "Savings",
-    amount: 40,
+    title: "Other",
+    amount: 20,
     type: "expense",
   },
   {
     id: "6",
-    title: "Tao Bao",
+    title: "Savings",
     amount: 20,
     type: "expense",
   },
