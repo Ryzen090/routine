@@ -22,21 +22,21 @@ export function MyTools() {
         const progress = Math.round((completed / total) * 100);
 
         return (
-          <Card key={tool.id} className="border border-gray-100 bg-white">
+          <Card key={tool.id} className="border border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-900">
             <CardContent className="p-4">
               <div className="mb-4">
                 <div className="flex items-center justify-between mb-2">
-                  <h4 className="font-semibold text-gray-900 text-base">
+                  <h4 className="font-semibold text-gray-900 dark:text-white text-base">
                     {tool.title}
                   </h4>
                 </div>
 
                 <div className="space-y-1">
-                  <div className="flex justify-between text-xs text-gray-500">
+                  <div className="flex justify-between text-xs text-gray-500 dark:text-slate-400">
                     <span>Progress</span>
                     <span>{progress}%</span>
                   </div>
-                  <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                  <div className="h-1.5 bg-gray-200 dark:bg-slate-800 rounded-full overflow-hidden">
                     <div
                       className="h-full bg-blue-500 rounded-full transition-all duration-300"
                       style={{ width: `${progress}%` }}
@@ -55,8 +55,8 @@ export function MyTools() {
                       flex items-center justify-center gap-2 transition-colors
                       ${
                         item.completed
-                          ? "bg-green-50 border-green-200 text-green-700"
-                          : "bg-gray-50 border-gray-200 text-gray-700 hover:bg-blue-50"
+                          ? "bg-green-50 dark:bg-emerald-950/40 border-green-200 dark:border-emerald-800 text-green-700 dark:text-emerald-400"
+                          : "bg-gray-50 dark:bg-slate-800 border-gray-200 dark:border-slate-700 text-gray-700 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-slate-700"
                       }
                     `}
                   >
@@ -66,7 +66,7 @@ export function MyTools() {
                         ${
                           item.completed
                             ? "bg-green-500 border-green-500"
-                            : "bg-white border-gray-300"
+                            : "bg-white dark:bg-slate-900 border-gray-300 dark:border-slate-600"
                         }
                       `}
                     >

@@ -78,23 +78,23 @@ export function Routine() {
   });
 
   return (
-    <div className="bg-white mb-2">
+    <div className="bg-white dark:bg-slate-900 rounded-xl mb-2 transition-colors">
       <div className="p-2 lg:p-6">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg lg:text-xl font-bold flex items-center gap-2 text-gray-900">
-              <Clock className="h-5 w-5 text-blue-600" />
-              Today&apos;s
+            <h2 className="text-lg lg:text-xl font-bold flex items-center gap-2 text-gray-900 dark:text-white">
+              <Clock className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+              Today&apos;s Routine
             </h2>
-            <p className="text-xs lg:text-sm text-gray-500 mt-1">{today}</p>
+            <p className="text-xs lg:text-sm text-gray-500 dark:text-slate-400 mt-1">{today}</p>
           </div>
         </div>
       </div>
 
-      <div className="px-2 lg:px-6 space-y-3 lg:space-y-4">
+      <div className="px-2 lg:px-6 pb-4 space-y-3 lg:space-y-4">
         {todaysTasks.length === 0 ? (
-          <div className="text-center py-8 lg:py-12 text-gray-500">
-            <Clock className="h-8 w-8 lg:h-12 lg:w-12 mx-auto mb-3 text-gray-300" />
+          <div className="text-center py-8 lg:py-12 text-gray-500 dark:text-slate-400">
+            <Clock className="h-8 w-8 lg:h-12 lg:w-12 mx-auto mb-3 text-gray-300 dark:text-slate-600" />
             <p className="text-sm lg:text-base">No tasks scheduled for today</p>
           </div>
         ) : (
@@ -104,13 +104,13 @@ export function Routine() {
               onClick={() => handleTaskToggle(task)}
               className={`
               rounded-xl lg:rounded-2xl p-3 lg:p-4
-              transition-all duration-200
+              transition-all duration-200 cursor-pointer
               ${
                 task.completed
-                  ? "bg-gray-50 border-l-4 border-gray-300 opacity-70"
+                  ? "bg-gray-50 dark:bg-slate-800/60 border-l-4 border-gray-300 dark:border-slate-700 opacity-70"
                   : `${
                       taskCompletedStyles[index % taskCompletedStyles.length]
-                    } hover:shadow-md`
+                    } dark:bg-slate-800 dark:border-indigo-500 dark:text-slate-100 hover:shadow-md`
               }
             `}
             >
@@ -121,13 +121,13 @@ export function Routine() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs lg:text-sm font-medium text-gray-600">
+                      <span className="text-xs lg:text-sm font-medium text-gray-600 dark:text-slate-400">
                         {formatTime(task.startTime)}
                       </span>
                     </div>
                     <h3
                       className={`text-sm lg:text-lg font-semibold truncate ${
-                        task.completed ? "text-gray-500" : "text-gray-900"
+                        task.completed ? "text-gray-500 dark:text-slate-400 line-through" : "text-gray-900 dark:text-white"
                       }`}
                     >
                       {task.title}
@@ -139,7 +139,7 @@ export function Routine() {
                     className={`w-5 h-5 lg:w-6 lg:h-6 rounded-full border-2 flex items-center justify-center cursor-pointer transition-all ${
                       task.completed
                         ? "bg-green-500 border-green-500"
-                        : "border-gray-300 hover:border-gray-400 bg-white"
+                        : "border-gray-300 dark:border-slate-600 hover:border-gray-400 dark:hover:border-slate-500 bg-white dark:bg-slate-900"
                     }`}
                     onClick={() => handleTaskToggle(task)}
                   >

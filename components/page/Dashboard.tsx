@@ -3,6 +3,7 @@ import { Quotes } from "../view/Quotes";
 import { Routine } from "../view/Routine";
 import { useApp } from "@/contexts/AppContext";
 import { getProgressCircleColor } from "@/lib/helper";
+import { ThemeToggle } from "../ThemeToggle";
 
 export function Dashboard() {
   const { state } = useApp();
@@ -25,15 +26,15 @@ export function Dashboard() {
       : 0;
 
   return (
-    <div className="space-y-6 bg-gray-50 min-h-screen pt-6 pb-20 px-4 lg:px-0">
-      <div className="relative overflow-hidden rounded-2xl bg-white p-6 shadow-sm border-gray-200">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-50 to-blue-50 rounded-full -translate-y-16 translate-x-16 opacity-60"></div>
-        <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-purple-50 to-pink-50 rounded-full translate-y-12 -translate-x-12 opacity-60"></div>
+    <div className="space-y-6 bg-gray-50 dark:bg-slate-950 min-h-screen pt-6 pb-20 px-4 lg:px-0 transition-colors">
+      <div className="relative overflow-hidden rounded-2xl bg-white dark:bg-slate-900 p-6 shadow-sm border border-gray-200/80 dark:border-slate-800">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-50 to-blue-50 dark:from-emerald-950/40 dark:to-blue-950/40 rounded-full -translate-y-16 translate-x-16 opacity-60"></div>
+        <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-purple-50 to-pink-50 dark:from-purple-950/40 dark:to-pink-950/40 rounded-full translate-y-12 -translate-x-12 opacity-60"></div>
 
         <div className="relative z-10 space-y-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-semibold text-gray-900 mb-1">
+              <h1 className="text-2xl font-semibold text-gray-900 dark:text-white mb-1">
                 {(() => {
                   const hour = new Date().getHours();
                   if (hour < 12) return "Good morning";
@@ -41,7 +42,7 @@ export function Dashboard() {
                   return "Good evening";
                 })()}
               </h1>
-              <div className="flex items-center text-gray-600">
+              <div className="flex items-center text-gray-600 dark:text-slate-400">
                 <svg
                   className="w-4 h-4 mr-2"
                   fill="currentColor"
@@ -64,7 +65,7 @@ export function Dashboard() {
                     cx="50"
                     cy="50"
                     r="40"
-                    stroke="#e5e7eb"
+                    className="stroke-gray-200 dark:stroke-slate-700"
                     strokeWidth="6"
                     fill="none"
                   />
@@ -83,7 +84,7 @@ export function Dashboard() {
                   />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-sm font-bold text-gray-800">
+                  <span className="text-sm font-bold text-gray-800 dark:text-white">
                     {Math.round(completionRate)}%
                   </span>
                 </div>
@@ -93,16 +94,17 @@ export function Dashboard() {
 
           <div className="space-y-4">
             <div className="flex justify-between items-center">
-              <div className="text-sm font-semibold text-gray-900">
+              <div className="text-sm font-semibold text-gray-900 dark:text-white">
                 Daily Progress
               </div>
-              <div className="text-sm text-gray-600">
+
+              <div className="text-sm text-gray-600 dark:text-slate-400">
                 <span className="font-bold">{Math.round(completionRate)}%</span>
               </div>
             </div>
 
             <div className="relative">
-              <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
+              <div className="h-3 bg-gray-200 dark:bg-slate-800 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-gradient-to-r from-emerald-400 to-teal-500 rounded-full transition-all duration-700 ease-out relative"
                   style={{ width: `${completionRate}%` }}
@@ -121,10 +123,12 @@ export function Dashboard() {
                       className={`w-2 h-2 rounded-full mb-1 ${
                         completionRate >= point
                           ? "bg-emerald-500"
-                          : "bg-gray-300"
+                          : "bg-gray-300 dark:bg-slate-700"
                       }`}
                     ></div>
-                    <span className="text-xs text-gray-500">{point}%</span>
+                    <span className="text-xs text-gray-500 dark:text-slate-400">
+                      {point}%
+                    </span>
                   </div>
                 ))}
               </div>
@@ -139,7 +143,7 @@ export function Dashboard() {
       </div>
 
       {/* Routine (PRIMARY) */}
-      <section className="rounded-xl bg-white p-1 shadow-sm border border-blue-100">
+      <section className="rounded-xl bg-white dark:bg-slate-900 p-1 shadow-sm border border-blue-100 dark:border-slate-800">
         <Routine />
       </section>
     </div>

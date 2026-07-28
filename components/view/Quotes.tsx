@@ -51,14 +51,14 @@ export function Quotes() {
   }, []);
 
   return (
-    <Card className="relative overflow-hidden border-0 transition-all duration-500 ">
-      <div className="absolute -top-10 -left-10 w-40 h-40 bg-indigo-200/30 rounded-full blur-3xl"></div>
-      <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-purple-200/30 rounded-full blur-3xl"></div>
+    <Card className="relative overflow-hidden border-0 bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm transition-all duration-500">
+      <div className="absolute -top-10 -left-10 w-40 h-40 bg-indigo-200/30 dark:bg-indigo-900/30 rounded-full blur-3xl"></div>
+      <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-purple-200/30 dark:bg-purple-900/30 rounded-full blur-3xl"></div>
 
       <CardContent className="relative p-4 flex flex-col items-center justify-center text-center">
-        <blockquote className="text-xl  font-semibold text-gray-800 leading-relaxed max-w-2xl uppercase">
+        <blockquote className="text-xl font-semibold text-gray-800 dark:text-slate-100 leading-relaxed max-w-2xl uppercase tracking-wide">
           {displayed}
-          <span className="animate-pulse ml-1"></span>
+          <span className="animate-pulse ml-1 text-indigo-500">|</span>
         </blockquote>
       </CardContent>
     </Card>

@@ -245,30 +245,30 @@ export function Metrics() {
   };
 
   return (
-    <div className="space-y-6 bg-white min-h-screen pt-5 pb-20 px-4">
+    <div className="space-y-6 bg-white dark:bg-slate-950 min-h-screen pt-5 pb-20 px-4 transition-colors">
       <div className="space-y-6">
         <div className="text-center space-y-3">
-          <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl mb-2 shadow-lg">
+          <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-gray-900 to-gray-800 dark:from-slate-800 dark:to-slate-900 rounded-2xl mb-2 shadow-lg border border-gray-700/20 dark:border-slate-700">
             <Goal className="w-7 h-7 text-white" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">Discipline</h2>
-            <p className="text-gray-600 mt-1">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Discipline</h2>
+            <p className="text-gray-600 dark:text-slate-400 mt-1">
               Becoming the best version of myself
             </p>
           </div>
         </div>
 
         <div className="flex justify-center">
-          <div className="inline-flex items-center bg-gray-50 rounded-xl p-1.5">
+          <div className="inline-flex items-center bg-gray-50 dark:bg-slate-900 rounded-xl p-1.5 border border-gray-200/80 dark:border-slate-800">
             {(["daily", "trade"] as Tab[]).map((tab, index) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={`relative px-6 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
                   activeTab === tab
-                    ? "text-gray-900 bg-white shadow"
-                    : "text-gray-500 hover:text-gray-700"
+                    ? "text-gray-900 dark:text-white bg-white dark:bg-slate-800 shadow-sm"
+                    : "text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200"
                 }`}
               >
                 <span className="capitalize flex items-center gap-2">
@@ -279,8 +279,8 @@ export function Metrics() {
                     <span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
                   )}
                 </span>
-                {index < 3 && activeTab !== tab && (
-                  <div className="absolute right-0 top-1/2 -translate-y-1/2 w-px h-4 bg-gray-300"></div>
+                {index < 1 && activeTab !== tab && (
+                  <div className="absolute right-0 top-1/2 -translate-y-1/2 w-px h-4 bg-gray-300 dark:bg-slate-700"></div>
                 )}
               </button>
             ))}
@@ -293,11 +293,11 @@ export function Metrics() {
           {state.notes.map((note) => (
             <div
               key={note.id}
-              className="relative group bg-gradient-to-br from-white to-gray-50 rounded-2xl border border-gray-200/60 p-5 hover:border-gray-300/80 transition-all duration-300"
+              className="relative group bg-gradient-to-br from-white to-gray-50 dark:from-slate-900 dark:to-slate-900/80 rounded-2xl border border-gray-200/60 dark:border-slate-800 p-5 hover:border-gray-300 dark:hover:border-slate-700 transition-all duration-300 shadow-sm"
             >
-              <div className="absolute -top-2 -right-2 w-10 h-10 rounded-xl bg-white border border-gray-200 shadow-sm flex items-center justify-center">
+              <div className="absolute -top-2 -right-2 w-10 h-10 rounded-xl bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 shadow-sm flex items-center justify-center">
                 <svg
-                  className="w-5 h-5 text-gray-600"
+                  className="w-5 h-5 text-gray-600 dark:text-slate-300"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                 >
@@ -306,11 +306,11 @@ export function Metrics() {
               </div>
 
               <div className="pr-8">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
                   {note.title}
                 </h3>
                 {note.content && (
-                  <p className="text-gray-600 text-sm leading-relaxed mb-6">
+                  <p className="text-gray-600 dark:text-slate-400 text-sm leading-relaxed mb-6">
                     {note.content}
                   </p>
                 )}
@@ -320,7 +320,7 @@ export function Metrics() {
                 {note.subNotes.map((sub) => (
                   <div
                     key={sub.id}
-                    className="flex gap-3 p-3 rounded-xl bg-white border border-gray-100 hover:bg-gray-50/80 hover:border-gray-200 transition-all duration-200 group/item"
+                    className="flex gap-3 p-3 rounded-xl bg-white dark:bg-slate-800/80 border border-gray-100 dark:border-slate-700/60 hover:bg-gray-50/80 dark:hover:bg-slate-800 hover:border-gray-200 dark:hover:border-slate-700 transition-all duration-200 group/item"
                   >
                     <div
                       onClick={() => toggleSubNote(note.id, sub.id)}
@@ -333,7 +333,7 @@ export function Metrics() {
                                     ${
                                       sub.completed
                                         ? "border-emerald-500 bg-emerald-500 scale-110"
-                                        : "border-gray-300 group-hover/item:border-gray-400"
+                                        : "border-gray-300 dark:border-slate-600 group-hover/item:border-gray-400 dark:group-hover/item:border-slate-500"
                                     }
                                   `}
                       >
@@ -362,8 +362,8 @@ export function Metrics() {
                                     text-sm font-medium cursor-pointer transition-all duration-300 capitalize
                                     ${
                                       sub.completed
-                                        ? "text-gray-400 line-through"
-                                        : "text-gray-700 group-hover/item:text-gray-900"
+                                        ? "text-gray-400 dark:text-slate-500 line-through"
+                                        : "text-gray-700 dark:text-slate-200 group-hover/item:text-gray-900 dark:group-hover/item:text-white"
                                     }
                                   `}
                       >
@@ -377,10 +377,10 @@ export function Metrics() {
                               key={index}
                               className={`
                                           text-[11px] flex items-start gap-1
-                                          ${sub.completed ? "text-gray-300" : "text-gray-500"}
+                                          ${sub.completed ? "text-gray-300 dark:text-slate-600" : "text-gray-500 dark:text-slate-400"}
                                         `}
                             >
-                              <span className="mt-[4px] w-1 h-1 rounded-full bg-gray-400 flex-shrink-0" />
+                              <span className="mt-[4px] w-1 h-1 rounded-full bg-gray-400 dark:bg-slate-500 flex-shrink-0" />
                               <span>{item}</span>
                             </li>
                           ))}
@@ -401,13 +401,13 @@ export function Metrics() {
 
       {activeTab === "trade" && (
         <div className="space-y-4">
-          <Card>
+          <Card className="bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-800 shadow-sm">
             <CardHeader className="pb-0">
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap">
                   <div>
-                    <CardTitle className="text-sm">Monthly Trading</CardTitle>
-                    <div className="text-xs text-gray-600">
+                    <CardTitle className="text-sm text-gray-900 dark:text-white">Monthly Trading</CardTitle>
+                    <div className="text-xs text-gray-600 dark:text-slate-400">
                       {getCycleDisplayName()}
                     </div>
                   </div>
@@ -415,10 +415,10 @@ export function Metrics() {
                 <div
                   className={`text-xl font-bold ${
                     totalBalance < 0
-                      ? "text-red-600"
+                      ? "text-red-600 dark:text-red-400"
                       : totalBalance > 0
-                        ? "text-green-600"
-                        : "text-gray-600"
+                        ? "text-emerald-600 dark:text-emerald-400"
+                        : "text-gray-600 dark:text-slate-400"
                   }`}
                 >
                   ${totalBalance.toFixed(2)}
@@ -426,44 +426,44 @@ export function Metrics() {
               </div>
             </CardHeader>
             <CardContent className="space-y-3">
-              <div className="border-gray-200">
+              <div className="border-gray-200 dark:border-slate-800">
                 <div className="mt-4">
-                  <div className="flex justify-between text-xs text-gray-600 mb-2">
+                  <div className="flex justify-between text-xs text-gray-600 dark:text-slate-400 mb-2">
                     <span>Starting Balance:</span>
-                    <span className="font-medium">$15.00</span>
+                    <span className="font-medium text-gray-900 dark:text-slate-200">$15.00</span>
                   </div>
 
                   <div className="flex justify-between text-xs mb-2">
-                    <span>Current Balance:</span>
+                    <span className="text-gray-600 dark:text-slate-400">Current Balance:</span>
                     <span
                       className={`font-semibold ${
                         totalBalance < 15
-                          ? "text-red-600"
+                          ? "text-red-600 dark:text-red-400"
                           : totalBalance > 15
-                            ? "text-green-600"
-                            : "text-gray-600"
+                            ? "text-emerald-600 dark:text-emerald-400"
+                            : "text-gray-600 dark:text-slate-400"
                       }`}
                     >
                       ${totalBalance.toFixed(2)}
                     </span>
                   </div>
 
-                  <div className="flex justify-between text-xs font-semibold border-t pt-2">
-                    <span>Monthly P/L:</span>
+                  <div className="flex justify-between text-xs font-semibold border-t border-gray-100 dark:border-slate-800 pt-2">
+                    <span className="text-gray-600 dark:text-slate-400">Monthly P/L:</span>
                     <span
                       className={
-                        monthlyTotal >= 0 ? "text-green-600" : "text-red-600"
+                        monthlyTotal >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-red-600 dark:text-red-400"
                       }
                     >
                       ${Math.abs(monthlyTotal).toFixed(2)}
                     </span>
                   </div>
 
-                  <div className="flex justify-between text-xs font-semibold border-t pt-2 mt-2">
-                    <span>This Week P/L :</span>
+                  <div className="flex justify-between text-xs font-semibold border-t border-gray-100 dark:border-slate-800 pt-2 mt-2">
+                    <span className="text-gray-600 dark:text-slate-400">This Week P/L :</span>
                     <span
                       className={
-                        weeklyTotal >= 0 ? "text-green-600" : "text-red-600"
+                        weeklyTotal >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-red-600 dark:text-red-400"
                       }
                     >
                       ${Math.abs(weeklyTotal).toFixed(2)}
@@ -472,33 +472,33 @@ export function Metrics() {
 
                   <div className="mt-3">
                     {monthlyTotal > 0 && (
-                      <div className="text-xs text-green-600 font-semibold flex items-center gap-1">
+                      <div className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1">
                         Monthly Profit: ${monthlyTotal.toFixed(2)}
                       </div>
                     )}
                     {monthlyTotal < 0 && (
-                      <div className="text-xs text-red-600 font-semibold flex items-center gap-1">
+                      <div className="text-xs text-red-600 dark:text-red-400 font-semibold flex items-center gap-1">
                         Monthly Loss: ${Math.abs(monthlyTotal).toFixed(2)}
                       </div>
                     )}
                   </div>
 
                   {/* Balance Breakdown */}
-                  <div className="mt-4 bg-gray-50 p-3 rounded-lg">
-                    <div className="text-xs font-medium text-gray-700 mb-2">
+                  <div className="mt-4 bg-gray-50 dark:bg-slate-800/60 p-3 rounded-lg border border-gray-200/60 dark:border-slate-700/50">
+                    <div className="text-xs font-medium text-gray-700 dark:text-slate-300 mb-2">
                       Balance Breakdown
                     </div>
                     <div className="space-y-2">
                       <div className="flex justify-between text-xs">
-                        <span className="text-gray-600">Starting Capital:</span>
-                        <span className="font-medium">$15.00</span>
+                        <span className="text-gray-600 dark:text-slate-400">Starting Capital:</span>
+                        <span className="font-medium text-gray-900 dark:text-white">$15.00</span>
                       </div>
                       <div className="flex justify-between text-xs">
                         <span
                           className={`${
                             monthlyTotal >= 0
-                              ? "text-green-600"
-                              : "text-red-600"
+                              ? "text-emerald-600 dark:text-emerald-400"
+                              : "text-red-600 dark:text-red-400"
                           }`}
                         >
                           {monthlyTotal >= 0
@@ -509,8 +509,8 @@ export function Metrics() {
                         <span
                           className={`font-medium ${
                             monthlyTotal >= 0
-                              ? "text-green-600"
-                              : "text-red-600"
+                              ? "text-emerald-600 dark:text-emerald-400"
+                              : "text-red-600 dark:text-red-400"
                           }`}
                         >
                           ${Math.abs(monthlyTotal).toFixed(2)}
@@ -520,8 +520,8 @@ export function Metrics() {
                         <span
                           className={`${
                             monthlyTotal >= 0
-                              ? "text-green-600"
-                              : "text-red-600"
+                              ? "text-emerald-600 dark:text-emerald-400"
+                              : "text-red-600 dark:text-red-400"
                           }`}
                         >
                           Return on Capital:
@@ -529,24 +529,24 @@ export function Metrics() {
                         <span
                           className={
                             monthlyTotal > 0
-                              ? "text-green-600"
+                              ? "text-emerald-600 dark:text-emerald-400"
                               : monthlyTotal < 0
-                                ? "text-red-600"
-                                : "text-gray-600"
+                                ? "text-red-600 dark:text-red-400"
+                                : "text-gray-600 dark:text-slate-400"
                           }
                         >
                           {Math.abs((monthlyTotal / 15) * 100).toFixed(1)}%
                         </span>
                       </div>
-                      <div className="flex justify-between text-xs font-bold border-t pt-2">
-                        <span>Total Balance:</span>
+                      <div className="flex justify-between text-xs font-bold border-t border-gray-200 dark:border-slate-700 pt-2">
+                        <span className="text-gray-900 dark:text-white">Total Balance:</span>
                         <span
                           className={
                             totalBalance > 15
-                              ? "text-green-600"
+                              ? "text-emerald-600 dark:text-emerald-400"
                               : totalBalance < 15
-                                ? "text-red-600"
-                                : "text-gray-600"
+                                ? "text-red-600 dark:text-red-400"
+                                : "text-gray-600 dark:text-slate-400"
                           }
                         >
                           ${totalBalance.toFixed(2)}
@@ -559,10 +559,10 @@ export function Metrics() {
               <div
                 className={`text-center py-2 rounded ${
                   monthlyTotal > 0
-                    ? "bg-green-50 text-green-700"
+                    ? "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800"
                     : monthlyTotal < 0
-                      ? "bg-red-50 text-red-700"
-                      : "bg-gray-50 text-gray-700"
+                      ? "bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800"
+                      : "bg-gray-50 dark:bg-slate-800 text-gray-700 dark:text-slate-300 border border-gray-200 dark:border-slate-700"
                 }`}
               >
                 <div className="text-xs font-semibold">
@@ -583,10 +583,10 @@ export function Metrics() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-800 shadow-sm">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-semibold flex items-center gap-2">
-                <Calendar className="h-4 w-4 text-blue-600" />
+              <CardTitle className="text-sm font-semibold flex items-center gap-2 text-gray-900 dark:text-white">
+                <Calendar className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                 Today&apos;s Trading {todayDayName}
               </CardTitle>
             </CardHeader>
@@ -594,7 +594,7 @@ export function Metrics() {
               {periods.map((period) => (
                 <div key={period}>
                   <div className="flex justify-between items-center mb-1">
-                    <label className="text-xs text-gray-600">
+                    <label className="text-xs text-gray-600 dark:text-slate-400">
                       Enter your trading amount for {todayDayName} :
                     </label>
                   </div>
@@ -611,21 +611,21 @@ export function Metrics() {
                         e.target.value,
                       )
                     }
-                    className="w-full rounded-md border px-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                    className="w-full rounded-md border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white px-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 placeholder-gray-400 dark:placeholder-slate-500"
                   />
                   {currentWeekData[todayDayName] && (
-                    <div className="text-xs text-gray-600 pt-2 flex justify-between">
+                    <div className="text-xs text-gray-600 dark:text-slate-400 pt-2 flex justify-between">
                       <span className="font-medium">Amount Today : </span>
                       {(() => {
                         const amount = parseFloat(
                           currentWeekData[todayDayName] || "0",
                         );
-                        let colorClass = "text-gray-600";
+                        let colorClass = "text-gray-600 dark:text-slate-400";
 
                         if (amount < 0) {
-                          colorClass = "text-red-600";
+                          colorClass = "text-red-600 dark:text-red-400";
                         } else if (amount > 0) {
-                          colorClass = "text-green-600";
+                          colorClass = "text-emerald-600 dark:text-emerald-400";
                         }
 
                         const formattedAmount =
@@ -643,7 +643,7 @@ export function Metrics() {
                   )}
                   {currentWeekData[todayDayName] && (
                     <div className="text-xs pt-1 flex justify-between">
-                      <span className="text-gray-600">Target Progress:</span>
+                      <span className="text-gray-600 dark:text-slate-400">Target Progress:</span>
                       {(() => {
                         const amount = parseFloat(
                           currentWeekData[todayDayName] || "0",
@@ -654,19 +654,19 @@ export function Metrics() {
 
                         if (amount >= target) {
                           return (
-                            <span className="text-green-600 font-medium">
+                            <span className="text-emerald-600 dark:text-emerald-400 font-medium">
                               ✓ Target (+${(amount - target).toFixed(2)} Over)
                             </span>
                           );
                         } else if (amount > 0) {
                           return (
-                            <span className="text-orange-600 font-medium">
+                            <span className="text-orange-600 dark:text-amber-400 font-medium">
                               ${remaining.toFixed(2)} ({percentage.toFixed(0)}%)
                             </span>
                           );
                         } else if (amount < 0) {
                           return (
-                            <span className="text-red-600 font-medium">
+                            <span className="text-red-600 dark:text-red-400 font-medium">
                               ${Math.abs(amount).toFixed(2)} Loss
                             </span>
                           );
@@ -680,21 +680,21 @@ export function Metrics() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-800 shadow-sm">
             <CardHeader className="pb-2">
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle className="text-sm">
+                  <CardTitle className="text-sm text-gray-900 dark:text-white">
                     Monthly Trading Overview
                   </CardTitle>
-                  <div className="text-xs text-gray-600">
+                  <div className="text-xs text-gray-600 dark:text-slate-400">
                     {getCycleDisplayName()}
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
                   <button
                     onClick={resetToCurrentMonth}
-                    className="px-3 py-1 text-sm bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg"
+                    className="px-3 py-1 text-sm bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/80 rounded-lg transition-colors"
                   >
                     Current
                   </button>
@@ -704,7 +704,7 @@ export function Metrics() {
             <CardContent>
               <div className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-2">
-                  {weeksInCurrentMonth.map((week, index) => {
+                  {weeksInCurrentMonth.map((week) => {
                     const weekData = getWeekData(week.number.toString());
                     const isCurrentWeek =
                       week.number.toString() === currentWeekNumber;
@@ -739,15 +739,15 @@ export function Metrics() {
                     return (
                       <div
                         key={week.number}
-                        className={`p-4 rounded-xl border ${
+                        className={`p-4 rounded-xl border transition-all ${
                           isCurrentWeek
-                            ? "border-blue-300 bg-blue-50"
-                            : "border-gray-200 bg-white"
+                            ? "border-blue-300 dark:border-blue-700 bg-blue-50/70 dark:bg-blue-950/30"
+                            : "border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900/60"
                         }`}
                       >
                         <div className="flex justify-between items-start mb-2">
                           <div>
-                            <div className="text-xs text-gray-500">
+                            <div className="text-xs text-gray-500 dark:text-slate-400">
                               {week.start.toLocaleDateString("en-US", {
                                 month: "short",
                                 day: "numeric",
@@ -758,13 +758,13 @@ export function Metrics() {
                                 day: "numeric",
                               })}
                             </div>
-                            <div className="text-xs text-gray-500 mt-1">
+                            <div className="text-xs text-gray-500 dark:text-slate-400 mt-1">
                               Daily Summary:
                             </div>
                           </div>
                           <div
                             className={`text-lg font-bold ${
-                              weekTotal >= 0 ? "text-green-600" : "text-red-600"
+                              weekTotal >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-red-600 dark:text-red-400"
                             }`}
                           >
                             ${Math.abs(weekTotal).toFixed(2)}
@@ -774,22 +774,22 @@ export function Metrics() {
                         <div className="mt-4 space-y-2">
                           <div className="grid grid-cols-5 gap-2">
                             {dayAmounts.map(
-                              ({ day, amount, isInCycle, date }) => (
+                              ({ day, amount, isInCycle }) => (
                                 <div key={day} className="text-center">
-                                  <div className="text-xs text-gray-500 mb-1">
+                                  <div className="text-xs text-gray-500 dark:text-slate-400 mb-1">
                                     {day.slice(0, 1)}
                                   </div>
                                   <div
                                     className={`h-10 rounded-lg flex items-center justify-center text-xs border ${
                                       !isInCycle
-                                        ? "text-gray-300 bg-gray-100 border-gray-200 opacity-50"
+                                        ? "text-gray-300 dark:text-slate-600 bg-gray-100 dark:bg-slate-800/40 border-gray-200 dark:border-slate-800 opacity-50"
                                         : amount === null
-                                          ? "text-gray-400 bg-gray-50"
+                                          ? "text-gray-400 dark:text-slate-500 bg-gray-50 dark:bg-slate-800/80 border-gray-100 dark:border-slate-700"
                                           : amount > 0
-                                            ? "text-green-600 bg-green-50 border-green-200"
+                                            ? "text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800 font-semibold"
                                             : amount < 0
-                                              ? "text-red-600 bg-red-50 border-red-200"
-                                              : "text-gray-600 bg-gray-50"
+                                              ? "text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/40 border-red-200 dark:border-red-800 font-semibold"
+                                              : "text-gray-600 dark:text-slate-400 bg-gray-50 dark:bg-slate-800 border-gray-200 dark:border-slate-700"
                                     }`}
                                     title={
                                       !isInCycle
@@ -813,12 +813,12 @@ export function Metrics() {
                           </div>
                         </div>
 
-                        <div className="mt-4 pt-3 border-t">
+                        <div className="mt-4 pt-3 border-t border-gray-100 dark:border-slate-800">
                           <div className="flex justify-between items-center">
-                            <span className="text-xs text-gray-600">
+                            <span className="text-xs text-gray-600 dark:text-slate-400">
                               Target avg:
                             </span>
-                            <span className="text-xs text-gray-600">$25</span>
+                            <span className="text-xs text-gray-600 dark:text-slate-400 font-medium">$25</span>
                           </div>
                         </div>
                       </div>
